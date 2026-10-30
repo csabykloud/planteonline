@@ -1,0 +1,472 @@
+{% extends "base.html" %}
+
+{% block title %}{{ plant.name }} ({{ plant.latin_name }}) - Fișă Botanică PlanteOnline{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+    <!-- Plant Profile Card -->
+    <article class="bg-white rounded-3xl p-6 sm:p-10 border border-stone-200 shadow-xs space-y-6">
+        
+        <!-- Breadcrumbs & Quick Nav -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-stone-400 border-b border-stone-100 pb-4">
+            <nav class="flex items-center space-x-2 flex-wrap">
+                <a href="{{ url_for('home') }}" class="hover:text-botanic-700">Acasă</a>
+                <span>/</span>
+                <a href="{{ url_for('plants_az') }}" class="hover:text-botanic-700">Plante A-Z</a>
+                <span>/</span>
+                <a href="{{ url_for('plants_az', l=plant.letter) }}" class="hover:text-botanic-700">Litera {{ plant.letter }}</a>
+                <span>/</span>
+                <span class="text-stone-700 font-semibold truncate">{{ plant.name }}</span>
+            </nav>
+            <div class="flex items-center space-x-3 text-xs">
+                <button type="button" onclick="window.print()" class="px-3 py-1.5 rounded-xl border border-stone-200 text-stone-600 hover:bg-stone-50 flex items-center space-x-1.5 transition-colors">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                    <span>Tipărește Fișa</span>
+                </button>
+                <a href="{{ url_for('plants_az', l=plant.letter) }}" class="text-botanic-700 hover:underline font-semibold flex items-center space-x-1">
+                    <span>&larr; Înapoi la litera {{ plant.letter }}</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 1. PLANT NAME & TITLE BLOCK (LOCATED ABOVE THE IMAGE) -->
+        <div class="space-y-1.5">
+            <div class="flex items-center space-x-2.5 flex-wrap">
+                <span class="bg-botanic-100 text-botanic-800 text-xs font-bold px-3 py-1 rounded-full border border-botanic-200/60">
+                    {{ plant.category or 'Plante' }}
+                </span>
+                <span class="text-xs text-stone-400 font-mono">Index #{{ plant.id }}</span>
+            </div>
+
+            <div>
+                <h1 class="text-2xl sm:text-4xl font-serif font-bold text-stone-900 leading-tight">
+                    {{ plant.name }}
+                </h1>
+                {% if plant.latin_name %}
+                <p class="text-base sm:text-lg text-botanic-700 italic font-serif mt-0.5">
+                    {{ plant.latin_name }}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 2. UNDER THE TITLE: IMAGE ON LEFT + ALL CHARACTERISTICS ON RIGHT -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-2">
+            
+            <!-- Left: Plant Image Gallery (5 cols) -->
+            <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-28">
+                <div class="w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden bg-stone-50 border border-stone-200 flex items-center justify-center relative p-3 shadow-2xs group cursor-zoom-in"
+                     onclick="openPlantLightbox(document.getElementById('main-plant-img').src)">
+                    {% if plant.images and plant.images|length > 0 %}
+                    <img id="main-plant-img" src="{{ plant.images[0] }}" alt="{{ plant.name }}" 
+                         data-fallback-1="{{ plant.images[1] if plant.images|length > 1 else '' }}"
+                         data-fallback-2="{{ plant.images[2] if plant.images|length > 2 else '' }}"
+                         class="max-h-full max-w-full object-contain filter drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+                         onerror="if(this.dataset.fallback1 && this.src !== this.dataset.fallback1){this.src=this.dataset.fallback1;this.dataset.fallback1='';}else if(this.dataset.fallback2 && this.src !== this.dataset.fallback2){this.src=this.dataset.fallback2;this.dataset.fallback2='';}else{this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.classList.remove('hidden');}">
+                    <div class="hidden flex-col items-center justify-center text-stone-300">
+                        <i data-lucide="sprout" class="w-16 h-16"></i>
+                        <span class="text-xs text-stone-400 mt-2">Imagine indisponibilă</span>
+                    </div>
+                    <div class="absolute bottom-3 right-3 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-xl text-[11px] font-semibold text-stone-700 shadow-xs flex items-center space-x-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-botanic-600"></i>
+                        <span>Vizualizare mare</span>
+                    </div>
+                    {% else %}
+                    <div class="flex flex-col items-center justify-center text-stone-300">
+                        <i data-lucide="sprout" class="w-16 h-16"></i>
+                        <span class="text-xs text-stone-400 mt-2">Imagine în curs de actualizare</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Thumbnails if multiple images -->
+                {% if plant.images and plant.images|length > 1 %}
+                <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+                    {% for img in plant.images %}
+                    <button type="button" onclick="switchMainImage('{{ img }}', this)"
+                            class="plant-thumb-btn w-16 h-16 rounded-xl border-2 {% if loop.first %}border-botanic-600 ring-2 ring-botanic-500/20{% else %}border-stone-200{% endif %} overflow-hidden shrink-0 hover:border-botanic-500 focus:outline-none transition-all bg-white p-0.5">
+                        <img src="{{ img }}" alt="{{ plant.name }} foto {{ loop.index }}" class="w-full h-full object-cover rounded-lg"
+                             onerror="this.closest('.plant-thumb-btn').style.display='none';">
+                    </button>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Articole Recomandate despre această plantă -->
+                {% if recommended_articles and recommended_articles|length > 0 %}
+                <div class="pt-2 space-y-3">
+                    <div class="flex items-center space-x-1.5 text-stone-900 text-xs font-bold uppercase tracking-wider border-b border-stone-100 pb-2">
+                        <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                            <i data-lucide="newspaper" class="w-3.5 h-3.5"></i>
+                        </span>
+                        <span>Articole recomandate</span>
+                    </div>
+                    <div class="space-y-2">
+                        {% for art in recommended_articles %}
+                        <a href="{{ url_for('article_detail', article_id=art.id) }}" 
+                           class="block p-3 rounded-2xl bg-stone-50 border border-stone-200/80 hover:border-botanic-400 hover:bg-emerald-50/30 transition-all group">
+                            <div class="flex items-start gap-2.5">
+                                {% if art.image_url %}
+                                <img src="{{ art.image_url }}" alt="{{ art.title }}" class="w-12 h-12 rounded-xl object-cover shrink-0 border border-stone-200/60"
+                                     onerror="this.style.display='none';">
+                                {% endif %}
+                                <div class="min-w-0 flex-1">
+                                    <div class="text-[10px] text-emerald-700 font-bold uppercase tracking-wider line-clamp-1">
+                                        {{ art.category or 'Ghid Practic' }}
+                                    </div>
+                                    <h4 class="text-xs font-semibold text-stone-900 group-hover:text-botanic-700 leading-snug line-clamp-2 transition-colors mt-0.5">
+                                        {{ art.title }}
+                                    </h4>
+                                    {% if art.date %}
+                                    <span class="text-[10px] text-stone-400 mt-0.5 block">{{ art.date }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Right: All Characteristics (7 cols) - Unified, No Duplications! -->
+            <div class="lg:col-span-7 space-y-4">
+                
+                <!-- Unified Characteristics Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    
+                    <!-- 1. Origine -->
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200/80 hover:border-botanic-300 transition-all space-y-1.5">
+                        <div class="flex items-center space-x-1.5 text-stone-900 text-xs font-bold uppercase tracking-wider">
+                            <span class="w-6 h-6 rounded-lg bg-botanic-100 text-botanic-700 flex items-center justify-center">
+                                <i data-lucide="globe-2" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Origine</span>
+                        </div>
+                        <p class="text-xs text-stone-700 leading-relaxed text-justify">
+                            {{ plant.origin or 'Regiuni temperate / tropicale' }}
+                        </p>
+                    </div>
+
+                    <!-- 2. Flori & Înflorire -->
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200/80 hover:border-emerald-300 transition-all space-y-1.5">
+                        <div class="flex items-center space-x-1.5 text-stone-900 text-xs font-bold uppercase tracking-wider">
+                            <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                <i data-lucide="flower-2" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Flori & Înflorire</span>
+                        </div>
+                        <p class="text-xs text-stone-700 leading-relaxed text-justify">
+                            {{ plant.flowers or 'Flori decorative specifice speciei.' }}
+                        </p>
+                    </div>
+
+                    <!-- 3. Caracteristici Frunză (Unified: frunza + frunzis) -->
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200/80 hover:border-botanic-300 transition-all space-y-1.5">
+                        <div class="flex items-center space-x-1.5 text-stone-900 text-xs font-bold uppercase tracking-wider">
+                            <span class="w-6 h-6 rounded-lg bg-botanic-100 text-botanic-700 flex items-center justify-center">
+                                <i data-lucide="leaf" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Caracteristici Frunză</span>
+                        </div>
+                        <p class="text-xs text-stone-700 leading-relaxed text-justify">
+                            {{ plant.leaves or 'Frunziș decorativ specific speciei.' }}
+                        </p>
+                    </div>
+
+                    <!-- 4. Formă de Creștere (Unified: forma de crestere + port) -->
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200/80 hover:border-stone-400 transition-all space-y-1.5">
+                        <div class="flex items-center space-x-1.5 text-stone-900 text-xs font-bold uppercase tracking-wider">
+                            <span class="w-6 h-6 rounded-lg bg-stone-200 text-stone-700 flex items-center justify-center">
+                                <i data-lucide="shapes" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Formă de Creștere</span>
+                        </div>
+                        <p class="text-xs text-stone-700 leading-relaxed text-justify">
+                            {{ plant.shape or 'Port armonios, caracteristic speciei.' }}
+                        </p>
+                    </div>
+
+                    <!-- 5. Lumină & Amplasament (Unified: necesitati lumina + lumina & amplasament) -->
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200/80 hover:border-amber-300 transition-all space-y-1.5">
+                        <div class="flex items-center space-x-1.5 text-stone-900 text-xs font-bold uppercase tracking-wider">
+                            <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+                                <i data-lucide="sun" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Lumină & Amplasament</span>
+                        </div>
+                        <p class="text-xs text-stone-700 leading-relaxed text-justify">
+                            {{ (plant.care_guide.lumina if (plant.care_guide and plant.care_guide.lumina) else plant.requirements) or 'Lumină filtrată sau soare direct în funcție de anotimp.' }}
+                        </p>
+                    </div>
+
+                    <!-- 6. Temperatură & Rezistență -->
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200/80 hover:border-orange-300 transition-all space-y-1.5">
+                        <div class="flex items-center space-x-1.5 text-stone-900 text-xs font-bold uppercase tracking-wider">
+                            <span class="w-6 h-6 rounded-lg bg-orange-100 text-orange-700 flex items-center justify-center">
+                                <i data-lucide="thermometer" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Temperatură & Rezistență</span>
+                        </div>
+                        <p class="text-xs text-stone-700 leading-relaxed text-justify">
+                            {{ (plant.care_guide.temperatura if (plant.care_guide and plant.care_guide.temperatura) else 'Temperatură adaptată speciei; se protejează de gerurile aspre.') }}
+                        </p>
+                    </div>
+
+                    <!-- 7. Udare & Umiditate -->
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200/80 hover:border-sky-300 transition-all space-y-1.5">
+                        <div class="flex items-center space-x-1.5 text-stone-900 text-xs font-bold uppercase tracking-wider">
+                            <span class="w-6 h-6 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center">
+                                <i data-lucide="droplets" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Udare & Umiditate</span>
+                        </div>
+                        <p class="text-xs text-stone-700 leading-relaxed text-justify">
+                            {{ (plant.care_guide.udare if (plant.care_guide and plant.care_guide.udare) else 'Udare moderată astfel încât substratul să rămână reavăn; se evită stagnarea apei.') }}
+                        </p>
+                    </div>
+
+                    <!-- 8. Sol & Substrat Recomandat -->
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200/80 hover:border-emerald-300 transition-all space-y-1.5">
+                        <div class="flex items-center space-x-1.5 text-stone-900 text-xs font-bold uppercase tracking-wider">
+                            <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Sol & Substrat Recomandat</span>
+                        </div>
+                        <p class="text-xs text-stone-700 leading-relaxed text-justify">
+                            {{ (plant.care_guide.sol if (plant.care_guide and plant.care_guide.sol) else 'Sol bine structurat, fertil și permeabil.') }}
+                        </p>
+                        {% if primary_substrate %}
+                        <div class="pt-1.5 flex items-center space-x-1.5 text-[11px] font-semibold text-emerald-800 bg-emerald-50/80 px-2.5 py-1 rounded-lg border border-emerald-200/60">
+                            <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
+                            <span>Substrat recomandat: <strong>{{ primary_substrate.name }}</strong> ({{ primary_substrate.brand }})</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- 9. Fertilizare & Nutriție Optimă (Spans full width on sm+) -->
+                    <div class="sm:col-span-2 bg-stone-50 p-4 rounded-2xl border border-stone-200/80 hover:border-botanic-300 transition-all space-y-1.5">
+                        <div class="flex items-center space-x-1.5 text-stone-900 text-xs font-bold uppercase tracking-wider">
+                            <span class="w-6 h-6 rounded-lg bg-botanic-100 text-botanic-700 flex items-center justify-center">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Fertilizare & Nutriție Optimă</span>
+                        </div>
+                        <p class="text-xs text-stone-700 leading-relaxed text-justify">
+                            {{ (plant.care_guide.fertilizare if (plant.care_guide and plant.care_guide.fertilizare) else 'Fertilizarea periodică în perioada de vegetație susține o creștere sănătoasă.') }}
+                        </p>
+                        {% if primary_fertilizer %}
+                        <div class="pt-1.5 flex items-center space-x-1.5 text-[11px] font-semibold text-amber-900 bg-amber-50/80 px-2.5 py-1 rounded-lg border border-amber-200/60 w-fit">
+                            <i data-lucide="sparkle" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i>
+                            <span>Nutriție recomandată: <strong>{{ primary_fertilizer.name }}</strong> ({{ primary_fertilizer.brand }})</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- 10. Descriere Morfologică & Cerințe Ecologice (Full width narrative card) -->
+                    <div class="sm:col-span-2 bg-gradient-to-br from-emerald-50/50 via-white to-stone-50 p-5 rounded-2xl border border-emerald-200/80 space-y-2 shadow-2xs">
+                        <div class="flex items-center space-x-2 text-botanic-900 text-xs font-bold uppercase tracking-wider">
+                            <span class="w-6 h-6 rounded-lg bg-botanic-100 text-botanic-700 flex items-center justify-center">
+                                <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Descriere Morfologică & Cerințe Ecologice</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-stone-700 leading-relaxed text-justify">
+                            {{ plant.description or (plant.name ~ ' este o plantă decorativă apreciată pentru calitățile sale estetice, adaptabilitate și vigoare în condiții optime de cultivare.') }}
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Dynamic Recommendation Banner -->
+        <div class="p-4 bg-gradient-to-r from-emerald-100/70 to-botanic-100/50 rounded-2xl border border-emerald-200 flex items-center space-x-3 text-xs text-botanic-900 font-medium shadow-2xs">
+            <i data-lucide="shield-check" class="w-6 h-6 text-botanic-700 shrink-0"></i>
+            <span class="leading-relaxed">
+                <strong>Recomandare:</strong> Pentru o înrădăcinare puternică, creștere armonioasă și dezvoltare optimă a speciei <strong>{{ plant.name }}</strong>, recomandăm cu încredere substratul <strong>{{ primary_substrate.name }}</strong> ({{ primary_substrate.brand }}){% if primary_fertilizer %} și fertilizarea periodică cu <strong>{{ primary_fertilizer.name }}</strong> ({{ primary_fertilizer.brand }}){% endif %}{% if alternatives|length > 0 %}. Ca opțiuni alternative profesionale compatibile puteți folosi și <strong>{{ alternatives[0].name }}</strong>{% endif %}.
+            </span>
+        </div>
+
+        <!-- Recommended Products for this Plant -->
+        {% if recommended_products %}
+        <div class="border-t border-stone-100 pt-6 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <span class="text-xs font-bold text-botanic-600 uppercase tracking-wider">Nutriție & Substraturi Dedicate</span>
+                    <h3 class="text-lg font-serif font-bold text-stone-900">
+                        Produse Recomandate pentru {{ plant.name }}
+                    </h3>
+                </div>
+                <div class="text-xs text-stone-500">
+                    Selecție optimizată: <span class="font-bold text-stone-800">{{ primary_substrate.brand }}{% if primary_fertilizer %} / {{ primary_fertilizer.brand }}{% endif %}</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {% for prod in recommended_products %}
+                <div class="p-4 bg-stone-50 rounded-2xl border {% if (primary_substrate and prod.id == primary_substrate.id) or (primary_fertilizer and prod.id == primary_fertilizer.id) %}border-botanic-300 ring-2 ring-botanic-500/20 bg-emerald-50/20{% else %}border-stone-200{% endif %} hover:shadow-md hover:border-botanic-400 transition-all cursor-pointer group flex flex-col justify-between"
+                     onclick="openProductModal({{ prod.id }})">
+                    <div>
+                        <div class="w-full h-36 bg-white rounded-xl mb-3 p-2 flex items-center justify-center overflow-hidden border border-stone-100">
+                            {% if prod.image_url %}
+                            <img src="{{ prod.image_url }}" alt="{{ prod.name }}" 
+                                 loading="lazy" decoding="async"
+                                 class="max-h-full object-contain group-hover:scale-105 transition-transform"
+                                 onerror="this.src='https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=300&q=80'">
+                            {% else %}
+                            <div class="flex flex-col items-center justify-center text-stone-300">
+                                <i data-lucide="package" class="w-8 h-8"></i>
+                                <span class="text-[10px] mt-1 text-stone-400">Produs</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex items-center space-x-1.5 mb-1.5 flex-wrap gap-y-1">
+                            <span class="text-[10px] font-bold text-botanic-800 bg-botanic-100 px-2 py-0.5 rounded">
+                                {{ prod.brand or 'Florasol' }}
+                            </span>
+                            {% if primary_substrate and prod.id == primary_substrate.id %}
+                            <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                                Substrat Principal
+                            </span>
+                            {% elif primary_fertilizer and prod.id == primary_fertilizer.id %}
+                            <span class="text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">
+                                Nutriție Principală
+                            </span>
+                            {% else %}
+                            <span class="text-[10px] font-bold text-stone-600 bg-stone-200/80 px-2 py-0.5 rounded">
+                                Alternativă
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <h4 class="font-bold text-stone-900 text-xs mt-1 line-clamp-2 group-hover:text-botanic-700 transition-colors">
+                            {{ prod.name }}
+                        </h4>
+                        <p class="text-[11px] text-stone-500 mt-1 line-clamp-2">
+                            {{ prod.description }}
+                        </p>
+                    </div>
+
+                    <div class="mt-3 pt-2.5 border-t border-stone-200/60 flex items-center justify-between text-xs font-semibold text-botanic-700">
+                        <span class="text-[11px] text-stone-400 font-mono">{{ prod.code or '' }}</span>
+                        <span class="flex items-center text-[11px] group-hover:underline">
+                            Detalii produs <i data-lucide="external-link" class="w-3 h-3 ml-1"></i>
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </article>
+
+    <!-- Similar Plants from Category -->
+    {% if similar_plants %}
+    <section class="space-y-4">
+        <h3 class="font-serif font-bold text-xl text-stone-900">Alte Plante din Categoria "{{ plant.category }}"</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {% for sim in similar_plants %}
+            <a href="{{ url_for('plant_detail', plant_id=sim.id) }}" 
+               class="bg-white p-3 rounded-2xl border border-stone-200 hover:border-botanic-400 hover:shadow-sm transition-all group block">
+                <div class="w-full h-24 bg-stone-50 rounded-xl overflow-hidden mb-2 flex items-center justify-center">
+                    {% if sim.images and sim.images|length > 0 %}
+                    <img src="{{ sim.images[0] }}" alt="{{ sim.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                         onerror="this.src='https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&w=200&q=80'">
+                    {% else %}
+                    <i data-lucide="sprout" class="w-6 h-6 text-stone-300"></i>
+                    {% endif %}
+                </div>
+                <h4 class="font-bold text-stone-900 text-xs truncate group-hover:text-botanic-700">{{ sim.name }}</h4>
+                <p class="text-[10px] text-stone-400 italic truncate">{{ sim.latin_name }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Lightbox Modal for Plant Image (Responsive on mobile, Max 2/3 screen size on desktop) -->
+    <div id="plant-image-modal" class="fixed inset-0 z-50 bg-stone-950/80 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-4 transition-all duration-300" 
+         onclick="closePlantLightbox(event)">
+        <div class="relative bg-white rounded-3xl overflow-hidden shadow-2xl w-[94vw] sm:w-auto sm:max-w-[66vw] max-h-[82vh] sm:max-h-[66vh] flex flex-col border border-stone-200" 
+             onclick="event.stopPropagation()">
+            <!-- Header with Plant Title and Close Button -->
+            <div class="flex items-center justify-between px-5 py-3 border-b border-stone-100 bg-stone-50/90 shrink-0">
+                <div class="pr-4">
+                    <h3 class="font-serif font-bold text-sm sm:text-base text-stone-900 leading-tight">{{ plant.name }}</h3>
+                    <p class="text-[11px] text-stone-500 italic">{{ plant.latin_name }}</p>
+                </div>
+                <button type="button" onclick="closePlantLightbox()" 
+                        class="w-8 h-8 rounded-full bg-stone-200/80 hover:bg-stone-300 text-stone-700 flex items-center justify-center transition-colors focus:outline-none shrink-0"
+                        title="Închide fereastra">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <!-- Large Image Container (Max 2/3 screen height minus header on desktop, 82vh on mobile) -->
+            <div class="p-3 sm:p-4 bg-stone-100/50 flex items-center justify-center overflow-hidden flex-1 min-h-0">
+                <img id="modal-plant-img" src="{{ plant.images[0] if (plant.images and plant.images|length > 0) else '' }}" alt="{{ plant.name }}"
+                     class="max-w-full max-h-[calc(82vh-85px)] sm:max-h-[calc(66vh-85px)] object-contain rounded-2xl filter drop-shadow-md select-none">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function openPlantLightbox(src) {
+        const modal = document.getElementById('plant-image-modal');
+        const modalImg = document.getElementById('modal-plant-img');
+        if (src) {
+            modalImg.src = src;
+        } else {
+            const mainImg = document.getElementById('main-plant-img');
+            if (mainImg) modalImg.src = mainImg.src;
+        }
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePlantLightbox(event) {
+        if (event && event.target && event.target.id !== 'plant-image-modal') return;
+        const modal = document.getElementById('plant-image-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    function switchMainImage(src, btn) {
+        const mainImg = document.getElementById('main-plant-img');
+        if (mainImg) mainImg.src = src;
+        const modalImg = document.getElementById('modal-plant-img');
+        if (modalImg) modalImg.src = src;
+        
+        document.querySelectorAll('.plant-thumb-btn').forEach(b => {
+            b.classList.remove('border-botanic-600', 'ring-2', 'ring-botanic-500/20');
+            b.classList.add('border-stone-200');
+        });
+        if (btn) {
+            btn.classList.add('border-botanic-600', 'ring-2', 'ring-botanic-500/20');
+            btn.classList.remove('border-stone-200');
+        }
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('plant-image-modal');
+            if (modal && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+        }
+    });
+</script>
+{% endblock %}

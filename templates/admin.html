@@ -1,0 +1,2287 @@
+{% extends "base.html" %}
+
+{% block title %}Panou de Administrare - PlanteOnline.ro{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+    <!-- Admin Header & Stats -->
+    <div class="bg-gradient-to-r from-stone-900 to-botanic-950 text-white rounded-3xl p-6 sm:p-8 shadow-lg">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center space-x-2 text-xs text-amber-300 font-bold uppercase tracking-wider mb-1">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span>Panou de Control & Administrare</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-serif font-bold text-white">
+                    Administrare PlanteOnline.ro
+                </h1>
+                <p class="text-xs text-stone-300 mt-1">
+                    Gestionează articolele, catalogul A-Z, produsele recomandate, calendarul și conținutul Despre Noi.
+                </p>
+            </div>
+            
+            <div class="flex items-center space-x-2 self-start sm:self-auto">
+                <a href="{{ url_for('home') }}" class="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-colors">
+                    <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                    <span>Vezi Site-ul</span>
+                </a>
+                <a href="{{ url_for('admin_logout') }}" class="px-3.5 py-2 bg-rose-600/80 hover:bg-rose-600 text-white rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-colors">
+                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                    <span>Deconectare</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Metric Badges -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-white/10 text-stone-200">
+            <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
+                <span class="text-[11px] text-stone-400 block">Total Articole</span>
+                <span class="text-xl font-bold text-white">{{ stats.total_articles }}</span>
+            </div>
+            <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
+                <span class="text-[11px] text-stone-400 block">Specii Plante A-Z</span>
+                <span class="text-xl font-bold text-botanic-400">{{ stats.total_plants }}</span>
+            </div>
+            <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
+                <span class="text-[11px] text-stone-400 block">Produse Recomandate</span>
+                <span class="text-xl font-bold text-amber-300">{{ stats.total_products }}</span>
+            </div>
+            <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
+                <span class="text-[11px] text-stone-400 block">Vizualizări Cumulate</span>
+                <span class="text-xl font-bold text-white">{{ stats.total_views }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Tabs Bar (Horizontally scrollable on mobile, wrapped on desktop) -->
+    <div class="bg-white rounded-2xl p-1.5 border border-stone-200 shadow-xs flex overflow-x-auto sm:flex-wrap gap-1 scrollbar-none">
+        <a href="{{ url_for('admin_panel', tab='overview') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'overview' %}bg-stone-900 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            <span>Privire Generală</span>
+        </a>
+        <a href="{{ url_for('admin_panel', tab='articles') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'articles' %}bg-botanic-700 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            <span>Articole ({{ stats.total_articles }})</span>
+        </a>
+        <a href="{{ url_for('admin_panel', tab='products') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'products' %}bg-amber-600 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            <span>Produse Recomandate ({{ stats.total_products }})</span>
+        </a>
+        <a href="{{ url_for('admin_panel', tab='showcase') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'showcase' %}bg-amber-500 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Ghid Vizual ({{ stats.total_showcase }})</span>
+        </a>
+        <a href="{{ url_for('admin_panel', tab='plants') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'plants' %}bg-emerald-700 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="sprout" class="w-4 h-4"></i>
+            <span>Plante A-Z</span>
+        </a>
+        <a href="{{ url_for('admin_panel', tab='about') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'about' %}bg-stone-800 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="building" class="w-4 h-4"></i>
+            <span>Despre Noi</span>
+        </a>
+        <a href="{{ url_for('admin_panel', tab='calendar') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'calendar' %}bg-botanic-800 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            <span>Calendar Grădinar</span>
+        </a>
+        <a href="{{ url_for('admin_panel', tab='media') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'media' %}bg-stone-900 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="image-plus" class="w-4 h-4"></i>
+            <span>Încărcare Imagini</span>
+        </a>
+        <a href="{{ url_for('admin_panel', tab='social') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'social' %}bg-sky-700 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="share-2" class="w-4 h-4"></i>
+            <span>Social Media</span>
+        </a>
+        <a href="{{ url_for('admin_panel', tab='stats') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'stats' %}bg-indigo-700 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+            <span>Statistici</span>
+        </a>
+        <a href="{{ url_for('admin_panel', tab='password') }}" 
+           class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 {% if active_tab == 'password' %}bg-rose-700 text-white shadow-xs{% else %}text-stone-600 hover:bg-stone-100{% endif %}">
+            <i data-lucide="key-round" class="w-4 h-4"></i>
+            <span>Schimbare Parolă</span>
+        </a>
+    </div>
+
+    <!-- TAB 1: OVERVIEW -->
+    {% if active_tab == 'overview' %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Quick Action 1: Adaugă Articol -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200 space-y-4">
+            <div class="flex items-center space-x-3">
+                <span class="w-10 h-10 rounded-2xl bg-botanic-100 text-botanic-700 flex items-center justify-center font-bold">
+                    <i data-lucide="file-plus" class="w-5 h-5"></i>
+                </span>
+                <div>
+                    <h3 class="font-serif font-bold text-stone-900 text-base">Publicare Articol Nou</h3>
+                    <p class="text-xs text-stone-500">Adaugă un nou ghid sau articol în categoriile existente.</p>
+                </div>
+            </div>
+            <a href="{{ url_for('admin_panel', tab='articles') }}#article-form" 
+               class="w-full py-2.5 px-4 bg-botanic-700 hover:bg-botanic-800 text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition-colors">
+                <span>Deschide Formularul de Articol</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+
+        <!-- Quick Action 2: Adaugă Produs -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200 space-y-4">
+            <div class="flex items-center space-x-3">
+                <span class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                    <i data-lucide="package-plus" class="w-5 h-5"></i>
+                </span>
+                <div>
+                    <h3 class="font-serif font-bold text-stone-900 text-base">Adăugare Produs Recomandat</h3>
+                    <p class="text-xs text-stone-500">Încarcă un produs nou cu poză mare, descriere și link extern.</p>
+                </div>
+            </div>
+            <a href="{{ url_for('admin_panel', tab='products') }}#product-form" 
+               class="w-full py-2.5 px-4 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition-colors">
+                <span>Adaugă Produs Recomandat</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+
+        <!-- Quick Action 3: Editează Despre Noi -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200 space-y-4">
+            <div class="flex items-center space-x-3">
+                <span class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                    <i data-lucide="edit-3" class="w-5 h-5"></i>
+                </span>
+                <div>
+                    <h3 class="font-serif font-bold text-stone-900 text-base">Actualizare Secțiune Despre Noi</h3>
+                    <p class="text-xs text-stone-500">Modifică textul companiei Mont Rose, valorile și datele de contact.</p>
+                </div>
+            </div>
+            <a href="{{ url_for('admin_panel', tab='about') }}" 
+               class="w-full py-2.5 px-4 bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition-colors">
+                <span>Editează Despre Noi</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+
+        <!-- Quick Action 4: Calendar Sezonier -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200 space-y-4">
+            <div class="flex items-center space-x-3">
+                <span class="w-10 h-10 rounded-2xl bg-botanic-100 text-botanic-800 flex items-center justify-center font-bold">
+                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                </span>
+                <div>
+                    <h3 class="font-serif font-bold text-stone-900 text-base">Sfaturi Sezoniere în Calendar</h3>
+                    <p class="text-xs text-stone-500">Actualizează ghidul pentru luna activă sau cele viitoare.</p>
+                </div>
+            </div>
+            <a href="{{ url_for('admin_panel', tab='calendar') }}" 
+               class="w-full py-2.5 px-4 bg-botanic-800 hover:bg-botanic-900 text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition-colors">
+                <span>Gestionează Calendarul</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+
+        <!-- Quick Action 5: Ghid Vizual (Imagini Prezentare) -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200 space-y-4 md:col-span-2">
+            <div class="flex items-center space-x-3">
+                <span class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </span>
+                <div>
+                    <h3 class="font-serif font-bold text-stone-900 text-base">Imagini „Ghid Vizual”</h3>
+                    <p class="text-xs text-stone-500">Încarcă și gestionează fotografiile de prezentare care vor rula automat în caruselul Ghid vizual din bara laterală a site-ului.</p>
+                </div>
+            </div>
+            <a href="{{ url_for('admin_panel', tab='showcase') }}" 
+               class="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition-colors">
+                <span>Gestionează & Încarcă Imagini Ghid Vizual ({{ stats.total_showcase }})</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+
+        <!-- Quick Action 6: Statistici & Monitorizare Trafic -->
+        <div class="bg-white rounded-3xl p-6 border border-stone-200 space-y-4 md:col-span-2">
+            <div class="flex items-center space-x-3">
+                <span class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                </span>
+                <div>
+                    <h3 class="font-serif font-bold text-stone-900 text-base">Statistici Trafic & Kereső Figyelő</h3>
+                    <p class="text-xs text-stone-500">Urmărește sursele vizitatorilor (Google, Facebook, Instagram, TikTok, Pinterest), termenii căutați de utilizatori și deschiderile de Produse Recomandate.</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 py-1">
+                <div class="p-3 bg-stone-50 rounded-xl text-center">
+                    <span class="text-[10px] text-stone-400 block uppercase font-bold">Total Vizite</span>
+                    <span class="text-lg font-bold text-stone-900 font-serif">{{ analytics.total_visits }}</span>
+                </div>
+                <div class="p-3 bg-stone-50 rounded-xl text-center">
+                    <span class="text-[10px] text-indigo-600 block uppercase font-bold">Google Căutare</span>
+                    <span class="text-lg font-bold text-indigo-950 font-serif">{{ analytics.google_pct }}%</span>
+                </div>
+                <div class="p-3 bg-stone-50 rounded-xl text-center">
+                    <span class="text-[10px] text-pink-600 block uppercase font-bold">Social Media</span>
+                    <span class="text-lg font-bold text-pink-950 font-serif">{{ analytics.social_pct }}%</span>
+                </div>
+                <div class="p-3 bg-stone-50 rounded-xl text-center">
+                    <span class="text-[10px] text-amber-600 block uppercase font-bold">Căutări Site</span>
+                    <span class="text-lg font-bold text-amber-950 font-serif">{{ analytics.total_searches }}</span>
+                </div>
+            </div>
+            <a href="{{ url_for('admin_panel', tab='stats') }}" 
+               class="w-full py-2.5 px-4 bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 transition-colors">
+                <span>Deschide Raportul Complet de Statistici</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+
+    </div>
+    {% endif %}
+
+
+
+    <!-- TAB 2: GESTIONEAZĂ ARTICOLE -->
+    {% if active_tab == 'articles' %}
+    <div class="space-y-8">
+        
+        <!-- Article Form (Add / Edit) -->
+        <div id="article-form" class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-4">
+                <h3 class="font-serif font-bold text-lg text-stone-900">
+                    {% if edit_item and active_tab == 'articles' %}Editează Articolul #{{ edit_item.id }}{% else %}Adaugă Articol Nou{% endif %}
+                </h3>
+                {% if edit_item and active_tab == 'articles' %}
+                <a href="{{ url_for('admin_panel', tab='articles') }}" class="text-xs text-stone-400 hover:text-stone-700">Anulează editarea</a>
+                {% endif %}
+            </div>
+
+            <form action="{{ url_for('admin_save_article') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                {% if edit_item and active_tab == 'articles' %}
+                <input type="hidden" name="id" value="{{ edit_item.id }}">
+                {% endif %}
+
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                    <div class="sm:col-span-8">
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Titlu Articol *</label>
+                        <input type="text" name="title" required value="{{ edit_item.title if edit_item else '' }}" 
+                               placeholder="Ex: Îngrijirea plantelor pe timpul iernii..."
+                               class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Categorie (Submeniu) *</label>
+                        <select name="category" class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                            {% for cat in all_categories %}
+                            <option value="{{ cat.name }}" {% if edit_item and edit_item.category == cat.name %}selected{% endif %}>{{ cat.name }}</option>
+                            {% endfor %}
+                            <option value="Diverse">Diverse</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Încarcă Imagine de pe Calculator</label>
+                        <input type="file" name="image_file" accept="image/*"
+                               class="w-full px-3 py-2 rounded-xl text-xs bg-stone-50 border border-stone-200 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-botanic-50 file:text-botanic-700">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Sau URL / Cale Imagine Existentă</label>
+                        <input type="text" name="image_url" value="{{ edit_item.image_url if edit_item else '' }}" placeholder="https://... sau /static/uploads/..."
+                               class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Rezumat / Scurtă introducere</label>
+                    <input type="text" name="summary" value="{{ edit_item.summary if edit_item else '' }}" placeholder="Un scurt fragment care apare în cardurile de articol..."
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Conținutul Complet al Articolului *</label>
+                    <textarea name="content" rows="8" required placeholder="Textul integral al articolului..."
+                              class="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500 leading-relaxed font-normal">{{ edit_item.content if edit_item else '' }}</textarea>
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button type="submit" class="px-6 py-2.5 bg-botanic-700 hover:bg-botanic-800 text-white text-xs font-bold rounded-xl shadow-sm transition-colors">
+                        {% if edit_item and active_tab == 'articles' %}Salvează Modificările{% else %}Publică Articolul{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Articles Table List with Live Filter, Sort & Pagination -->
+        <div id="articles-admin-container" class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-5 overflow-hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-100 pb-4">
+                <div>
+                    <h3 class="font-serif font-bold text-xl text-stone-900 flex items-center space-x-2">
+                        <span>Listă Articole Înregistrate</span>
+                        <span id="articles-total-badge" class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-botanic-100 text-botanic-800">
+                            {{ articles|length }}
+                        </span>
+                    </h3>
+                    <p class="text-xs text-stone-500 mt-1">Căutare instantă, filtrare pe categorii și navigare rapidă între pagini.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button type="button" id="articles-reset-btn" class="px-3 py-1.5 rounded-xl border border-stone-200 text-stone-500 hover:text-stone-800 hover:bg-stone-50 text-xs font-semibold flex items-center space-x-1.5 transition-colors">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Resetează filtre</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Controls Bar -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 bg-stone-50/80 p-3.5 rounded-2xl border border-stone-200">
+                <!-- 1. Search by title -->
+                <div class="lg:col-span-4 relative">
+                    <input type="text" id="articles-search-input" placeholder="Caută după titlu sau ID..."
+                           class="w-full pl-9 pr-3 py-2 rounded-xl text-xs bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                    <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3 top-2.5"></i>
+                </div>
+
+                <!-- 2. Filter by Category -->
+                <div class="lg:col-span-3">
+                    <select id="articles-category-filter"
+                            class="w-full px-3 py-2 rounded-xl text-xs bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500 text-stone-700 font-medium">
+                        <option value="all">Toate Categoriile ({{ articles|length }})</option>
+                        {% for cat in article_categories %}
+                        <option value="{{ cat }}">{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 3. Sort by Views / Date / Title -->
+                <div class="lg:col-span-3">
+                    <select id="articles-sort-select"
+                            class="w-full px-3 py-2 rounded-xl text-xs bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500 text-stone-700 font-medium">
+                        <option value="date-desc">Dată: Cele mai recente</option>
+                        <option value="date-asc">Dată: Cele mai vechi</option>
+                        <option value="views-desc">Vizualizări: Cele mai vizualizate</option>
+                        <option value="views-asc">Vizualizări: Crescător</option>
+                        <option value="title-asc">Titlu: A &rarr; Z</option>
+                        <option value="id-desc">ID: Descrescător</option>
+                        <option value="id-asc">ID: Crescător</option>
+                    </select>
+                </div>
+
+                <!-- 4. Per-page selector -->
+                <div class="lg:col-span-2">
+                    <select id="articles-pagesize-select"
+                            class="w-full px-3 py-2 rounded-xl text-xs bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500 text-stone-700 font-medium">
+                        <option value="15">15 pe pagină</option>
+                        <option value="25">25 pe pagină</option>
+                        <option value="50">50 pe pagină</option>
+                        <option value="100">100 pe pagină</option>
+                        <option value="all">Toate</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Table (100% width, table-fixed, no horizontal scroll needed) -->
+            <div class="w-full overflow-hidden rounded-2xl border border-stone-200/80 bg-white">
+                <table class="w-full table-fixed text-left text-xs text-stone-600">
+                    <thead class="bg-stone-50 text-stone-500 font-semibold uppercase tracking-wider border-b border-stone-200 select-none">
+                        <tr>
+                            <th class="p-3 w-14 sm:w-16 cursor-pointer hover:text-botanic-700 transition-colors" onclick="triggerArticleSort('id')">
+                                <div class="flex items-center space-x-1">
+                                    <span>ID</span>
+                                    <i data-lucide="arrow-up-down" class="w-3 h-3 text-stone-400"></i>
+                                </div>
+                            </th>
+                            <th class="p-3 cursor-pointer hover:text-botanic-700 transition-colors" onclick="triggerArticleSort('title')">
+                                <div class="flex items-center space-x-1">
+                                    <span>Titlu</span>
+                                    <i data-lucide="arrow-up-down" class="w-3 h-3 text-stone-400"></i>
+                                </div>
+                            </th>
+                            <th class="p-3 w-28 sm:w-36">Categorie</th>
+                            <th class="p-3 w-24 cursor-pointer hover:text-botanic-700 transition-colors" onclick="triggerArticleSort('date')">
+                                <div class="flex items-center space-x-1">
+                                    <span>Data</span>
+                                    <i data-lucide="arrow-up-down" class="w-3 h-3 text-stone-400"></i>
+                                </div>
+                            </th>
+                            <th class="p-3 w-24 cursor-pointer hover:text-botanic-700 transition-colors" onclick="triggerArticleSort('views')">
+                                <div class="flex items-center space-x-1">
+                                    <span>Vizualizări</span>
+                                    <i data-lucide="arrow-up-down" class="w-3 h-3 text-stone-400"></i>
+                                </div>
+                            </th>
+                            <th class="p-3 w-40 sm:w-44 text-right shrink-0">Acțiuni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="articles-table-body" class="divide-y divide-stone-100 bg-white">
+                        {% for a in articles %}
+                        <tr class="article-row hover:bg-stone-50 transition-colors"
+                            data-id="{{ a.id }}"
+                            data-title="{{ a.title }}"
+                            data-category="{{ a.category }}"
+                            data-date="{{ a.date }}"
+                            data-views="{{ a.views or 0 }}">
+                            <td class="p-3 font-mono text-stone-400">#{{ a.id }}</td>
+                            <td class="p-3 font-semibold text-stone-900 leading-snug">
+                                <div class="line-clamp-2 sm:line-clamp-3 break-words text-xs text-stone-900" title="{{ a.title }}">
+                                    {{ a.title }}
+                                </div>
+                            </td>
+                            <td class="p-3">
+                                <span class="inline-block bg-botanic-50 text-botanic-700 px-2 py-0.5 rounded-full font-medium text-[11px] border border-botanic-200/50 truncate max-w-full" title="{{ a.category }}">
+                                    {{ a.category }}
+                                </span>
+                            </td>
+                            <td class="p-3 text-stone-500 whitespace-nowrap text-xs">{{ a.date }}</td>
+                            <td class="p-3 font-semibold text-stone-800 whitespace-nowrap text-xs">
+                                <div class="flex items-center space-x-1 text-stone-600">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5 text-stone-400 shrink-0"></i>
+                                    <span>{{ a.views or 0 }}</span>
+                                </div>
+                            </td>
+                            <td class="p-3 text-right whitespace-nowrap shrink-0">
+                                <div class="inline-flex items-center justify-end space-x-1 sm:space-x-2">
+                                    <a href="{{ url_for('article_detail', article_id=a.id) }}" target="_blank" 
+                                       class="text-stone-400 hover:text-stone-800 font-medium px-1.5 py-1 rounded-lg hover:bg-stone-100 transition-colors text-xs">Vezi</a>
+                                    <a href="{{ url_for('admin_panel', tab='articles', edit_id=a.id) }}#article-form" 
+                                       class="text-botanic-700 hover:text-botanic-900 font-semibold px-1.5 py-1 rounded-lg hover:bg-botanic-50 transition-colors text-xs">Editează</a>
+                                    <form action="{{ url_for('admin_delete_article', article_id=a.id) }}" method="POST" class="inline" onsubmit="return confirm('Sigur doriți să ștergeți acest articol?')">
+                                        <button type="submit" class="text-rose-600 hover:text-rose-800 font-semibold px-1.5 py-1 rounded-lg hover:bg-rose-50 transition-colors text-xs">Șterge</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty message if no search results -->
+            <div id="articles-empty-msg" class="hidden py-12 text-center text-stone-400">
+                <i data-lucide="file-question" class="w-10 h-10 mx-auto mb-2 text-stone-300"></i>
+                <p class="text-sm font-medium text-stone-600">Nu a fost găsit niciun articol conform filtrelor aplicate.</p>
+                <button type="button" onclick="resetArticlesFilter()" class="mt-3 text-xs text-botanic-700 font-bold hover:underline">
+                    Șterge filtrele și arată toate articolele
+                </button>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-stone-100 text-xs text-stone-500">
+                <div id="articles-pagination-info" class="font-medium">
+                    Afișare 1 - 15 din {{ articles|length }} articole
+                </div>
+                <div id="articles-pagination-controls" class="flex items-center space-x-1.5 flex-wrap">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% endif %}
+
+
+
+    <!-- TAB 3: PRODUSE RECOMANDATE -->
+    {% if active_tab == 'products' %}
+    <div class="space-y-8">
+
+        <!-- FOLDER IMPORT QUICK ACTION CARD -->
+        <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 border border-amber-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="space-y-1.5 max-w-2xl">
+                <div class="flex items-center space-x-2 text-amber-800 text-xs font-bold uppercase tracking-wider">
+                    <i data-lucide="folder-sync" class="w-4 h-4"></i>
+                    <span>Import Automat din Folderul Local `import_produse/`</span>
+                </div>
+                <h4 class="font-serif font-bold text-stone-900 text-base">
+                    Sincronizare Imagini & Extragere Descrieri din PDF
+                </h4>
+                <p class="text-xs text-stone-600 leading-relaxed">
+                    Copiază imaginile în <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono text-[11px]">import_produse/produse_recomandate/</code>, 
+                    imaginile de prezentare în <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono text-[11px]">import_produse/termek_bemutato/</code> 
+                    și fișierul PDF în <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono text-[11px]">import_produse/</code>, apoi apasă butonul:
+                </p>
+            </div>
+            <a href="{{ url_for('admin_process_import') }}" 
+               class="px-5 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl text-xs font-bold flex items-center justify-center space-x-2 shadow-sm shrink-0 transition-all hover:scale-102">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                <span>Procesează Fișierele din Folder</span>
+            </a>
+        </div>
+        
+        <!-- Product Form (Prompt requirement: large image upload, description, external link) -->
+        <div id="product-form" class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-4">
+                <div>
+                    <h3 class="font-serif font-bold text-lg text-stone-900">
+                        {% if edit_item and active_tab == 'products' %}Editează Produsul Recomandat #{{ edit_item.id }}{% else %}Adaugă Produs Recomandat Nou{% endif %}
+                    </h3>
+                    <p class="text-xs text-stone-500">Acest produs va apărea în caruselul lateral și la click se va deschide modalul cu imagine mare și link.</p>
+                </div>
+                {% if edit_item and active_tab == 'products' %}
+                <a href="{{ url_for('admin_panel', tab='products') }}" class="text-xs text-stone-400 hover:text-stone-700">Anulează</a>
+                {% endif %}
+            </div>
+
+            <form action="{{ url_for('admin_save_product') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                {% if edit_item and active_tab == 'products' %}
+                <input type="hidden" name="id" value="{{ edit_item.id }}">
+                {% endif %}
+
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                    <div class="sm:col-span-6">
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Denumire Produs *</label>
+                        <input type="text" name="name" required value="{{ edit_item.name if edit_item else '' }}" 
+                               placeholder="Ex: Insecticid cu pompă - Florasol"
+                               class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                    </div>
+
+                    <div class="sm:col-span-6">
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Gamă / Marcă</label>
+                        <input type="text" name="brand" value="{{ edit_item.brand if edit_item else 'Florasol' }}" 
+                               placeholder="Florasol / Vitaflora / Nutrisol / Humiflor / Plantasol"
+                               class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Încarcă Imagine Mare a Produsului</label>
+                        <input type="file" name="image_file" accept="image/*"
+                               class="w-full px-3 py-2 rounded-xl text-xs bg-stone-50 border border-stone-200 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-botanic-50 file:text-botanic-700">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Sau URL / Cale Imagine Mare</label>
+                        <input type="text" name="image_url" value="{{ edit_item.image_url if edit_item else '' }}" placeholder="https://... sau /static/uploads/..."
+                               class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Link Extern de Achiziție / Disponibilitate</label>
+                    <input type="text" name="external_url" value="{{ edit_item.external_url if edit_item else '' }}" 
+                           placeholder="https://www.montrose.ro"
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Descriere Detaliată & Domenii de Utilizare</label>
+                    <textarea name="description" rows="5" placeholder="Instrucțiuni de utilizare, compoziție, mod de aplicare..."
+                              class="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500 leading-relaxed">{{ edit_item.description if edit_item else '' }}</textarea>
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button type="submit" class="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-sm transition-colors">
+                        {% if edit_item and active_tab == 'products' %}Actualizează Produsul{% else %}Adaugă Produsul Recomandat{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Products List Cards with Live Filter & Pagination -->
+        <div id="products-admin-container" class="space-y-6">
+            <!-- Filter Bar -->
+            <div class="bg-white rounded-3xl p-5 border border-stone-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <h4 class="font-serif font-bold text-lg text-stone-900">Listă Produse Recomandate</h4>
+                    <span id="products-total-badge" class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                        {{ products|length }} produse
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:w-auto">
+                    <!-- Search -->
+                    <div class="relative">
+                        <input type="text" id="products-search-input" placeholder="Caută produs..."
+                               class="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5"></i>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div>
+                        <select id="products-brand-filter"
+                                class="w-full px-3 py-1.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-700">
+                            <option value="all">Toate Brandurile ({{ products|length }})</option>
+                            {% for b in product_brands %}
+                            <option value="{{ b }}">{{ b }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Per Page -->
+                    <div>
+                        <select id="products-pagesize-select"
+                                class="w-full px-3 py-1.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-700">
+                            <option value="12">12 pe pagină</option>
+                            <option value="24">24 pe pagină</option>
+                            <option value="all">Toate</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Grid Cards -->
+            <div id="products-grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for prod in products %}
+                <div class="product-admin-card bg-white rounded-3xl p-5 border border-stone-200 flex flex-col justify-between hover:shadow-md transition-all"
+                     data-id="{{ prod.id }}"
+                     data-name="{{ prod.name }}"
+                     data-brand="{{ prod.brand or 'Florasol' }}"
+                     data-code="{{ prod.code or '' }}">
+                    <div>
+                        <div class="w-full h-40 bg-stone-50 rounded-2xl p-2 flex items-center justify-center overflow-hidden mb-3 border border-stone-100">
+                            {% if prod.image_url %}
+                            <img src="{{ prod.image_url }}" alt="{{ prod.name }}" class="max-h-full object-contain">
+                            {% else %}
+                            <i data-lucide="package" class="w-10 h-10 text-stone-300"></i>
+                            {% endif %}
+                        </div>
+                        <span class="text-[10px] font-bold text-botanic-800 bg-botanic-100 px-2 py-0.5 rounded">
+                            {{ prod.brand or 'Florasol' }}
+                        </span>
+                        <h4 class="font-bold text-stone-900 text-sm mt-1.5 line-clamp-2">{{ prod.name }}</h4>
+                        <p class="text-xs text-stone-500 mt-1 line-clamp-2">{{ prod.description }}</p>
+                    </div>
+
+                    <div class="pt-4 mt-4 border-t border-stone-100 flex items-center justify-between text-xs">
+                        <span class="text-stone-400 font-mono">{{ prod.code or '' }}</span>
+                        <div class="space-x-2">
+                            <button type="button" onclick="openProductModal({{ prod.id }})" class="text-botanic-700 font-semibold hover:underline">Preview</button>
+                            <a href="{{ url_for('admin_panel', tab='products', edit_id=prod.id) }}#product-form" class="text-stone-700 font-semibold hover:underline">Editează</a>
+                            <form action="{{ url_for('admin_delete_product', prod_id=prod.id) }}" method="POST" class="inline" onsubmit="return confirm('Ștergeți produsul?')">
+                                <button type="submit" class="text-rose-600 font-semibold hover:underline">Șterge</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Empty message -->
+            <div id="products-empty-msg" class="hidden py-12 text-center text-stone-400">
+                <i data-lucide="shopping-bag" class="w-10 h-10 mx-auto mb-2 text-stone-300"></i>
+                <p class="text-sm font-medium text-stone-600">Nu a fost găsit niciun produs conform filtrelor.</p>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="bg-white rounded-2xl p-4 border border-stone-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-stone-500">
+                <div id="products-pagination-info" class="font-medium">
+                    Afișare 1 - 12 din {{ products|length }} produse
+                </div>
+                <div id="products-pagination-controls" class="flex items-center space-x-1.5 flex-wrap">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% endif %}
+
+
+
+    <!-- TAB: GHID VIZUAL (IMAGINI CARUSEL PREZENTARE) -->
+    {% if active_tab == 'showcase' %}
+    <div class="space-y-8">
+        
+        <!-- Header & Upload Form Card -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 pb-5">
+                <div>
+                    <div class="flex items-center space-x-2 text-amber-600 text-xs font-bold uppercase tracking-wider mb-1">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span>Secțiunea Ghid Vizual</span>
+                    </div>
+                    <h3 class="font-serif font-bold text-xl text-stone-900">Încărcare Imagini pentru „Ghid Vizual”</h3>
+                    <p class="text-xs text-stone-500 mt-1">
+                        Fotografiile încărcate aici vor fi afișate automat în caruselul interactiv <strong>Ghid vizual</strong> din bara laterală a site-ului.
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="px-3.5 py-1.5 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold flex items-center space-x-1.5">
+                        <i data-lucide="image" class="w-4 h-4"></i>
+                        <span>{{ showcase_list|length }} Imagini Active</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Upload Form -->
+            <form action="{{ url_for('admin_upload_showcase') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+                <div class="p-8 sm:p-10 border-2 border-dashed border-amber-300 rounded-3xl text-center space-y-4 hover:border-amber-500 transition-colors bg-amber-50/20 group">
+                    <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+                        <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <label for="showcase-file-input" class="cursor-pointer text-sm font-bold text-amber-800 hover:text-amber-900 underline underline-offset-4">
+                            Apasă aici pentru a alege imagini de pe calculator
+                        </label>
+                        <p class="text-xs text-stone-500 mt-2">
+                            Puteți selecta o singură imagine sau mai multe imagini simultan.<br>
+                            Formate acceptate: <strong>JPG, JPEG, PNG, WEBP, GIF, SVG</strong> (Până la 64MB per încărcare).
+                        </p>
+                    </div>
+                    <input type="file" id="showcase-file-input" name="showcase_files" multiple accept="image/*" class="hidden" onchange="previewShowcaseUpload(this)">
+                </div>
+
+                <!-- Live Preview of selected files before upload -->
+                <div id="showcase-upload-preview-container" class="hidden p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-3">
+                    <div class="flex items-center justify-between text-xs font-bold text-stone-700 border-b border-stone-200/80 pb-2">
+                        <span id="showcase-selected-count">Fișiere selectate pentru încărcare:</span>
+                        <button type="button" onclick="clearShowcaseSelected()" class="text-rose-600 hover:underline flex items-center space-x-1">
+                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                            <span>Anulează selecția</span>
+                        </button>
+                    </div>
+                    <div id="showcase-selected-list" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button type="submit" class="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center space-x-2">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>Încarcă Imaginile în Ghidul Vizual</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Gallery of all currently active Ghid Vizual images with Live Filter & Pagination -->
+        <div id="showcase-admin-container" class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-100 pb-4">
+                <div>
+                    <h4 class="font-serif font-bold text-xl text-stone-900 flex items-center space-x-2">
+                        <span>Galerie Imagini Ghid Vizual</span>
+                        <span id="showcase-total-badge" class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                            {{ showcase_list|length }} fotografii
+                        </span>
+                    </h4>
+                    <p class="text-xs text-stone-500 mt-1">Fotografiile active în caruselul lateral „Ghid vizual”.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:w-auto">
+                    <!-- Search -->
+                    <div class="relative">
+                        <input type="text" id="showcase-search-input" placeholder="Caută imagine..."
+                               class="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5"></i>
+                    </div>
+
+                    <!-- Sort -->
+                    <div>
+                        <select id="showcase-sort-select"
+                                class="w-full px-3 py-1.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-700">
+                            <option value="mtime-desc">Cele mai recente</option>
+                            <option value="mtime-asc">Cele mai vechi</option>
+                            <option value="title-asc">Fișier: A &rarr; Z</option>
+                        </select>
+                    </div>
+
+                    <!-- Per Page -->
+                    <div>
+                        <select id="showcase-pagesize-select"
+                                class="w-full px-3 py-1.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-stone-700">
+                            <option value="18">18 pe pagină</option>
+                            <option value="36">36 pe pagină</option>
+                            <option value="all">Toate</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="showcase-grid-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                {% for item in showcase_list %}
+                <div class="showcase-admin-card bg-stone-50 rounded-2xl p-2.5 border border-stone-200 hover:border-amber-400 hover:shadow-md transition-all flex flex-col justify-between group"
+                     data-filename="{{ item.filename }}"
+                     data-title="{{ item.title }}"
+                     data-mtime="{{ item.mtime_ts }}">
+                    <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-white border border-stone-100 mb-2">
+                        <img src="{{ item.image_url }}" alt="{{ item.title }}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                             loading="lazy">
+                        <a href="{{ item.image_url }}" target="_blank" 
+                           class="absolute top-1.5 right-1.5 w-7 h-7 rounded-lg bg-stone-900/80 hover:bg-stone-900 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity shadow-sm" 
+                           title="Deschide imaginea completă în tab nou">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[11px] font-bold text-stone-800 truncate" title="{{ item.filename }}">
+                            {{ item.filename }}
+                        </div>
+                        <div class="flex items-center justify-between text-[10px] text-stone-500">
+                            <span>{{ item.size_str }}</span>
+                            <span>{{ item.mtime_str }}</span>
+                        </div>
+                    </div>
+                    <div class="pt-2 mt-2 border-t border-stone-200/80 flex items-center justify-end">
+                        <form action="{{ url_for('admin_delete_showcase', filename=item.filename) }}" method="POST" onsubmit="return confirm('Sigur doriți să ștergeți imaginea din Ghidul Vizual?');">
+                            <button type="submit" class="px-2 py-1 rounded-lg text-rose-600 hover:bg-rose-50 text-[11px] font-semibold flex items-center space-x-1 transition-colors" title="Șterge definitiv această imagine">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                <span>Șterge</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-span-full py-12 text-center text-stone-400">
+                    <i data-lucide="images" class="w-12 h-12 mx-auto mb-2 text-stone-300"></i>
+                    <p class="text-sm">Nu există încă imagini în Ghidul Vizual. Folosește formularul de mai sus pentru a încărca fotografii!</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Empty message if search yields no results -->
+            <div id="showcase-empty-msg" class="hidden py-12 text-center text-stone-400">
+                <i data-lucide="image-off" class="w-10 h-10 mx-auto mb-2 text-stone-300"></i>
+                <p class="text-sm font-medium text-stone-600">Nu a fost găsită nicio fotografie conform căutării.</p>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="pt-4 border-t border-stone-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-stone-500">
+                <div id="showcase-pagination-info" class="font-medium">
+                    Afișare 1 - 18 din {{ showcase_list|length }} imagini
+                </div>
+                <div id="showcase-pagination-controls" class="flex items-center space-x-1.5 flex-wrap">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% endif %}
+
+
+
+    <!-- TAB 4: PLANTE A-Z -->
+    {% if active_tab == 'plants' %}
+    <div class="space-y-8">
+        
+        <!-- Add / Edit Plant Form -->
+        <div id="plant-form" class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-4">
+                <h3 class="font-serif font-bold text-lg text-stone-900">
+                    {% if edit_item and active_tab == 'plants' %}Editează Planta: {{ edit_item.name }}{% else %}Adaugă Specie Nouă în Catalogul A-Z{% endif %}
+                </h3>
+                {% if edit_item and active_tab == 'plants' %}
+                <a href="{{ url_for('admin_panel', tab='plants') }}" class="text-xs text-stone-400 hover:text-stone-700">Anulează</a>
+                {% endif %}
+            </div>
+
+            <form action="{{ url_for('admin_save_plant') }}" method="POST" enctype="multipart/form-data" onsubmit="return checkDuplicatePlantOnSubmit(event)" class="space-y-6">
+                {% if edit_item and active_tab == 'plants' %}
+                <input type="hidden" id="plant-id-input" name="id" value="{{ edit_item.id }}">
+                {% endif %}
+
+                <!-- 1. Identitate Plantă -->
+                <div>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                        <div>
+                            <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block">1. Identitate & Clasificare</span>
+                            <p class="text-[11px] text-stone-500 mt-0.5">
+                                După ce introduceți <strong>Numele Românesc</strong> sau <strong>Numele Latin</strong>, toate câmpurile fișei se completează automat de pe internet și pot fi editate liber.
+                            </p>
+                        </div>
+                        <button type="button" id="btn-autofill-plant" onclick="autoFillPlantFromWeb(true)"
+                                class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center space-x-1.5 shadow-xs transition-all shrink-0 cursor-pointer">
+                            <i data-lucide="wand-2" class="w-3.5 h-3.5"></i>
+                            <span>Completează Automat din Internet</span>
+                        </button>
+                    </div>
+
+                    <div id="plant-autofill-status" class="hidden mb-3 px-3.5 py-2 rounded-xl text-xs font-semibold border"></div>
+
+                    <!-- Inline Duplicate Plant Warning Banner -->
+                    <div id="plant-duplicate-warning" class="hidden mb-3 p-3.5 rounded-2xl bg-amber-50 border-2 border-amber-400 text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                        <div class="flex items-start space-x-2.5">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+                            <div class="text-xs">
+                                <span class="font-bold block text-amber-900">Atenție! Această plantă / floare este deja adăugată în baza de date!</span>
+                                <span id="plant-duplicate-warning-text" class="text-amber-800 mt-0.5 block"></span>
+                            </div>
+                        </div>
+                        <a id="plant-duplicate-edit-link" href="#"
+                           class="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shrink-0 inline-flex items-center space-x-1.5 shadow-2xs transition-colors">
+                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                            <span>Deschide Fișa Existentă</span>
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Nume Românesc *</label>
+                            <input type="text" id="plant-name-input" name="name" required value="{{ edit_item.name if edit_item else '' }}" placeholder="Ex: Acanthus hungaricus"
+                                   onchange="onPlantIdentityInputChanged('name')"
+                                   onkeydown="if(event.key==='Enter'){event.preventDefault(); autoFillPlantFromWeb(true);}"
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Nume Latin (Științific)</label>
+                            <input type="text" id="plant-latin-input" name="latin_name" value="{{ edit_item.latin_name if edit_item else '' }}" placeholder="Ex: Acanthus hungaricus"
+                                   onchange="onPlantIdentityInputChanged('latin_name')"
+                                   onkeydown="if(event.key==='Enter'){event.preventDefault(); autoFillPlantFromWeb(true);}"
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Subtip / Categorie</label>
+                            <input type="text" name="category" value="{{ edit_item.category if edit_item else 'Perene' }}" placeholder="Ex: Perene / Plante de apartament / Arbusti"
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Caracteristici Morfologice & Imagine -->
+                <div class="pt-2 border-t border-stone-100">
+                    <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block mb-3">2. Origine & Caracteristici Botanice</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Origine</label>
+                            <input type="text" name="origin" value="{{ edit_item.origin if edit_item else '' }}" placeholder="Ex: Peninsula Balcanică, România..."
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Flori & Înflorire</label>
+                            <input type="text" name="flowers" value="{{ edit_item.flowers if edit_item else '' }}" placeholder="Ex: Sunt albe sau roz, înfloresc vara..."
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Caracteristici Frunză</label>
+                            <input type="text" name="leaves" value="{{ edit_item.leaves if edit_item else '' }}" placeholder="Ex: Lanceolate, lucioase, verzi..."
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Formă de Creștere</label>
+                            <input type="text" name="shape" value="{{ edit_item.shape if edit_item else '' }}" placeholder="Ex: Crește sub formă de tufă viguroasă..."
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                    </div>
+
+                    <!-- Galerie Fotografii Alocate Plantei (3 Sloturi Vizuale: Drag & Drop / Reordonare / Ștergere / Înlocuire) -->
+                    {% set img1 = edit_item.images[0] if (edit_item and edit_item.images and edit_item.images|length > 0) else '' %}
+                    {% set img2 = edit_item.images[1] if (edit_item and edit_item.images and edit_item.images|length > 1) else '' %}
+                    {% set img3 = edit_item.images[2] if (edit_item and edit_item.images and edit_item.images|length > 2) else '' %}
+                    <div class="mt-5 pt-4 border-t border-stone-100">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                            <div>
+                                <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center space-x-2">
+                                    <span>Fotografii Alocate Plantei (Maxim 3 Poze)</span>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-botanic-100 text-botanic-800 border border-botanic-200">
+                                        <i data-lucide="move" class="w-2.5 h-2.5 mr-1"></i>
+                                        Drag & Drop activ
+                                    </span>
+                                </label>
+                                <p class="text-[11px] text-stone-500 mt-0.5">
+                                    Puteți <strong>schimba ordinea pozelor trăgându-le cu mouse-ul (Drag & Drop)</strong> sau folosind butoanele săgeți. Foto #1 este întotdeauna fotografia principală a plantei.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="plant-photos-container">
+                            {% for slot_idx, slot_url, field_name, slot_label in [
+                                (1, img1, 'image_url', 'Foto #1 (Principală)'),
+                                (2, img2, 'image_url_2', 'Foto #2 (Secundară)'),
+                                (3, img3, 'image_url_3', 'Foto #3 (Detaliu)')
+                            ] %}
+                            <div id="plant-photo-card-{{ slot_idx }}"
+                                 data-slot-idx="{{ slot_idx }}"
+                                 draggable="true"
+                                 class="plant-photo-card bg-stone-50/90 rounded-2xl p-3.5 border-2 border-stone-200 flex flex-col justify-between space-y-2.5 transition-all select-none hover:shadow-md hover:border-stone-300">
+                                <!-- Slot Header & Actions (Drag handle, Label, Quick Move Arrows, Delete Button) -->
+                                <div class="flex items-center justify-between gap-1 pb-1 border-b border-stone-200/60">
+                                    <div class="flex items-center space-x-1.5 min-w-0">
+                                        <span class="cursor-grab active:cursor-grabbing p-1 -ml-1 text-stone-400 hover:text-botanic-700 hover:bg-botanic-50 rounded-md transition-colors drag-handle shrink-0" 
+                                              title="Trage cu mouse-ul pentru a reordona (Drag & Drop)">
+                                            <i data-lucide="grip-vertical" class="w-4 h-4"></i>
+                                        </span>
+                                        <span class="text-[11px] font-bold text-stone-700 flex items-center space-x-1.5 truncate" id="plant-photo-label-{{ slot_idx }}">
+                                            <i data-lucide="image" class="w-3.5 h-3.5 text-botanic-600 shrink-0"></i>
+                                            <span class="truncate">{{ slot_label }}</span>
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center space-x-1 shrink-0">
+                                        <!-- Quick Swap / Move Buttons -->
+                                        {% if slot_idx > 1 %}
+                                        <button type="button" onclick="movePlantPhotoSlot({{ slot_idx }}, -1)"
+                                                class="w-6 h-6 rounded-md bg-white hover:bg-botanic-50 text-stone-500 hover:text-botanic-700 border border-stone-200 flex items-center justify-center transition-all cursor-pointer shadow-2xs"
+                                                title="Mută poza spre stânga (devine Foto #{{ slot_idx - 1 }})">
+                                            <i data-lucide="arrow-left" class="w-3 h-3"></i>
+                                        </button>
+                                        {% endif %}
+                                        {% if slot_idx < 3 %}
+                                        <button type="button" onclick="movePlantPhotoSlot({{ slot_idx }}, 1)"
+                                                class="w-6 h-6 rounded-md bg-white hover:bg-botanic-50 text-stone-500 hover:text-botanic-700 border border-stone-200 flex items-center justify-center transition-all cursor-pointer shadow-2xs"
+                                                title="Mută poza spre dreapta (devine Foto #{{ slot_idx + 1 }})">
+                                            <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                                        </button>
+                                        {% endif %}
+                                        <button type="button" id="plant-photo-del-btn-{{ slot_idx }}"
+                                                onclick="deletePlantPhotoSlot({{ slot_idx }})"
+                                                class="px-2 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-800 text-[11px] font-bold flex items-center space-x-1 transition-colors cursor-pointer {% if not slot_url %}hidden{% endif %}"
+                                                title="Șterge această fotografie">
+                                            <i data-lucide="trash-2" class="w-3 h-3"></i>
+                                            <span>Șterge</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Live Image Preview Box (Also draggable directly) -->
+                                <div class="relative w-full h-40 rounded-xl bg-white border border-stone-200 overflow-hidden flex items-center justify-center group cursor-grab active:cursor-grabbing"
+                                     title="Trage poza pentru a-i schimba poziția">
+                                    <img id="plant-photo-img-{{ slot_idx }}"
+                                         src="{{ slot_url }}"
+                                         alt="{{ slot_label }}"
+                                         onclick="if(this.src) window.open(this.src, '_blank')"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 {% if not slot_url %}hidden{% endif %}">
+                                    <div id="plant-photo-empty-{{ slot_idx }}"
+                                         class="flex flex-col items-center justify-center text-stone-400 p-4 text-center {% if slot_url %}hidden{% endif %}">
+                                        <i data-lucide="image-off" class="w-8 h-8 mb-1 text-stone-300"></i>
+                                        <span class="text-[11px] font-medium">Fără fotografie în poziția #{{ slot_idx }}</span>
+                                    </div>
+                                    <span class="absolute bottom-1.5 right-1.5 bg-stone-900/60 backdrop-blur-xs text-white text-[9px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                        Trage pentru mutare
+                                    </span>
+                                </div>
+
+                                <!-- URL / Path Input -->
+                                <div>
+                                    <label class="block text-[10px] font-bold text-stone-500 uppercase tracking-wider mb-1">URL sau Cale Imagine</label>
+                                    <input type="text"
+                                           id="plant-photo-url-{{ slot_idx }}"
+                                           name="{{ field_name }}"
+                                           value="{{ slot_url }}"
+                                           oninput="updatePlantPhotoSlotFromUrl({{ slot_idx }})"
+                                           placeholder="https://... sau /static/uploads/..."
+                                           class="w-full px-3 py-1.5 rounded-xl text-xs bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                                </div>
+
+                                <!-- Replace / Upload File Button -->
+                                <div>
+                                    <label class="w-full py-1.5 px-3 rounded-xl bg-white hover:bg-botanic-50 text-botanic-700 border border-stone-200 hover:border-botanic-300 text-[11px] font-bold flex items-center justify-center space-x-1.5 cursor-pointer transition-colors shadow-2xs">
+                                        <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                                        <span id="plant-photo-upload-label-{{ slot_idx }}">{% if slot_url %}Înlocuiește cu altă poză{% else %}Încarcă poză din calculator{% endif %}</span>
+                                        <input type="file"
+                                               id="plant-photo-file-{{ slot_idx }}"
+                                               name="image_file_{{ slot_idx }}"
+                                               accept="image/*"
+                                               class="hidden"
+                                               onchange="onPlantPhotoFileSelected({{ slot_idx }}, this)">
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Cerințe Ecologice & Îngrijire -->
+                <div class="pt-2 border-t border-stone-100">
+                    <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block mb-3">3. Cerințe Ecologice & Ghid de Îngrijire</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Lumină & Amplasament</label>
+                            <input type="text" name="lumina" value="{{ edit_item.care_guide.lumina if (edit_item and edit_item.care_guide) else (edit_item.requirements if edit_item else '') }}" placeholder="Ex: Locuri însorite sau parțial umbrite..."
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Temperatură & Rezistență</label>
+                            <input type="text" name="temperatura" value="{{ edit_item.care_guide.temperatura if (edit_item and edit_item.care_guide) else '' }}" placeholder="Ex: Specie rustică, rezistă la ger (-20°C)..."
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Udare & Umiditate</label>
+                            <input type="text" name="udare" value="{{ edit_item.care_guide.udare if (edit_item and edit_item.care_guide) else '' }}" placeholder="Ex: Udare moderată, se evită stagnarea apei..."
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Sol & Substrat Recomandat</label>
+                            <input type="text" name="sol" value="{{ edit_item.care_guide.sol if (edit_item and edit_item.care_guide) else '' }}" placeholder="Ex: Substrat fertil și bine drenat. Se recomandă utilizarea substratului Nutrisol / Florasol / Humiflor..."
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Fertilizare & Nutriție Optimă</label>
+                            <input type="text" name="fertilizare" value="{{ edit_item.care_guide.fertilizare if (edit_item and edit_item.care_guide) else '' }}" placeholder="Ex: Fertilizare periodică cu Soluție Nutritivă Nutrisol / Vitaflora / Florasol..."
+                                   class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Descriere Morfologică & Cerințe Ecologice -->
+                <div class="pt-2 border-t border-stone-100">
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Descriere Morfologică & Cerințe Ecologice (Text Integral)</label>
+                    <textarea name="description" rows="4" placeholder="Prezentare botanică detaliată, rol peisagistic și caracteristici generale..."
+                              class="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500 leading-relaxed">{{ edit_item.description if edit_item else '' }}</textarea>
+                </div>
+
+                <!-- 5. Produse Recomandate & Nutriție (Matcher Automat & Suprascriere) -->
+                <div class="pt-2 border-t border-stone-100 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block">5. Produse Recomandate & Nutriție Optimă</span>
+                            <p class="text-xs text-stone-500">
+                                Asociază automat pământul/substratul și tápoldatot speciei. Puteți lăsa selecția automată sau bifa manual produsele dorite.
+                            </p>
+                        </div>
+                        <button type="button" onclick="autoSuggestPlantProducts()" 
+                                class="px-3.5 py-1.5 bg-botanic-100 hover:bg-botanic-200 text-botanic-800 text-xs font-bold rounded-xl flex items-center space-x-1.5 transition-colors border border-botanic-300 shrink-0">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-botanic-700"></i>
+                            <span>Sugerează Automat Produse</span>
+                        </button>
+                    </div>
+
+                    <div id="auto-suggest-status" class="hidden text-xs font-semibold py-1"></div>
+
+                    <!-- Products Grid with Checkboxes -->
+                    {% set selected_prod_ids = [] %}
+                    {% if edit_item and edit_item.recommended_products %}
+                        {% for rp in edit_item.recommended_products %}
+                            {% set _ = selected_prod_ids.append(rp.id if rp.id is defined else rp) %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-72 overflow-y-auto p-2 bg-stone-50/60 rounded-2xl border border-stone-200">
+                        {% for prod in products %}
+                        {% set is_checked = (prod.id in selected_prod_ids) %}
+                        <label class="plant-rec-card flex items-start space-x-2.5 p-2.5 rounded-xl border {% if is_checked %}border-botanic-500 bg-emerald-50/40{% else %}border-stone-200 bg-white{% endif %} hover:border-botanic-400 cursor-pointer transition-all text-xs">
+                            <input type="checkbox" name="recommended_product_ids" value="{{ prod.id }}" 
+                                   class="plant-rec-checkbox mt-0.5 rounded text-botanic-600 focus:ring-botanic-500"
+                                   {% if is_checked %}checked{% endif %}
+                                   onchange="this.closest('.plant-rec-card').classList.toggle('border-botanic-500', this.checked); this.closest('.plant-rec-card').classList.toggle('bg-emerald-50/40', this.checked); this.closest('.plant-rec-card').classList.toggle('border-stone-200', !this.checked);">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center space-x-1 mb-0.5">
+                                    <span class="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded bg-stone-100 text-stone-700">
+                                        {{ prod.brand or 'Florasol' }}
+                                    </span>
+                                    {% if 'turba' in prod.name|lower or 'substrat' in prod.name|lower %}
+                                    <span class="text-[9px] font-semibold text-emerald-700 bg-emerald-50 px-1 rounded">Substrat</span>
+                                    {% elif 'solutie' in prod.name|lower or 'batoane' in prod.name|lower %}
+                                    <span class="text-[9px] font-semibold text-amber-700 bg-amber-50 px-1 rounded">Nutriție</span>
+                                    {% endif %}
+                                </div>
+                                <div class="font-bold text-stone-900 truncate" title="{{ prod.name }}">{{ prod.name }}</div>
+                            </div>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button type="submit" class="px-6 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl shadow-sm transition-colors flex items-center space-x-1.5">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>{% if edit_item and active_tab == 'plants' %}Salvează Specia (Șablon Nou){% else %}Adaugă în Catalogul A-Z{% endif %}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Popup Warning Modal: Plant Already Exists in Database -->
+        <div id="duplicate-plant-modal" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+            <div class="bg-white rounded-3xl max-w-md w-full p-6 border-2 border-amber-400 shadow-2xl transform scale-95 transition-transform duration-200 space-y-4">
+                <div class="flex items-start space-x-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                            Avertisment Duplicat
+                        </span>
+                        <h4 class="font-serif font-bold text-lg text-stone-900 mt-1">
+                            Planta / floarea există deja în baza de date!
+                        </h4>
+                        <p class="text-xs text-stone-600 mt-1 leading-relaxed">
+                            Specia pe care doriți să o adăugați se află deja în catalogul <strong>Plante A-Z</strong>:
+                        </p>
+                    </div>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200 space-y-1 text-xs">
+                    <div class="flex items-center justify-between">
+                        <span class="text-stone-400 font-semibold">ID Catalog:</span>
+                        <span id="dup-modal-plant-id" class="font-mono font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md">#--</span>
+                    </div>
+                    <div class="flex items-start justify-between gap-2 pt-1">
+                        <span class="text-stone-400 font-semibold shrink-0">Denumire:</span>
+                        <span id="dup-modal-plant-name" class="font-bold text-stone-900 text-right">--</span>
+                    </div>
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="text-stone-400 font-semibold shrink-0">Nume Latin:</span>
+                        <span id="dup-modal-plant-latin" class="italic font-serif text-botanic-700 text-right">--</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="text-stone-400 font-semibold shrink-0">Categorie:</span>
+                        <span id="dup-modal-plant-category" class="text-stone-700 font-medium text-right">--</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-2">
+                    <button type="button" onclick="closeDuplicatePlantModal()"
+                            class="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-stone-200 hover:bg-stone-100 text-stone-700 text-xs font-bold transition-colors cursor-pointer">
+                        Am înțeles (Închide)
+                    </button>
+                    <a id="dup-modal-edit-btn" href="#"
+                       class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm transition-colors">
+                        <i data-lucide="edit-3" class="w-4 h-4"></i>
+                        <span>Editează Fișa Existentă</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plants Table Preview with Filter, Search, Sort & Pagination -->
+        <div id="plants-admin-container" class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-5 overflow-hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-100 pb-4">
+                <div>
+                    <h3 class="font-serif font-bold text-xl text-stone-900 flex items-center space-x-2">
+                        <span>Catalog Specii Botanice A-Z</span>
+                        <span id="plants-total-badge" class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                            {{ plants|length }} specii
+                        </span>
+                    </h3>
+                    <p class="text-xs text-stone-500 mt-1">Căutare după denumire românească sau latină, filtrare pe litere și subtipuri botanice.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <a href="{{ url_for('plants_az') }}" target="_blank" class="px-3 py-1.5 rounded-xl border border-stone-200 text-stone-600 hover:text-stone-900 hover:bg-stone-50 text-xs font-semibold flex items-center space-x-1.5 transition-colors">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        <span>Vezi catalogul live</span>
+                    </a>
+                    <button type="button" id="plants-reset-btn" class="px-3 py-1.5 rounded-xl border border-stone-200 text-stone-500 hover:text-stone-800 hover:bg-stone-50 text-xs font-semibold flex items-center space-x-1.5 transition-colors">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Resetează</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Controls Bar -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 bg-stone-50/80 p-3.5 rounded-2xl border border-stone-200">
+                <!-- 1. Search by Name / Latin name -->
+                <div class="lg:col-span-4 relative">
+                    <input type="text" id="plants-search-input" placeholder="Caută după nume sau denumire latină..."
+                           class="w-full pl-9 pr-3 py-2 rounded-xl text-xs bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3 top-2.5"></i>
+                </div>
+
+                <!-- 2. Filter by Category -->
+                <div class="lg:col-span-3">
+                    <select id="plants-category-filter"
+                            class="w-full px-3 py-2 rounded-xl text-xs bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-stone-700 font-medium">
+                        <option value="all">Toate Categoriile ({{ plants|length }})</option>
+                        {% for cat in plant_categories %}
+                        <option value="{{ cat }}">{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 3. Filter by Letter -->
+                <div class="lg:col-span-2">
+                    <select id="plants-letter-filter"
+                            class="w-full px-3 py-2 rounded-xl text-xs bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-stone-700 font-medium">
+                        <option value="all">Toate Literele</option>
+                        {% for let in plant_letters %}
+                        <option value="{{ let }}">Litera {{ let }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 4. Sort select -->
+                <div class="lg:col-span-2">
+                    <select id="plants-sort-select"
+                            class="w-full px-3 py-2 rounded-xl text-xs bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-stone-700 font-medium">
+                        <option value="name-asc">Nume: A &rarr; Z</option>
+                        <option value="name-desc">Nume: Z &rarr; A</option>
+                        <option value="latin-asc">Nume Latin: A &rarr; Z</option>
+                        <option value="id-desc">ID: Cele mai noi</option>
+                        <option value="id-asc">ID: Cele mai vechi</option>
+                    </select>
+                </div>
+
+                <!-- 5. Page size select -->
+                <div class="lg:col-span-1">
+                    <select id="plants-pagesize-select"
+                            class="w-full px-2 py-2 rounded-xl text-xs bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-stone-700 font-medium">
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="all">Toate</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Table (100% width, table-fixed, no horizontal scroll needed) -->
+            <div class="w-full overflow-hidden rounded-2xl border border-stone-200/80 bg-white">
+                <table class="w-full table-fixed text-left text-xs text-stone-600">
+                    <thead class="bg-stone-50 text-stone-500 font-semibold uppercase tracking-wider border-b border-stone-200 select-none">
+                        <tr>
+                            <th class="p-3 w-12 sm:w-14">Litera</th>
+                            <th class="p-3 cursor-pointer hover:text-emerald-700 transition-colors" onclick="triggerPlantSort('name')">
+                                <div class="flex items-center space-x-1">
+                                    <span>Nume Românesc</span>
+                                    <i data-lucide="arrow-up-down" class="w-3 h-3 text-stone-400"></i>
+                                </div>
+                            </th>
+                            <th class="p-3 w-32 sm:w-44 cursor-pointer hover:text-emerald-700 transition-colors" onclick="triggerPlantSort('latin')">
+                                <div class="flex items-center space-x-1">
+                                    <span>Nume Latin</span>
+                                    <i data-lucide="arrow-up-down" class="w-3 h-3 text-stone-400"></i>
+                                </div>
+                            </th>
+                            <th class="p-3 w-28 sm:w-36">Subtip / Categorie</th>
+                            <th class="p-3 w-16 cursor-pointer hover:text-emerald-700 transition-colors" onclick="triggerPlantSort('id')">
+                                <div class="flex items-center space-x-1">
+                                    <span>Index</span>
+                                    <i data-lucide="arrow-up-down" class="w-3 h-3 text-stone-400"></i>
+                                </div>
+                            </th>
+                            <th class="p-3 w-36 sm:w-44 text-right shrink-0">Acțiuni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="plants-table-body" class="divide-y divide-stone-100 bg-white">
+                        {% for p in plants %}
+                        <tr class="plant-row hover:bg-stone-50 transition-colors"
+                            data-id="{{ p.id }}"
+                            data-name="{{ p.name }}"
+                            data-latin="{{ p.latin_name or '' }}"
+                            data-category="{{ p.category or '' }}"
+                            data-letter="{{ p.letter or '' }}">
+                            <td class="p-3 font-bold text-stone-800">
+                                <span class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200/60 flex items-center justify-center text-xs font-mono">
+                                    {{ p.letter }}
+                                </span>
+                            </td>
+                            <td class="p-3 font-semibold text-stone-900 leading-snug">
+                                <div class="line-clamp-2 sm:line-clamp-3 break-words text-xs text-stone-900" title="{{ p.name }}">
+                                    {{ p.name }}
+                                </div>
+                            </td>
+                            <td class="p-3 italic text-stone-500 leading-snug">
+                                <div class="line-clamp-2 break-words text-xs text-stone-500" title="{{ p.latin_name or '-' }}">
+                                    {{ p.latin_name or '-' }}
+                                </div>
+                            </td>
+                            <td class="p-3">
+                                <span class="inline-block bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full font-medium text-[11px] truncate max-w-full" title="{{ p.category or 'Perene' }}">
+                                    {{ p.category or 'Perene' }}
+                                </span>
+                            </td>
+                            <td class="p-3 font-mono text-stone-400 whitespace-nowrap text-xs">#{{ p.id }}</td>
+                            <td class="p-3 text-right whitespace-nowrap shrink-0">
+                                <div class="inline-flex items-center justify-end space-x-1 sm:space-x-2">
+                                    <a href="{{ url_for('plant_detail', plant_id=p.id) }}" target="_blank" 
+                                       class="text-stone-400 hover:text-stone-800 font-medium px-1.5 py-1 rounded-lg hover:bg-stone-100 transition-colors text-xs">Fișă</a>
+                                    <a href="{{ url_for('admin_panel', tab='plants', edit_id=p.id) }}#plant-form" 
+                                       class="text-botanic-700 hover:text-botanic-900 font-semibold px-1.5 py-1 rounded-lg hover:bg-botanic-50 transition-colors text-xs">Editează</a>
+                                    <form action="{{ url_for('admin_delete_plant', plant_id=p.id) }}" method="POST" class="inline" onsubmit="return confirm('Sigur doriți să ștergeți specia {{ p.name }}?')">
+                                        <button type="submit" class="text-rose-600 hover:text-rose-800 font-semibold px-1.5 py-1 rounded-lg hover:bg-rose-50 transition-colors text-xs">Șterge</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty message if no search results -->
+            <div id="plants-empty-msg" class="hidden py-12 text-center text-stone-400">
+                <i data-lucide="sprout" class="w-10 h-10 mx-auto mb-2 text-stone-300"></i>
+                <p class="text-sm font-medium text-stone-600">Nu a fost găsită nicio specie conform criteriilor de filtrare.</p>
+                <button type="button" onclick="resetPlantsFilter()" class="mt-3 text-xs text-emerald-700 font-bold hover:underline">
+                    Șterge filtrele și arată tot catalogul A-Z
+                </button>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-stone-100 text-xs text-stone-500">
+                <div id="plants-pagination-info" class="font-medium">
+                    Afișare 1 - 25 din {{ plants|length }} specii
+                </div>
+                <div id="plants-pagination-controls" class="flex items-center space-x-1.5 flex-wrap">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% endif %}
+
+
+
+    <!-- TAB 5: DESPRE NOI (Prompt requirement: editable from admin) -->
+    {% if active_tab == 'about' %}
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+        <div class="border-b border-stone-100 pb-4">
+            <h3 class="font-serif font-bold text-lg text-stone-900">Actualizare Conținut Pagina "Despre Noi"</h3>
+            <p class="text-xs text-stone-500">Toate modificările salvate aici vor fi afișate imediat vizitatorilor în pagina oficială Despre Noi.</p>
+        </div>
+
+        <form action="{{ url_for('admin_save_about') }}" method="POST" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Titlu Principal</label>
+                    <input type="text" name="title" value="{{ about.title }}" 
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Subtitlu / Slogan</label>
+                    <input type="text" name="subtitle" value="{{ about.subtitle }}" 
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Nume Companie</label>
+                    <input type="text" name="company_name" value="{{ about.company_name }}" 
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">An Înființare</label>
+                    <input type="number" name="founded_year" value="{{ about.founded_year }}" 
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Certificare / Calitate</label>
+                    <input type="text" name="quality_standards" value="{{ about.quality_standards }}" 
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Descriere Detaliată Companie (Societatea Mont Rose)</label>
+                <textarea name="description" rows="8" 
+                          class="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500 leading-relaxed">{{ about.description }}</textarea>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Declarația de Misiune</label>
+                <textarea name="mission" rows="3" 
+                          class="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500 leading-relaxed">{{ about.mission }}</textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Email Contact</label>
+                    <input type="email" name="contact_email" value="{{ about.contact_email }}" 
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Telefon Contact</label>
+                    <input type="text" name="contact_phone" value="{{ about.contact_phone }}" 
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Adresă Sediu</label>
+                    <input type="text" name="address" value="{{ about.address }}" 
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end space-x-3 pt-4 border-t border-stone-100">
+                <button type="submit" class="px-6 py-2.5 bg-botanic-700 hover:bg-botanic-800 text-white text-xs font-bold rounded-xl shadow-sm transition-colors">
+                    Actualizează Datele Despre Noi
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+
+
+    <!-- TAB 6: CALENDARUL GRĂDINARULUI -->
+    {% if active_tab == 'calendar' %}
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+        <div class="border-b border-stone-100 pb-4">
+            <h3 class="font-serif font-bold text-lg text-stone-900">Editare Sfaturi Sezoniere în Calendar</h3>
+            <p class="text-xs text-stone-500">Alege luna și modifică sfaturile pentru plante de exterior și de interior.</p>
+        </div>
+
+        {% set m_edit = request.args.get('month', default=10, type=int) %}
+        {% set cur_cal = calendar[m_edit|string] %}
+
+        <div class="flex flex-wrap gap-2 pb-4">
+            {% for m_num, m_data in calendar.items() %}
+            <a href="{{ url_for('admin_panel', tab='calendar', month=m_num) }}" 
+               class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all {% if m_edit == (m_num|int) %}bg-botanic-700 text-white shadow-xs{% else %}bg-stone-100 text-stone-700 hover:bg-stone-200{% endif %}">
+                {{ m_data.month_name }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <form action="{{ url_for('admin_save_calendar') }}" method="POST" class="space-y-4">
+            <input type="hidden" name="month" value="{{ m_edit }}">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Titlu Ghid Lună</label>
+                    <input type="text" name="title" value="{{ cur_cal.title }}" 
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Subtitlu</label>
+                    <input type="text" name="subtitle" value="{{ cur_cal.subtitle }}" 
+                           class="w-full px-4 py-2.5 rounded-xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-emerald-800 uppercase tracking-wider mb-1.5">Sfaturi Plante de Exterior (Grădină)</label>
+                    <textarea name="exterior_advice" rows="4" 
+                              class="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">{{ cur_cal.exterior_advice }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-amber-800 uppercase tracking-wider mb-1.5">Sfaturi Plante de Interior (Apartament)</label>
+                    <textarea name="interior_advice" rows="4" 
+                              class="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">{{ cur_cal.interior_advice }}</textarea>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Conținutul Detaliat al Ghidului Lunii {{ cur_cal.month_name }}</label>
+                <textarea name="full_content" rows="6" 
+                          class="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500 leading-relaxed">{{ cur_cal.full_content }}</textarea>
+            </div>
+
+            <div class="flex items-center justify-end space-x-3 pt-2">
+                <button type="submit" class="px-6 py-2.5 bg-botanic-700 hover:bg-botanic-800 text-white text-xs font-bold rounded-xl shadow-sm transition-colors">
+                    Salvează Sfaturile pentru {{ cur_cal.month_name }}
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+
+
+    <!-- TAB 7: ÎNCĂRCARE IMAGINI & MEDIA -->
+    {% if active_tab == 'media' %}
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+        <div class="border-b border-stone-100 pb-4">
+            <h3 class="font-serif font-bold text-lg text-stone-900">Manager Media & Încărcare Imagini</h3>
+            <p class="text-xs text-stone-500">Încarcă poze noi pentru articole sau produse. Vei primi instant URL-ul pe care îl poți insera în articole.</p>
+        </div>
+
+        <div class="p-8 border-2 border-dashed border-stone-300 rounded-3xl text-center space-y-4 hover:border-botanic-500 transition-colors bg-stone-50/50">
+            <i data-lucide="upload-cloud" class="w-12 h-12 text-stone-400 mx-auto"></i>
+            <div>
+                <label for="media-file-input" class="cursor-pointer text-sm font-bold text-botanic-700 hover:text-botanic-900">
+                    Apasă pentru a alege o imagine de pe dispozitiv
+                </label>
+                <p class="text-xs text-stone-400 mt-1">Formate acceptate: JPG, PNG, WEBP, GIF (Max 16MB)</p>
+            </div>
+            <input type="file" id="media-file-input" class="hidden" accept="image/*" onchange="uploadImageAsync(this)">
+        </div>
+
+        <!-- Uploaded Images Result Box -->
+        <div id="media-upload-result" class="hidden p-4 bg-emerald-50 rounded-2xl border border-emerald-200 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <img id="media-preview-img" src="" class="w-12 h-12 object-cover rounded-xl border border-emerald-300">
+                <div class="text-xs">
+                    <span class="font-bold text-emerald-900 block">Imagine încărcată cu succes!</span>
+                    <input type="text" id="media-copy-url" readonly class="text-xs bg-white border border-emerald-300 rounded px-2 py-1 mt-1 w-64 text-stone-600">
+                </div>
+            </div>
+            <button type="button" onclick="copyMediaUrl()" class="px-3 py-1.5 bg-emerald-700 text-white rounded-xl text-xs font-semibold">
+                Copiază URL
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+
+
+    <!-- TAB 8: SCHIMBARE PAROLĂ -->
+    {% if active_tab == 'password' %}
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6 max-w-xl">
+        <div class="border-b border-stone-100 pb-4">
+            <div class="flex items-center space-x-2 text-rose-700 text-xs font-bold uppercase tracking-wider mb-1">
+                <i data-lucide="lock" class="w-4 h-4"></i>
+                <span>Securitate Administrator</span>
+            </div>
+            <h3 class="font-serif font-bold text-xl text-stone-900">Modificare Parolă Acces</h3>
+            <p class="text-xs text-stone-500 mt-1">
+                Schimbă parola contului de administrator (utilizator activ: <strong class="text-stone-800">{{ session.get('admin_user', 'montrose') }}</strong>).
+            </p>
+        </div>
+
+        <form action="{{ url_for('admin_change_password') }}" method="POST" class="space-y-4">
+            <div>
+                <label for="current_password" class="block text-xs font-bold text-stone-700 mb-1.5">
+                    Parola Actuală
+                </label>
+                <div class="relative">
+                    <input type="password" id="current_password" name="current_password" required
+                           placeholder="Introduceți parola actuală (inițial: rosemont@1)"
+                           class="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                    <i data-lucide="key" class="w-4 h-4 text-stone-400 absolute left-3.5 top-3"></i>
+                </div>
+            </div>
+
+            <div>
+                <label for="new_password" class="block text-xs font-bold text-stone-700 mb-1.5">
+                    Noua Parolă
+                </label>
+                <div class="relative">
+                    <input type="password" id="new_password" name="new_password" required minlength="6"
+                           placeholder="Introduceți noua parolă (minim 6 caractere)"
+                           class="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                    <i data-lucide="lock" class="w-4 h-4 text-stone-400 absolute left-3.5 top-3"></i>
+                </div>
+            </div>
+
+            <div>
+                <label for="confirm_password" class="block text-xs font-bold text-stone-700 mb-1.5">
+                    Confirmă Noua Parolă
+                </label>
+                <div class="relative">
+                    <input type="password" id="confirm_password" name="confirm_password" required minlength="6"
+                           placeholder="Reintroduceți noua parolă"
+                           class="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-botanic-500">
+                    <i data-lucide="check-check" class="w-4 h-4 text-stone-400 absolute left-3.5 top-3"></i>
+                </div>
+            </div>
+
+            <div class="pt-3 flex items-center justify-between">
+                <span class="text-[11px] text-stone-400">Minim 6 caractere</span>
+                <button type="submit" 
+                        class="px-5 py-2.5 bg-botanic-700 hover:bg-botanic-800 text-white font-bold text-xs rounded-xl flex items-center space-x-1.5 shadow-sm transition-colors">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    <span>Actualizează Parola</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- TAB: SOCIAL MEDIA -->
+    {% if active_tab == 'social' %}
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6 max-w-3xl">
+        <div class="border-b border-stone-100 pb-4">
+            <div class="flex items-center space-x-2 text-sky-700 text-xs font-bold uppercase tracking-wider mb-1">
+                <i data-lucide="share-2" class="w-4 h-4"></i>
+                <span>Canale de Comunicare Online</span>
+            </div>
+            <h3 class="font-serif font-bold text-xl text-stone-900">Configurare Social Media</h3>
+            <p class="text-xs text-stone-500 mt-1">
+                Activează sau dezactivează afișarea secțiunii de Social Media pe site și personalizează adresele URL pentru fiecare rețea în parte.
+            </p>
+        </div>
+
+        <form action="{{ url_for('admin_save_social') }}" method="POST" class="space-y-6">
+            
+            <!-- Master Activation Switch -->
+            <div class="p-4 bg-sky-50/60 rounded-2xl border border-sky-100 flex items-start sm:items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <label for="social_enabled" class="text-sm font-bold text-stone-900 cursor-pointer flex items-center space-x-2">
+                        <span>Activează Secțiunea Social Media</span>
+                    </label>
+                    <p class="text-xs text-stone-600">
+                        Dacă este bifat, widgetul Social Media va apărea în bara laterală a site-ului și link-urile vor fi vizibile și în subsol.
+                    </p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                    <input type="checkbox" id="social_enabled" name="enabled" value="1" {% if social and social.enabled %}checked{% endif %} class="sr-only peer">
+                    <div class="w-11 h-6 bg-stone-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-600"></div>
+                </label>
+            </div>
+
+            <!-- Header Labels -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="social_title" class="block text-xs font-bold text-stone-700 mb-1.5">
+                        Titlu Secțiune (Widget Lateral)
+                    </label>
+                    <input type="text" id="social_title" name="title" value="{{ social.title if social else 'Urmărește-ne pe Social Media' }}"
+                           placeholder="ex: Urmărește-ne pe Social Media"
+                           class="w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                </div>
+                <div>
+                    <label for="social_subtitle" class="block text-xs font-bold text-stone-700 mb-1.5">
+                        Subtitlu / Descriere Scurtă
+                    </label>
+                    <input type="text" id="social_subtitle" name="subtitle" value="{{ social.subtitle if social else '' }}"
+                           placeholder="ex: Inspirație, noutăți și sfaturi practice."
+                           class="w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm bg-stone-50 border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                </div>
+            </div>
+
+            <div class="border-t border-stone-100 pt-4">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">Rețele Individuale & Link-uri</h4>
+                
+                <div class="space-y-4">
+                    <!-- Facebook -->
+                    <div class="p-4 rounded-2xl border border-stone-200 bg-stone-50/50 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                </span>
+                                <div>
+                                    <span class="text-xs font-bold text-stone-900 block">Facebook</span>
+                                    <span class="text-[10px] text-stone-500">Pagina sau profilul oficial Facebook</span>
+                                </div>
+                            </div>
+                            <label class="flex items-center space-x-2 cursor-pointer text-xs font-semibold text-stone-700">
+                                <input type="checkbox" name="facebook_enabled" value="1" {% if not social or social.facebook_enabled %}checked{% endif %} class="w-4 h-4 text-blue-600 rounded border-stone-300 focus:ring-blue-500">
+                                <span>Afișează</span>
+                            </label>
+                        </div>
+                        <div>
+                            <input type="url" name="facebook_url" value="{{ social.facebook_url if social else '' }}"
+                                   placeholder="https://www.facebook.com/nume-pagina"
+                                   class="w-full px-3.5 py-2 rounded-xl text-xs sm:text-sm bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- Instagram -->
+                    <div class="p-4 rounded-2xl border border-stone-200 bg-stone-50/50 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow-xs">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                </span>
+                                <div>
+                                    <span class="text-xs font-bold text-stone-900 block">Instagram</span>
+                                    <span class="text-[10px] text-stone-500">Contul oficial Instagram</span>
+                                </div>
+                            </div>
+                            <label class="flex items-center space-x-2 cursor-pointer text-xs font-semibold text-stone-700">
+                                <input type="checkbox" name="instagram_enabled" value="1" {% if not social or social.instagram_enabled %}checked{% endif %} class="w-4 h-4 text-pink-600 rounded border-stone-300 focus:ring-pink-500">
+                                <span>Afișează</span>
+                            </label>
+                        </div>
+                        <div>
+                            <input type="url" name="instagram_url" value="{{ social.instagram_url if social else '' }}"
+                                   placeholder="https://www.instagram.com/nume-cont"
+                                   class="w-full px-3.5 py-2 rounded-xl text-xs sm:text-sm bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                        </div>
+                    </div>
+
+                    <!-- TikTok -->
+                    <div class="p-4 rounded-2xl border border-stone-200 bg-stone-50/50 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="w-8 h-8 rounded-xl bg-stone-900 text-white flex items-center justify-center shadow-xs">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.53a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3 15.25a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V9.08a8.2 8.2 0 0 0 3.91 1.03V6.69z"/></svg>
+                                </span>
+                                <div>
+                                    <span class="text-xs font-bold text-stone-900 block">TikTok</span>
+                                    <span class="text-[10px] text-stone-500">Canalul oficial TikTok</span>
+                                </div>
+                            </div>
+                            <label class="flex items-center space-x-2 cursor-pointer text-xs font-semibold text-stone-700">
+                                <input type="checkbox" name="tiktok_enabled" value="1" {% if not social or social.tiktok_enabled %}checked{% endif %} class="w-4 h-4 text-stone-900 rounded border-stone-300 focus:ring-stone-500">
+                                <span>Afișează</span>
+                            </label>
+                        </div>
+                        <div>
+                            <input type="url" name="tiktok_url" value="{{ social.tiktok_url if social else '' }}"
+                                   placeholder="https://www.tiktok.com/@nume-cont"
+                                   class="w-full px-3.5 py-2 rounded-xl text-xs sm:text-sm bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-stone-500">
+                        </div>
+                    </div>
+
+                    <!-- Pinterest -->
+                    <div class="p-4 rounded-2xl border border-stone-200 bg-stone-50/50 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <span class="w-8 h-8 rounded-xl bg-red-600 text-white flex items-center justify-center shadow-xs">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0a12 12 0 0 0-4.37 23.18c-.06-.94-.1-2.4.02-3.44l.87-3.7s-.22-.44-.22-1.1c0-1.03.6-1.8 1.34-1.8.63 0 .94.47.94 1.04 0 .63-.4 1.58-.61 2.46-.17.74.37 1.34 1.1 1.34 1.32 0 2.34-1.39 2.34-3.4 0-1.78-1.28-3.02-3.11-3.02-2.27 0-3.6 1.7-3.6 3.46 0 .69.26 1.42.59 1.82.07.08.08.15.06.23l-.22.92c-.04.14-.13.17-.25.11-1-.46-1.62-1.92-1.62-3.09 0-2.52 1.83-4.83 5.28-4.83 2.8 0 4.97 2 4.97 4.67 0 2.78-1.75 5.02-4.18 5.02-.82 0-1.58-.43-1.85-.93l-.5 1.92c-.18.7-.67 1.58-1 2.11A11.96 11.96 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0z"/></svg>
+                                </span>
+                                <div>
+                                    <span class="text-xs font-bold text-stone-900 block">Pinterest</span>
+                                    <span class="text-[10px] text-stone-500">Panouri și cont Pinterest</span>
+                                </div>
+                            </div>
+                            <label class="flex items-center space-x-2 cursor-pointer text-xs font-semibold text-stone-700">
+                                <input type="checkbox" name="pinterest_enabled" value="1" {% if not social or social.pinterest_enabled %}checked{% endif %} class="w-4 h-4 text-red-600 rounded border-stone-300 focus:ring-red-500">
+                                <span>Afișează</span>
+                            </label>
+                        </div>
+                        <div>
+                            <input type="url" name="pinterest_url" value="{{ social.pinterest_url if social else '' }}"
+                                   placeholder="https://www.pinterest.com/nume-cont"
+                                   class="w-full px-3.5 py-2 rounded-xl text-xs sm:text-sm bg-white border border-stone-200 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="pt-4 border-t border-stone-100 flex items-center justify-end">
+                <button type="submit" 
+                        class="px-6 py-2.5 bg-botanic-700 hover:bg-botanic-800 text-white font-bold text-xs rounded-xl flex items-center space-x-1.5 shadow-sm transition-colors">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    <span>Salvează Setările Social Media</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+
+
+    <!-- TAB: STATISTICI & MONITORIZARE TRAFIC -->
+    {% if active_tab == 'stats' %}
+    <div class="space-y-8">
+        
+        <!-- Header Banner & Action Bar -->
+        <div class="bg-gradient-to-r from-stone-900 via-indigo-950 to-stone-900 text-white rounded-3xl p-6 sm:p-8 border border-white/10 shadow-sm relative overflow-hidden">
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div class="space-y-2 max-w-2xl">
+                    <div class="flex items-center space-x-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
+                        <i data-lucide="activity" class="w-4 h-4"></i>
+                        <span>Centru de Analiză & Performanță</span>
+                    </div>
+                    <h3 class="font-serif font-bold text-2xl sm:text-3xl text-white">Statistici & Monitorizare Trafic</h3>
+                    <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                        Monitorizează de unde vin vizitatorii (Google Căutare, Facebook, Instagram, TikTok, Pinterest), ce caută pe site (interese botanice) și care produse recomandate generează cel mai mare interes.
+                    </p>
+                </div>
+                
+                <!-- Reset / Action button -->
+                <div class="flex items-center space-x-3 shrink-0">
+                    <form action="{{ url_for('admin_reset_stats') }}" method="POST" onsubmit="return confirm('Sigur doriți să resetați contoarele de statistici? Această acțiune nu poate fi anulată.');">
+                        <input type="hidden" name="section" value="all">
+                        <button type="submit" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-white/10 hover:bg-rose-600/80 text-white border border-white/15 hover:border-rose-500 transition-all flex items-center space-x-2">
+                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                            <span>Resetează Statisticile</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Background decorative glow -->
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        </div>
+
+        <!-- 5 Key KPI Metric Badges -->
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+            <!-- Metric 1: Total Vizite -->
+            <div class="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-xs space-y-2">
+                <div class="flex items-center justify-between text-stone-400">
+                    <span class="text-xs font-bold uppercase tracking-wider text-stone-500">Total Vizite</span>
+                    <span class="w-8 h-8 rounded-xl bg-stone-100 text-stone-700 flex items-center justify-center">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="text-2xl sm:text-3xl font-bold text-stone-900 font-serif">
+                    {{ analytics.total_visits }}
+                </div>
+                <span class="text-[11px] text-emerald-600 font-semibold flex items-center space-x-1">
+                    <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                    <span>Trafic înregistrat</span>
+                </span>
+            </div>
+
+            <!-- Metric 2: Google Search -->
+            <div class="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-xs space-y-2">
+                <div class="flex items-center justify-between text-stone-400">
+                    <span class="text-xs font-bold uppercase tracking-wider text-stone-500">Google Căutare</span>
+                    <span class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="text-2xl sm:text-3xl font-bold text-indigo-950 font-serif">
+                    {{ analytics.google_total }}
+                </div>
+                <div class="text-[11px] text-indigo-600 font-semibold">
+                    {{ analytics.google_pct }}% din total vizite
+                </div>
+            </div>
+
+            <!-- Metric 3: Social Media Total -->
+            <div class="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-xs space-y-2">
+                <div class="flex items-center justify-between text-stone-400">
+                    <span class="text-xs font-bold uppercase tracking-wider text-stone-500">Social Media</span>
+                    <span class="w-8 h-8 rounded-xl bg-pink-100 text-pink-700 flex items-center justify-center">
+                        <i data-lucide="share-2" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="text-2xl sm:text-3xl font-bold text-pink-950 font-serif">
+                    {{ analytics.social_total }}
+                </div>
+                <div class="text-[11px] text-pink-600 font-semibold">
+                    {{ analytics.social_pct }}% din total vizite
+                </div>
+            </div>
+
+            <!-- Metric 4: Căutări Interne -->
+            <div class="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-xs space-y-2">
+                <div class="flex items-center justify-between text-stone-400">
+                    <span class="text-xs font-bold uppercase tracking-wider text-stone-500">Căutări pe Site</span>
+                    <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                        <i data-lucide="compass" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="text-2xl sm:text-3xl font-bold text-amber-950 font-serif">
+                    {{ analytics.total_searches }}
+                </div>
+                <div class="text-[11px] text-amber-600 font-semibold">
+                    Interese utilizatori
+                </div>
+            </div>
+
+            <!-- Metric 5: Interacțiuni Produse -->
+            <div class="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-xs space-y-2 col-span-2 lg:col-span-1">
+                <div class="flex items-center justify-between text-stone-400">
+                    <span class="text-xs font-bold uppercase tracking-wider text-stone-500">Produse Recomandate</span>
+                    <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                    </span>
+                </div>
+                <div class="text-2xl sm:text-3xl font-bold text-emerald-950 font-serif">
+                    {{ analytics.total_prod_interactions }}
+                </div>
+                <div class="text-[11px] text-emerald-700 font-semibold">
+                    {{ analytics.total_prod_views }} vederi / {{ analytics.total_prod_clicks }} click
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 1: SURSE DE TRAFIC (GOOGLE, FACEBOOK, INSTAGRAM, TIKTOK, PINTEREST, DIRECT) -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-4">
+                <div>
+                    <div class="flex items-center space-x-2 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-1">
+                        <i data-lucide="globe-2" class="w-4 h-4"></i>
+                        <span>Achiziție Vizitatori</span>
+                    </div>
+                    <h4 class="font-serif font-bold text-xl text-stone-900">Surse de Trafic (Google & Rețele Sociale)</h4>
+                    <p class="text-xs text-stone-500 mt-0.5">Identifică de unde accesează utilizatorii paginile PlanteOnline.ro</p>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-stone-100 text-stone-600 text-xs font-semibold self-start sm:self-auto">
+                    Total: {{ analytics.total_visits }} vizitatori
+                </span>
+            </div>
+
+            <!-- Platform breakdown cards grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for src in analytics.sources_stats %}
+                <div class="p-4 rounded-2xl border border-stone-200/80 bg-stone-50/50 hover:bg-white hover:border-stone-300 transition-all space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-9 h-9 rounded-xl flex items-center justify-center shadow-xs 
+                                {% if src.key == 'google' %}bg-indigo-600 text-white
+                                {% elif src.key == 'facebook' %}bg-blue-600 text-white
+                                {% elif src.key == 'instagram' %}bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white
+                                {% elif src.key == 'tiktok' %}bg-stone-900 text-white
+                                {% elif src.key == 'pinterest' %}bg-red-600 text-white
+                                {% else %}bg-emerald-600 text-white{% endif %}">
+                                {% if src.key == 'google' %}
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+                                {% elif src.key == 'facebook' %}
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                {% elif src.key == 'instagram' %}
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                {% elif src.key == 'tiktok' %}
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.53a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3 15.25a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V9.08a8.2 8.2 0 0 0 3.91 1.03V6.69z"/></svg>
+                                {% elif src.key == 'pinterest' %}
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0a12 12 0 0 0-4.37 23.18c-.06-.94-.1-2.4.02-3.44l.87-3.7s-.22-.44-.22-1.1c0-1.03.6-1.8 1.34-1.8.63 0 .94.47.94 1.04 0 .63-.4 1.58-.61 2.46-.17.74.37 1.34 1.1 1.34 1.32 0 2.34-1.39 2.34-3.4 0-1.78-1.28-3.02-3.11-3.02-2.27 0-3.6 1.7-3.6 3.46 0 .69.26 1.42.59 1.82.07.08.08.15.06.23l-.22.92c-.04.14-.13.17-.25.11-1-.46-1.62-1.92-1.62-3.09 0-2.52 1.83-4.83 5.28-4.83 2.8 0 4.97 2 4.97 4.67 0 2.78-1.75 5.02-4.18 5.02-.82 0-1.58-.43-1.85-.93l-.5 1.92c-.18.7-.67 1.58-1 2.11A11.96 11.96 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0z"/></svg>
+                                {% else %}
+                                <i data-lucide="globe" class="w-4 h-4"></i>
+                                {% endif %}
+                            </span>
+                            <div>
+                                <span class="text-xs font-bold text-stone-900 block leading-tight">{{ src.name }}</span>
+                                <span class="text-[10px] text-stone-500">{{ src.desc }}</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-base font-bold text-stone-900 font-serif block">{{ src.count }}</span>
+                            <span class="text-[11px] font-semibold 
+                                {% if src.key == 'google' %}text-indigo-600
+                                {% elif src.key == 'facebook' %}text-blue-600
+                                {% elif src.key == 'instagram' %}text-pink-600
+                                {% elif src.key == 'tiktok' %}text-stone-800
+                                {% elif src.key == 'pinterest' %}text-red-600
+                                {% else %}text-emerald-600{% endif %}">
+                                {{ src.percent }}%
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Progress bar -->
+                    <div class="w-full bg-stone-200/70 h-2 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-500 
+                            {% if src.key == 'google' %}bg-indigo-600
+                            {% elif src.key == 'facebook' %}bg-blue-600
+                            {% elif src.key == 'instagram' %}bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600
+                            {% elif src.key == 'tiktok' %}bg-stone-900
+                            {% elif src.key == 'pinterest' %}bg-red-600
+                            {% else %}bg-emerald-600{% endif %}"
+                            style="width: {{ src.percent }}%">
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Recent Visitors Log -->
+            <div class="border-t border-stone-100 pt-5">
+                <h5 class="text-xs font-bold uppercase tracking-wider text-stone-600 mb-3 flex items-center justify-between">
+                    <span>Jurnalul Ultimilor Vizitatori (Timp Real)</span>
+                    <span class="text-[10px] text-stone-400 font-normal">Ultimele 15 sesiuni înregistrate</span>
+                </h5>
+                <div class="overflow-x-auto rounded-2xl border border-stone-100">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-stone-50 text-stone-500 uppercase font-bold text-[10px] border-b border-stone-200/80">
+                            <tr>
+                                <th class="py-2.5 px-3">Data & Ora</th>
+                                <th class="py-2.5 px-3">Sursă Trafic</th>
+                                <th class="py-2.5 px-3">Pagină Accesat</th>
+                                <th class="py-2.5 px-3">Referrer Origine</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100">
+                            {% for v in analytics.recent_visits[:15] %}
+                            <tr class="hover:bg-stone-50/70 transition-colors">
+                                <td class="py-2 px-3 text-stone-500 font-mono text-[11px] whitespace-nowrap">{{ v.timestamp }}</td>
+                                <td class="py-2 px-3 whitespace-nowrap">
+                                    <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md text-[10px] font-bold 
+                                        {% if v.source == 'google' %}bg-indigo-100 text-indigo-800
+                                        {% elif v.source == 'facebook' %}bg-blue-100 text-blue-800
+                                        {% elif v.source == 'instagram' %}bg-pink-100 text-pink-800
+                                        {% elif v.source == 'tiktok' %}bg-stone-100 text-stone-800
+                                        {% elif v.source == 'pinterest' %}bg-red-100 text-red-800
+                                        {% else %}bg-emerald-100 text-emerald-800{% endif %}">
+                                        <span>{{ v.source|capitalize }}</span>
+                                    </span>
+                                </td>
+                                <td class="py-2 px-3 text-stone-800 font-medium whitespace-nowrap">
+                                    <a href="{{ v.path }}" target="_blank" class="hover:underline text-botanic-700 font-mono text-[11px]">{{ v.path }}</a>
+                                </td>
+                                <td class="py-2 px-3 text-stone-500 truncate max-w-xs">{{ v.referrer or 'Direct / Fără Referrer' }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="py-4 text-center text-stone-400 text-xs">Nu există înregistrări recente.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: CĂUTĂRI PE SITE (KERESŐ FIGYELŐ) -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 pb-4">
+                <div>
+                    <div class="flex items-center space-x-2 text-amber-600 text-xs font-bold uppercase tracking-wider mb-1">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                        <span>Kereső Figyelő / Monitorizare Căutări</span>
+                    </div>
+                    <h4 class="font-serif font-bold text-xl text-stone-900">Ce Caută Vizitatorii pe PlanteOnline.ro</h4>
+                    <p class="text-xs text-stone-500 mt-0.5">Urmărește termenii, plantele și produsele căutate de utilizatori în catalog</p>
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <div class="relative">
+                        <input type="text" id="stats-search-filter" placeholder="Filtrează cuvânt cheie..."
+                               class="pl-8 pr-3 py-1.5 rounded-xl text-xs bg-stone-100 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white w-48 sm:w-56">
+                        <i data-lucide="filter" class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2"></i>
+                    </div>
+                    <span class="px-2.5 py-1 bg-amber-50 text-amber-800 font-bold text-xs rounded-xl border border-amber-200">
+                        {{ analytics.total_searches }} Căutări
+                    </span>
+                </div>
+            </div>
+
+            <!-- Top Search Terms Table -->
+            <div class="overflow-x-auto rounded-2xl border border-stone-100">
+                <table class="w-full text-left text-xs" id="table-search-queries">
+                    <thead class="bg-stone-50 text-stone-500 uppercase font-bold text-[10px] border-b border-stone-200/80">
+                        <tr>
+                            <th class="py-2.5 px-3">#</th>
+                            <th class="py-2.5 px-3">Cuvânt Cheie / Termen Căutat</th>
+                            <th class="py-2.5 px-3">Secțiune / Țintă</th>
+                            <th class="py-2.5 px-3">Frecvență Căutare</th>
+                            <th class="py-2.5 px-3">Rezultate Găsite</th>
+                            <th class="py-2.5 px-3">Ultima Căutare</th>
+                            <th class="py-2.5 px-3 text-right">Acțiune</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-stone-100">
+                        {% for q in analytics.top_queries %}
+                        <tr class="hover:bg-amber-50/30 transition-colors search-row">
+                            <td class="py-2.5 px-3 text-stone-400 font-mono text-[11px]">{{ loop.index }}</td>
+                            <td class="py-2.5 px-3 font-semibold text-stone-900 query-name">
+                                <span class="bg-stone-100 px-2 py-1 rounded-lg text-xs">{{ q.query }}</span>
+                            </td>
+                            <td class="py-2.5 px-3 whitespace-nowrap">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md {% if q.target == 'plante' %}bg-emerald-100 text-emerald-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+                                    {{ q.target|capitalize }}
+                                </span>
+                            </td>
+                            <td class="py-2.5 px-3">
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-bold text-stone-900 font-serif text-sm">{{ q.count }}</span>
+                                    <span class="text-[10px] text-stone-400">ori</span>
+                                </div>
+                            </td>
+                            <td class="py-2.5 px-3">
+                                <span class="text-[11px] font-semibold {% if q.results_found > 0 %}text-emerald-700{% else %}text-rose-600{% endif %}">
+                                    {{ q.results_found }} rezultate
+                                </span>
+                            </td>
+                            <td class="py-2.5 px-3 text-stone-500 font-mono text-[11px] whitespace-nowrap">
+                                {{ q.last_searched }}
+                            </td>
+                            <td class="py-2.5 px-3 text-right">
+                                <a href="{% if q.target == 'articole' %}{{ url_for('articles_list', q=q.query) }}{% else %}{{ url_for('plants_az', q=q.query) }}{% endif %}" target="_blank"
+                                   class="inline-flex items-center space-x-1 text-[11px] text-botanic-700 hover:text-botanic-900 font-semibold bg-botanic-50 hover:bg-botanic-100 px-2 py-1 rounded-lg transition-colors">
+                                    <span>Vezi rezultate</span>
+                                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="py-6 text-center text-stone-400 text-xs">Nu s-a înregistrat nicio căutare încă.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Real-time recent search pills -->
+            <div class="p-4 bg-stone-50 rounded-2xl border border-stone-200/80 space-y-2">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-stone-500 block">Ultimele căutări live:</span>
+                <div class="flex flex-wrap gap-1.5">
+                    {% for r in analytics.recent_searches[:16] %}
+                    <span class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-xl bg-white border border-stone-200 text-xs text-stone-700 shadow-2xs">
+                        <i data-lucide="search" class="w-3 h-3 text-amber-500"></i>
+                        <span class="font-medium">{{ r.query }}</span>
+                        <span class="text-[10px] text-stone-400 font-mono">({{ r.timestamp.split(' ')[1] if ' ' in r.timestamp else r.timestamp }})</span>
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: INTERACȚIUNI PRODUSE RECOMANDATE -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-4">
+                <div>
+                    <div class="flex items-center space-x-2 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-1">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                        <span>Produse Recomandate sub Observație</span>
+                    </div>
+                    <h4 class="font-serif font-bold text-xl text-stone-900">Interes pentru Produsele Recomandate</h4>
+                    <p class="text-xs text-stone-500 mt-0.5">Vezi care produs a fost deschis de cele mai multe ori și care atrage cele mai multe click-uri</p>
+                </div>
+                <div class="flex items-center space-x-2 text-xs">
+                    <span class="px-2.5 py-1 bg-emerald-50 text-emerald-800 font-bold rounded-xl border border-emerald-200">
+                        {{ analytics.total_prod_views }} Vizualizări
+                    </span>
+                    <span class="px-2.5 py-1 bg-indigo-50 text-indigo-800 font-bold rounded-xl border border-indigo-200">
+                        {{ analytics.total_prod_clicks }} Click-uri Magazin
+                    </span>
+                </div>
+            </div>
+
+            <!-- Products Performance Table -->
+            <div class="overflow-x-auto rounded-2xl border border-stone-100">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-stone-50 text-stone-500 uppercase font-bold text-[10px] border-b border-stone-200/80">
+                        <tr>
+                            <th class="py-2.5 px-3">#</th>
+                            <th class="py-2.5 px-3">Produs Recomandat</th>
+                            <th class="py-2.5 px-3">Brand</th>
+                            <th class="py-2.5 px-3 text-center">Deschideri Modal</th>
+                            <th class="py-2.5 px-3 text-center">Click Magazin</th>
+                            <th class="py-2.5 px-3 text-center">Rată Interes (CTR)</th>
+                            <th class="py-2.5 px-3">Ultima Deschidere</th>
+                            <th class="py-2.5 px-3 text-right">Previzualizare</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-stone-100">
+                        {% for prod in analytics.top_products %}
+                        <tr class="hover:bg-emerald-50/20 transition-colors">
+                            <td class="py-3 px-3 text-stone-400 font-mono text-[11px]">{{ loop.index }}</td>
+                            <td class="py-3 px-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-xl bg-stone-100 border border-stone-200 overflow-hidden flex items-center justify-center shrink-0">
+                                        {% if prod.image_url %}
+                                        <img src="{{ prod.image_url }}" alt="{{ prod.name }}" class="w-full h-full object-cover">
+                                        {% else %}
+                                        <i data-lucide="package" class="w-5 h-5 text-stone-400"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <span class="font-bold text-stone-900 block leading-snug">{{ prod.name }}</span>
+                                        <span class="text-[10px] text-stone-400">ID #{{ prod.id }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-3 whitespace-nowrap">
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold 
+                                    {% if prod.brand == 'Florasol' %}bg-botanic-100 text-botanic-800
+                                    {% elif prod.brand == 'Nutrisol' %}bg-amber-100 text-amber-800
+                                    {% elif prod.brand == 'Vitaflora' %}bg-purple-100 text-purple-800
+                                    {% else %}bg-stone-100 text-stone-800{% endif %}">
+                                    {{ prod.brand }}
+                                </span>
+                            </td>
+                            <td class="py-3 px-3 text-center font-serif text-sm font-bold text-stone-900">
+                                {{ prod.views }}
+                            </td>
+                            <td class="py-3 px-3 text-center font-serif text-sm font-bold text-emerald-700">
+                                {{ prod.clicks }}
+                            </td>
+                            <td class="py-3 px-3 text-center">
+                                <span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-bold {% if prod.ctr >= 30 %}bg-emerald-100 text-emerald-800{% else %}bg-stone-100 text-stone-700{% endif %}">
+                                    {{ prod.ctr }}%
+                                </span>
+                            </td>
+                            <td class="py-3 px-3 text-stone-500 font-mono text-[11px] whitespace-nowrap">
+                                {{ prod.last_interacted }}
+                            </td>
+                            <td class="py-3 px-3 text-right">
+                                <button type="button" onclick="openProductModal({{ prod.id }})" 
+                                        class="px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold text-xs transition-colors inline-flex items-center space-x-1">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                    <span>Deschide</span>
+                                </button>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="py-6 text-center text-stone-400 text-xs">Nu s-a înregistrat nicio interacțiune cu produsele încă.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Live filter script for search queries -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterInput = document.getElementById('stats-search-filter');
+            if (filterInput) {
+                filterInput.addEventListener('input', function() {
+                    const val = this.value.toLowerCase().trim();
+                    const rows = document.querySelectorAll('#table-search-queries .search-row');
+                    rows.forEach(row => {
+                        const qName = row.querySelector('.query-name')?.textContent.toLowerCase() || '';
+                        if (qName.includes(val)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+    {% endif %}
+
+</div>
+{% endblock %}

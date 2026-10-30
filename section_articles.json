@@ -1,0 +1,210 @@
+{
+  "26": {
+    "id": 26,
+    "name": "Plante de interior",
+    "articles": [
+      {
+        "id": "77",
+        "title": "Alegerea unui Bonsai",
+        "href": "showarticle.php?articleID=77"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "27": {
+    "id": 27,
+    "name": "Plante de exterior",
+    "articles": [
+      {
+        "id": "94",
+        "title": "PrimÄvara ĂŽn livadÄ",
+        "href": "showarticle.php?articleID=94"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "25": {
+    "id": 25,
+    "name": "Intretinere",
+    "articles": [
+      {
+        "id": "58",
+        "title": "Ce lucrÄri trebuie efectuate la vii ĂŽn timpul primÄverii?",
+        "href": "showarticle.php?articleID=58"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "30": {
+    "id": 30,
+    "name": "Amenajari",
+    "articles": [
+      {
+        "id": "141",
+        "title": "Natura din birou",
+        "href": "showarticle.php?articleID=141"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "23": {
+    "id": 23,
+    "name": "Fertilizant",
+    "articles": [
+      {
+        "id": "175",
+        "title": "SoluĹŁie nutritivÄ pentru citrice Ĺi plantele mediteraniene - Gama Vitaflora",
+        "href": "showarticle.php?articleID=175"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "39": {
+    "id": 39,
+    "name": "Turba",
+    "articles": [
+      {
+        "id": "163",
+        "title": "Amestec de turbÄ universalÄ",
+        "href": "showarticle.php?articleID=163"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "31": {
+    "id": 31,
+    "name": "Fructe",
+    "articles": [
+      {
+        "id": "102",
+        "title": "Culesul strugurilor",
+        "href": "showarticle.php?articleID=102"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "34": {
+    "id": 34,
+    "name": "Doctorul gradinii",
+    "articles": [
+      {
+        "id": "145",
+        "title": "Plantele la medic",
+        "href": "showarticle.php?articleID=145"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "32": {
+    "id": 32,
+    "name": "Gradina",
+    "articles": [
+      {
+        "id": "97",
+        "title": "LucrÄri de toamnÄ - plantarea tufelor",
+        "href": "showarticle.php?articleID=97"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "35": {
+    "id": 35,
+    "name": "Aranjamente florale",
+    "articles": [
+      {
+        "id": "106",
+        "title": "Aranjamente din flori uscate",
+        "href": "showarticle.php?articleID=106"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "38": {
+    "id": 38,
+    "name": "Seminte",
+    "articles": [
+      {
+        "id": "123",
+        "title": "MuĹcata- metode de ĂŽnmulĹŁire",
+        "href": "showarticle.php?articleID=123"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "29": {
+    "id": 29,
+    "name": "Sisteme de irigatie",
+    "articles": [
+      {
+        "id": "124",
+        "title": "Ploaie artificialÄ",
+        "href": "showarticle.php?articleID=124"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  },
+  "36": {
+    "id": 36,
+    "name": "Accesorii",
+    "articles": [
+      {
+        "id": "103",
+        "title": "Un alt vin: Ĺampania Ĺi cognacul",
+        "href": "showarticle.php?articleID=103"
+      },
+      {
+        "id": "184",
+        "title": "Octombrie",
+        "href": "showarticle.php?articleID=184"
+      }
+    ]
+  }
+}

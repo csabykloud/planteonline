@@ -1,0 +1,709 @@
+{% extends "base.html" %}
+
+{% block title %}Plante Online - Ghidul Tău Botanic & Îngrijirea Plantelor{% endblock %}
+
+{% block content %}
+<div class="space-y-10">
+
+    <!-- 1. BLOKK: CALENDARUL GRĂDINARULUI (Zöld doboz - Aligned with Right Column & Viewport Bottom) -->
+    <section id="calendarul-gradinarului-block" class="bg-gradient-to-br from-[#2d6a4f] via-[#3a8260] to-[#4c956c] rounded-3xl p-6 sm:p-7 md:p-8 text-white shadow-xl border border-emerald-600/30 relative overflow-hidden flex flex-col justify-between min-h-[680px] lg:min-h-[725px]">
+        
+        <!-- Background subtle botanical decoration -->
+        <div class="absolute -right-6 -bottom-6 opacity-15 pointer-events-none">
+            <i data-lucide="leaf" class="w-80 h-80 text-lime-100"></i>
+        </div>
+        <div class="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-lime-300/10 blur-3xl pointer-events-none"></div>
+
+        <!-- Month Navigation Header & Selector -->
+        <div class="mb-4 relative z-10 space-y-2.5">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+                <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/20 text-lime-100 border border-white/30 shadow-2xs backdrop-blur-xs">
+                    <i data-lucide="calendar-days" class="w-3.5 h-3.5 mr-1.5 text-lime-200"></i>
+                    Calendarul Grădinarului
+                </span>
+                <span class="text-xs text-lime-100/90 font-medium bg-black/15 px-3 py-1 rounded-full border border-white/15 backdrop-blur-xs">
+                    <i data-lucide="calendar" class="w-3 h-3 text-lime-300 inline mr-1"></i>
+                    Selectează luna pentru sfaturi sezoniere:
+                </span>
+            </div>
+            
+            <!-- Month Selector Buttons -->
+            <div class="flex overflow-x-auto sm:flex-wrap gap-1 bg-white/15 p-1.5 rounded-2xl border border-white/25 backdrop-blur-md shadow-inner scrollbar-none items-center justify-between">
+                {% set months = [
+                    (1, 'Ianuarie', 'Ian'), (2, 'Februarie', 'Feb'), (3, 'Martie', 'Mar'),
+                    (4, 'Aprilie', 'Apr'), (5, 'Mai', 'Mai'), (6, 'Iunie', 'Iun'),
+                    (7, 'Iulie', 'Iul'), (8, 'August', 'Aug'), (9, 'Septembrie', 'Sep'),
+                    (10, 'Octombrie', 'Oct'), (11, 'Noiembrie', 'Noi'), (12, 'Decembrie', 'Dec')
+                ] %}
+                {% for m_num, m_full, m_short in months %}
+                <a href="{{ url_for('home', luna=m_num) }}" 
+                   title="{{ m_full }}"
+                   class="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition-all {% if selected_month == m_num %}bg-white text-[#1b4332] shadow-md font-bold scale-105{% else %}text-white/90 hover:text-white hover:bg-white/20{% endif %}">
+                    {{ m_short }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Main Featured Monthly Article -->
+        <div class="relative z-10 space-y-4">
+            <div>
+                <div class="inline-flex items-center text-xs text-amber-200 font-bold mb-1">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1 text-amber-300"></i>
+                    Ghidul sezonier activ: {{ calendar_info.month_name }}
+                </div>
+
+                {% set main_title = calendar_info.main_title or (calendar_info.title.split(':', 1)[0] if ':' in calendar_info.title else calendar_info.title) %}
+                {% set topic_title = calendar_info.topic or (calendar_info.title.split(':', 1)[1]|trim if ':' in calendar_info.title else '') %}
+
+                <h2 class="text-xl sm:text-3xl font-serif font-bold text-white leading-tight drop-shadow-2xs">
+                    {{ main_title }}
+                </h2>
+                {% if topic_title %}
+                <div class="text-sm sm:text-lg font-serif font-semibold text-lime-100 mt-1 leading-snug">
+                    {{ topic_title }}
+                </div>
+                {% endif %}
+                <p class="text-emerald-50/95 text-xs sm:text-sm mt-1.5 leading-relaxed text-justify line-clamp-2">
+                    {{ calendar_info.subtitle }}
+                </p>
+            </div>
+
+            <!-- Dual Seasonal Advice Grid (Scrollable cards ensuring height matches right sidebar) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1">
+                
+                <!-- Exterior Box -->
+                <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 sm:p-4.5 border border-white/25 hover:bg-white/20 transition-all shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-2 text-lime-200 font-bold text-xs sm:text-sm mb-2.5 pb-2 border-b border-white/15">
+                            <span class="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center text-lime-100 shrink-0">
+                                <i data-lucide="trees" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Plante de Exterior & Grădină</span>
+                        </div>
+                        
+                        <!-- Scrollable list with line-height 1.55, bold keywords & 8px spacing -->
+                        <div class="max-h-[265px] sm:max-h-[285px] lg:max-h-[295px] overflow-y-auto pr-2 botanic-scrollbar">
+                            <ul class="space-y-2">
+                                {% for it in calendar_info.exterior_advice|format_advice %}
+                                <li class="text-xs sm:text-[13px] text-white/95 leading-[1.55] flex items-start space-x-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-lime-300 mt-1.5 shrink-0"></span>
+                                    <span class="text-justify block w-full">
+                                        {% if it.prefix %}<strong class="font-bold text-white text-lime-100">{{ it.prefix }}</strong> {% endif %}{{ it.content }}
+                                    </span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interior Box -->
+                <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 sm:p-4.5 border border-white/25 hover:bg-white/20 transition-all shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-2 text-amber-200 font-bold text-xs sm:text-sm mb-2.5 pb-2 border-b border-white/15">
+                            <span class="w-6 h-6 rounded-lg bg-amber-400/25 flex items-center justify-center text-amber-100 shrink-0">
+                                <i data-lucide="flower-2" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span>Plante de Interior & Apartament</span>
+                        </div>
+                        
+                        <!-- Scrollable list with line-height 1.55, bold keywords & 8px spacing -->
+                        <div class="max-h-[265px] sm:max-h-[285px] lg:max-h-[295px] overflow-y-auto pr-2 botanic-scrollbar">
+                            <ul class="space-y-2">
+                                {% for it in calendar_info.interior_advice|format_advice %}
+                                <li class="text-xs sm:text-[13px] text-white/95 leading-[1.55] flex items-start space-x-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-300 mt-1.5 shrink-0"></span>
+                                    <span class="text-justify block w-full">
+                                        {% if it.prefix %}<strong class="font-bold text-white text-amber-100">{{ it.prefix }}</strong> {% endif %}{{ it.content }}
+                                    </span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Full Article Expand / Action Button -->
+            <div class="pt-2 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button type="button" onclick="toggleCalendarArticle()" 
+                            class="px-4 py-2 bg-white hover:bg-lime-50 text-[#1b4332] font-bold text-xs rounded-xl inline-flex items-center space-x-1.5 shadow-md transition-transform hover:-translate-y-0.5 cursor-pointer">
+                        <i data-lucide="book-open" class="w-3.5 h-3.5 text-[#2d6a4f]"></i>
+                        <span id="expand-btn-text">Citește articolul complet al lunii</span>
+                        <i data-lucide="chevron-down" id="expand-icon" class="w-3.5 h-3.5 transition-transform text-[#2d6a4f]"></i>
+                    </button>
+
+                    <a href="{{ url_for('calendar_view', luna=selected_month) }}" 
+                       class="px-3.5 py-2 bg-white/15 hover:bg-white/25 border border-white/25 text-white font-semibold text-xs rounded-xl inline-flex items-center space-x-1 transition-colors">
+                        <span>Deschide calendarul anual</span>
+                        <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+
+                <span class="text-[11px] text-lime-200/80 hidden sm:inline-flex items-center">
+                    <i data-lucide="scroll" class="w-3 h-3 mr-1 text-lime-300"></i>
+                    Derulează în ferestre pentru toate recomandările
+                </span>
+            </div>
+
+            <!-- Collapsible Full Article Body for Current Month -->
+            <div id="full-calendar-article-box" class="hidden mt-4 pt-4 border-t border-white/25 bg-[#1b4332]/50 p-5 rounded-2xl backdrop-blur-md">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs text-lime-200 font-mono">Publicat pe PlanteOnline.ro</span>
+                    <button type="button" onclick="toggleCalendarArticle()" class="text-emerald-100 hover:text-white text-xs cursor-pointer font-bold">Închide &times;</button>
+                </div>
+                <div class="prose prose-invert prose-sm max-w-none text-white/95 leading-relaxed whitespace-pre-line text-justify">
+                    {{ calendar_info.full_content }}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 2. BLOKK: INDEXUL PLANTELOR A-Z (Katalógus előnézet & Dinamikus Körforgás) -->
+    <section id="plante-az-preview-section" class="bg-stone-100/70 rounded-3xl p-5 sm:p-7 border border-stone-200 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs font-bold text-botanic-700 uppercase tracking-wider">Enciclopedie Botanică</span>
+                    <span class="bg-botanic-100 text-botanic-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-botanic-200">530+ specii</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-serif font-bold text-stone-900 mt-0.5">
+                    Indexul Plantelor A-Z
+                </h2>
+                <p class="text-xs sm:text-sm text-stone-500 mt-1 text-justify">
+                    Ghid alfabetic complet: denumiri științifice în latină, cerințe de îngrijire, lumină, udare și sol optim.
+                </p>
+            </div>
+            <div class="flex items-center space-x-2 self-start sm:self-auto shrink-0">
+                <a href="{{ url_for('plants_az') }}" class="px-4 py-2.5 bg-botanic-700 hover:bg-botanic-800 text-white text-xs font-bold rounded-xl flex items-center space-x-1.5 shadow-sm transition-colors">
+                    <span>Explorează Catalogul Complet (532)</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Alphabet Quick Jump Row (with active pill highlight and dimmed inactive letters) -->
+        <div class="bg-white p-3 rounded-2xl border border-stone-200 shadow-2xs space-y-2">
+            <div class="flex items-center justify-between text-[11px] text-stone-400 px-1">
+                <span class="flex items-center space-x-1.5 font-medium">
+                    <i data-lucide="rotate-cw" class="w-3 h-3 text-botanic-600 animate-spin" style="animation-duration: 8s;"></i>
+                    <span>Litera activă se schimbă automat la fiecare 7 secunde (sau alege o literă):</span>
+                </span>
+                <span id="alphabet-active-letter-badge" class="font-bold text-botanic-700 text-xs">
+                    Litera activă: A
+                </span>
+            </div>
+
+            <div id="alphabet-nav-bar" class="flex overflow-x-auto sm:flex-wrap gap-1 items-center scrollbar-none pb-1">
+                {% for l in all_letters %}
+                    {% set count = letter_counts.get(l, 0) %}
+                    {% if count > 0 %}
+                    <button type="button" 
+                            onclick="selectAlphabetLetter('{{ l }}')" 
+                            data-letter="{{ l }}"
+                            title="Litera {{ l }} ({{ count }} plante)"
+                            class="alphabet-letter-btn w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-all shrink-0 cursor-pointer {% if l == 'A' %}bg-botanic-700 text-white shadow-sm ring-2 ring-botanic-500 scale-105 active-letter-btn{% else %}text-stone-700 hover:bg-botanic-50 hover:text-botanic-800{% endif %}">
+                        {{ l }}
+                    </button>
+                    {% else %}
+                    <span title="Nu există plante înregistrate sub litera {{ l }}"
+                          class="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs font-semibold text-stone-300 opacity-40 cursor-not-allowed shrink-0 select-none">
+                        {{ l }}
+                    </span>
+                    {% endif %}
+                {% endfor %}
+
+                <a href="{{ url_for('plants_az', l='ALL') }}" 
+                   title="Vezi toate plantele din catalog"
+                   class="px-2.5 h-7.5 sm:h-8 rounded-lg flex items-center justify-center text-xs font-bold bg-stone-100 text-stone-700 hover:bg-botanic-700 hover:text-white transition-all ml-auto shrink-0 whitespace-nowrap">
+                    Toate (532) &rarr;
+                </a>
+            </div>
+        </div>
+
+        <!-- 6 Featured Plants Sample Grid (Dynamic rotation with circular continuation) -->
+        <div id="plants-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 transition-opacity duration-300">
+            {% for p in initial_plants %}
+            <div class="bg-white rounded-2xl p-3.5 border border-stone-200 hover:shadow-md hover:border-botanic-400 transition-all flex flex-col justify-between group">
+                <div>
+                    <!-- Image with Light Botanical Capsule Badge -->
+                    <div class="w-full h-36 bg-stone-50 rounded-xl overflow-hidden mb-2.5 flex items-center justify-center relative">
+                        {% if p.image %}
+                        <img src="{{ p.image }}" alt="{{ p.name }}" 
+                             loading="lazy" decoding="async"
+                             data-fallback="{{ p.fallback_image }}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                             onerror="if(this.dataset.fallback && this.src !== this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.classList.remove('hidden');}">
+                        <div class="hidden text-stone-300 flex-col items-center">
+                            <i data-lucide="sprout" class="w-8 h-8"></i>
+                        </div>
+                        {% else %}
+                        <div class="text-stone-300 flex flex-col items-center">
+                            <i data-lucide="sprout" class="w-8 h-8"></i>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Light Botanical Capsule Badge -->
+                        <span class="absolute top-2 left-2 bg-emerald-50/95 text-emerald-800 border border-emerald-200/60 shadow-2xs text-[10px] font-semibold px-2 py-0.5 rounded-full backdrop-blur-xs">
+                            {{ p.category or 'Plante' }}
+                        </span>
+                    </div>
+
+                    <!-- 2-line wrapped title without mid-word cutting -->
+                    <h4 class="font-bold text-stone-900 text-xs sm:text-sm line-clamp-2 min-h-[2.4rem] leading-snug group-hover:text-botanic-700 transition-colors" title="{{ p.name }}">
+                        {{ p.name }}
+                    </h4>
+                    <p class="text-[11px] text-stone-400 italic line-clamp-1 mt-0.5" title="{{ p.latin_name }}">
+                        {{ p.latin_name or 'Specie botanică' }}
+                    </p>
+                    <p class="text-xs text-stone-500 mt-1.5 line-clamp-2 leading-relaxed text-justify">
+                        {{ p.description }}
+                    </p>
+                </div>
+
+                <!-- Bottom Row: Origin on left, Detalii pinned on right -->
+                <div class="pt-2.5 mt-2.5 border-t border-stone-100 flex items-center justify-between gap-1.5">
+                    <span class="text-[11px] text-stone-400 truncate max-w-[105px] sm:max-w-[120px]" title="Origine: {{ p.origin }}">
+                        <strong class="font-medium text-stone-500">Origine:</strong> {{ p.origin }}
+                    </span>
+                    <a href="{{ url_for('plant_detail', plant_id=p.id) }}" class="text-xs font-bold text-botanic-700 hover:text-botanic-900 flex items-center space-x-0.5 shrink-0 whitespace-nowrap group-hover:translate-x-0.5 transition-transform">
+                        <span>Detalii</span>
+                        <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- 3. BLOKK: ARTICOLE PE CATEGORII (Articole Recomandate - Views hidden, 2-line clamp) -->
+    <section class="space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-200 pb-4">
+            <div>
+                <span class="text-xs font-bold text-botanic-600 uppercase tracking-wider">Ghiduri & Cunoștințe</span>
+                <h2 class="text-2xl sm:text-3xl font-serif font-bold text-stone-900 tracking-tight">
+                    Articole Recomandate
+                </h2>
+            </div>
+            <a href="{{ url_for('articles_list') }}" class="text-xs font-bold text-botanic-700 hover:text-botanic-900 flex items-center space-x-1 group">
+                <span>Toate cele 150+ articole</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+
+        <!-- 3 Pillars Grid: Plante de interior / Plante de exterior / Întreținere -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Column 1: Plante de Interior -->
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-xs flex flex-col justify-between space-y-4 hover:border-botanic-300 transition-colors">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                            <i data-lucide="flower" class="w-5 h-5"></i>
+                        </span>
+                        <span class="text-xs font-bold text-stone-400 bg-stone-100 px-2.5 py-1 rounded-full">Interior</span>
+                    </div>
+                    <h3 class="font-serif font-bold text-lg text-stone-900">Plante de Interior</h3>
+                    <p class="text-xs text-stone-500 leading-relaxed text-justify">
+                        Totul despre ghivece, udare, lumină optimă și plante purificatoare de aer pentru locuință și birou.
+                    </p>
+                    <div class="divide-y divide-stone-100 pt-2">
+                        {% for art in cat_highlights['interior'] %}
+                        <a href="{{ url_for('article_detail', article_id=art.id) }}" class="block py-2.5 hover:text-botanic-700 group transition-colors">
+                            <h4 class="text-xs font-semibold text-stone-800 group-hover:text-botanic-700 line-clamp-2 min-h-[2.25rem] leading-snug">
+                                {{ art.title }}
+                            </h4>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <a href="{{ url_for('articles_list', categorie='Plante de interior') }}" 
+                   class="inline-flex items-center text-xs font-bold text-botanic-700 hover:text-botanic-900 pt-2 border-t border-stone-100">
+                    <span>Vezi articolele de interior</span>
+                    <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-1"></i>
+                </a>
+            </div>
+
+            <!-- Column 2: Plante de Exterior -->
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-xs flex flex-col justify-between space-y-4 hover:border-botanic-300 transition-colors">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="w-10 h-10 rounded-2xl bg-botanic-100 text-botanic-800 flex items-center justify-center font-bold">
+                            <i data-lucide="trees" class="w-5 h-5"></i>
+                        </span>
+                        <span class="text-xs font-bold text-stone-400 bg-stone-100 px-2.5 py-1 rounded-full">Exterior</span>
+                    </div>
+                    <h3 class="font-serif font-bold text-lg text-stone-900">Plante de Exterior</h3>
+                    <p class="text-xs text-stone-500 leading-relaxed text-justify">
+                        Arbuști ornamentali, arbori, flori de grădină, garduri vii și amenajarea spațiilor deschise.
+                    </p>
+                    <div class="divide-y divide-stone-100 pt-2">
+                        {% for art in cat_highlights['exterior'] %}
+                        <a href="{{ url_for('article_detail', article_id=art.id) }}" class="block py-2.5 hover:text-botanic-700 group transition-colors">
+                            <h4 class="text-xs font-semibold text-stone-800 group-hover:text-botanic-700 line-clamp-2 min-h-[2.25rem] leading-snug">
+                                {{ art.title }}
+                            </h4>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <a href="{{ url_for('articles_list', categorie='Plante de exterior') }}" 
+                   class="inline-flex items-center text-xs font-bold text-botanic-700 hover:text-botanic-900 pt-2 border-t border-stone-100">
+                    <span>Vezi articolele de exterior</span>
+                    <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-1"></i>
+                </a>
+            </div>
+
+            <!-- Column 3: Întreținere & Fertilizare -->
+            <div class="bg-white rounded-3xl p-6 border border-stone-200 shadow-xs flex flex-col justify-between space-y-4 hover:border-botanic-300 transition-colors">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                            <i data-lucide="flask-conical" class="w-5 h-5"></i>
+                        </span>
+                        <span class="text-xs font-bold text-stone-400 bg-stone-100 px-2.5 py-1 rounded-full">Întreținere</span>
+                    </div>
+                    <h3 class="font-serif font-bold text-lg text-stone-900">Întreținere & Nutriție</h3>
+                    <p class="text-xs text-stone-500 leading-relaxed text-justify">
+                        Tăieri tehnice, fertilizare echilibrată, combaterea bolilor și pregătirea pentru iarnă.
+                    </p>
+                    <div class="divide-y divide-stone-100 pt-2">
+                        {% for art in cat_highlights['intretinere'] %}
+                        <a href="{{ url_for('article_detail', article_id=art.id) }}" class="block py-2.5 hover:text-botanic-700 group transition-colors">
+                            <h4 class="text-xs font-semibold text-stone-800 group-hover:text-botanic-700 line-clamp-2 min-h-[2.25rem] leading-snug">
+                                {{ art.title }}
+                            </h4>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <a href="{{ url_for('articles_list', categorie='Intretinere') }}" 
+                   class="inline-flex items-center text-xs font-bold text-botanic-700 hover:text-botanic-900 pt-2 border-t border-stone-100">
+                    <span>Ghiduri de întreținere</span>
+                    <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-1"></i>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SOCIAL MEDIA (Horizontal bar right above Despre Societatea Mont Rose) -->
+    {% if social_media and social_media.enabled %}
+    <section class="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200 shadow-xs space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-3">
+            <div class="flex items-center space-x-2.5">
+                <span class="w-8 h-8 rounded-xl bg-botanic-100 text-botanic-700 flex items-center justify-center font-bold shrink-0">
+                    <i data-lucide="share-2" class="w-4 h-4"></i>
+                </span>
+                <div>
+                    <h3 class="font-serif font-bold text-base sm:text-lg text-stone-900 leading-tight">
+                        {{ social_media.title or 'Urmărește-ne pe Social Media' }}
+                    </h3>
+                    <p class="text-[11px] sm:text-xs text-stone-500 text-justify">
+                        {{ social_media.subtitle or 'Inspirație, noutăți și sfaturi practice pentru plante și grădinărit.' }}
+                    </p>
+                </div>
+            </div>
+            <span class="text-[11px] text-stone-400 font-medium hidden sm:inline-block">Comunitatea PlanteOnline</span>
+        </div>
+
+        <!-- Horizontal row of 4 social channels -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {% if social_media.facebook_enabled and social_media.facebook_url %}
+            <a href="{{ social_media.facebook_url }}" target="_blank" rel="noopener noreferrer" 
+               class="flex items-center justify-center space-x-2.5 p-3 rounded-2xl bg-blue-50/70 hover:bg-blue-100 border border-blue-200/60 text-blue-700 font-semibold text-xs transition-all shadow-2xs hover:shadow-xs group">
+                <span class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </span>
+                <span>Facebook</span>
+            </a>
+            {% endif %}
+
+            {% if social_media.instagram_enabled and social_media.instagram_url %}
+            <a href="{{ social_media.instagram_url }}" target="_blank" rel="noopener noreferrer" 
+               class="flex items-center justify-center space-x-2.5 p-3 rounded-2xl bg-pink-50/70 hover:bg-pink-100 border border-pink-200/60 text-pink-700 font-semibold text-xs transition-all shadow-2xs hover:shadow-xs group">
+                <span class="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </span>
+                <span>Instagram</span>
+            </a>
+            {% endif %}
+
+            {% if social_media.tiktok_enabled and social_media.tiktok_url %}
+            <a href="{{ social_media.tiktok_url }}" target="_blank" rel="noopener noreferrer" 
+               class="flex items-center justify-center space-x-2.5 p-3 rounded-2xl bg-stone-100 hover:bg-stone-200/80 border border-stone-200 text-stone-900 font-semibold text-xs transition-all shadow-2xs hover:shadow-xs group">
+                <span class="w-7 h-7 rounded-lg bg-stone-900 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.53a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3 15.25a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V9.08a8.2 8.2 0 0 0 3.91 1.03V6.69z"/></svg>
+                </span>
+                <span>TikTok</span>
+            </a>
+            {% endif %}
+
+            {% if social_media.pinterest_enabled and social_media.pinterest_url %}
+            <a href="{{ social_media.pinterest_url }}" target="_blank" rel="noopener noreferrer" 
+               class="flex items-center justify-center space-x-2.5 p-3 rounded-2xl bg-red-50/70 hover:bg-red-100 border border-red-200/60 text-red-700 font-semibold text-xs transition-all shadow-2xs hover:shadow-xs group">
+                <span class="w-7 h-7 rounded-lg bg-red-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0a12 12 0 0 0-4.37 23.18c-.06-.94-.1-2.4.02-3.44l.87-3.7s-.22-.44-.22-1.1c0-1.03.6-1.8 1.34-1.8.63 0 .94.47.94 1.04 0 .63-.4 1.58-.61 2.46-.17.74.37 1.34 1.1 1.34 1.32 0 2.34-1.39 2.34-3.4 0-1.78-1.28-3.02-3.11-3.02-2.27 0-3.6 1.7-3.6 3.46 0 .69.26 1.42.59 1.82.07.08.08.15.06.23l-.22.92c-.04.14-.13.17-.25.11-1-.46-1.62-1.92-1.62-3.09 0-2.52 1.83-4.83 5.28-4.83 2.8 0 4.97 2 4.97 4.67 0 2.78-1.75 5.02-4.18 5.02-.82 0-1.58-.43-1.85-.93l-.5 1.92c-.18.7-.67 1.58-1 2.11A11.96 11.96 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0z"/></svg>
+                </span>
+                <span>Pinterest</span>
+            </a>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- 4. BLOKK: DESPRE NOI SUMMARY & EXPERTISE BANNER -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div class="md:col-span-8 space-y-3">
+            <span class="text-xs font-bold text-botanic-700 uppercase tracking-wider">Despre Societatea Mont Rose</span>
+            <h3 class="text-2xl font-serif font-bold text-stone-900">
+                Peste 20 de ani de experiență în slujba grădinarilor
+            </h3>
+            <p class="text-stone-600 text-xs sm:text-sm leading-relaxed text-justify">
+                Societatea Mont Rose a fost înființată în anul 2001 cu scopul de a oferi pasionaților de plante și nu numai, soluțiile, precum și produsele necesare pentru întreținerea acestora. Produsele comercializate sunt fabricate în UE în concordanță cu cele mai exigente standarde de calitate.
+            </p>
+            <div class="flex flex-wrap gap-4 pt-2 text-xs text-stone-700">
+                <div class="flex items-center space-x-1.5">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-botanic-600"></i>
+                    <span>Producător Florasol</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-botanic-600"></i>
+                    <span>Distribuitor Humiflor & Nutrisol</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-botanic-600"></i>
+                    <span>Plantasol, Vitaflora & Florimo</span>
+                </div>
+            </div>
+        </div>
+        <div class="md:col-span-4 flex flex-col items-center justify-center text-center p-6 bg-botanic-50 rounded-2xl border border-botanic-100 space-y-3">
+            <div class="w-16 h-16 rounded-full bg-botanic-600 text-white flex items-center justify-center font-bold text-xl shadow-md">
+                2001
+            </div>
+            <div class="font-serif font-bold text-stone-900">Fondat în România</div>
+            <p class="text-xs text-stone-500">Misiune educațională și produse profesionale pentru flori.</p>
+            <a href="{{ url_for('about_view') }}" class="text-xs font-bold text-botanic-700 hover:text-botanic-900 underline">
+                Află mai multe despre noi &rarr;
+            </a>
+        </div>
+    </section>
+
+</div>
+
+<!-- Data payload for client-side Alphabet Carousel rotation -->
+<script id="plants-by-letter-data" type="application/json">
+{{ plants_by_letter | tojson }}
+</script>
+<script id="active-letters-data" type="application/json">
+{{ active_letters | tojson }}
+</script>
+
+<script>
+// Toggle Calendar Article Body Expand
+function toggleCalendarArticle() {
+    const box = document.getElementById('full-calendar-article-box');
+    const text = document.getElementById('expand-btn-text');
+    const icon = document.getElementById('expand-icon');
+    
+    if (box.classList.contains('hidden')) {
+        box.classList.remove('hidden');
+        text.textContent = 'Restrânge articolul';
+        icon.classList.add('rotate-180');
+    } else {
+        box.classList.add('hidden');
+        text.textContent = 'Citește articolul complet al lunii';
+        icon.classList.remove('rotate-180');
+    }
+}
+
+// Client-side A-Z Plant Carousel Rotation
+(function() {
+    let plantsData = {};
+    let activeLetters = [];
+    
+    try {
+        const rawPlants = document.getElementById('plants-by-letter-data').textContent;
+        const rawLetters = document.getElementById('active-letters-data').textContent;
+        plantsData = JSON.parse(rawPlants);
+        activeLetters = JSON.parse(rawLetters);
+    } catch(e) {
+        console.error('Error parsing alphabet plants data:', e);
+        return;
+    }
+
+    if (!activeLetters || activeLetters.length === 0) return;
+
+    // State per letter to remember pagination offset
+    const letterOffsets = {};
+    activeLetters.forEach(l => { letterOffsets[l] = 0; });
+    // Initial letter A already displayed items 0..5
+    if (activeLetters.includes('A')) {
+        const aTotal = (plantsData['A'] || []).length;
+        if (aTotal > 6) {
+            letterOffsets['A'] = 6;
+        }
+    }
+
+    let currentLetterIdx = 0;
+    let rotationTimer = null;
+    const ROTATION_INTERVAL_MS = 7000; // 7 seconds per letter
+    let isPaused = false;
+
+    // Circular Continuation Algorithm specified by user:
+    function getNextBatchForLetter(letter) {
+        const list = plantsData[letter] || [];
+        const total = list.length;
+        if (total === 0) return [];
+        
+        // If letter has 6 or fewer plants, show all available plants
+        if (total <= 6) {
+            letterOffsets[letter] = 0;
+            return list;
+        }
+
+        const offset = letterOffsets[letter] || 0;
+        let batch = [];
+
+        if (offset + 6 <= total) {
+            batch = list.slice(offset, offset + 6);
+            letterOffsets[letter] = (offset + 6) % total;
+        } else {
+            const remaining = total - offset;
+            const needed = 6 - remaining;
+            batch = list.slice(offset).concat(list.slice(0, needed));
+            letterOffsets[letter] = needed;
+        }
+
+        return batch;
+    }
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function renderCards(plants, letter) {
+        const container = document.getElementById('plants-cards-grid');
+        const badge = document.getElementById('alphabet-active-letter-badge');
+        if (!container) return;
+
+        // Smooth fade out
+        container.classList.add('opacity-0');
+
+        setTimeout(() => {
+            let html = '';
+            plants.forEach(p => {
+                const safeName = escapeHtml(p.name);
+                const safeLatin = escapeHtml(p.latin_name || 'Specie botanică');
+                const safeCat = escapeHtml(p.category || 'Plante');
+                const safeDesc = escapeHtml(p.description || '');
+                const safeOrigin = escapeHtml(p.origin || 'Global');
+                const safeImg = escapeHtml(p.image || '');
+                const safeFallback = escapeHtml(p.fallback_image || '');
+                const safeId = encodeURIComponent(p.id);
+
+                const imgTag = safeImg ? 
+                    `<img src="${safeImg}" alt="${safeName}" loading="lazy" decoding="async" data-fallback="${safeFallback}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="if(this.dataset.fallback && this.src !== this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.classList.remove('hidden');}">
+                     <div class="hidden text-stone-300 flex-col items-center"><i data-lucide="sprout" class="w-8 h-8"></i></div>` :
+                    `<div class="text-stone-300 flex-col items-center"><i data-lucide="sprout" class="w-8 h-8"></i></div>`;
+
+                html += `
+                <div class="bg-white rounded-2xl p-3.5 border border-stone-200 hover:shadow-md hover:border-botanic-400 transition-all flex flex-col justify-between group">
+                    <div>
+                        <div class="w-full h-36 bg-stone-50 rounded-xl overflow-hidden mb-2.5 flex items-center justify-center relative">
+                            ${imgTag}
+                            <span class="absolute top-2 left-2 bg-emerald-50/95 text-emerald-800 border border-emerald-200/60 shadow-2xs text-[10px] font-semibold px-2 py-0.5 rounded-full backdrop-blur-xs">
+                                ${safeCat}
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-stone-900 text-xs sm:text-sm line-clamp-2 min-h-[2.4rem] leading-snug group-hover:text-botanic-700 transition-colors" title="${safeName}">
+                            ${safeName}
+                        </h4>
+                        <p class="text-[11px] text-stone-400 italic line-clamp-1 mt-0.5" title="${safeLatin}">
+                            ${safeLatin}
+                        </p>
+                        <p class="text-xs text-stone-500 mt-1.5 line-clamp-2 leading-relaxed text-justify">
+                            ${safeDesc}
+                        </p>
+                    </div>
+                    <div class="pt-2.5 mt-2.5 border-t border-stone-100 flex items-center justify-between gap-1.5">
+                        <span class="text-[11px] text-stone-400 truncate max-w-[105px] sm:max-w-[120px]" title="Origine: ${safeOrigin}">
+                            <strong class="font-medium text-stone-500">Origine:</strong> ${safeOrigin}
+                        </span>
+                        <a href="/planta/${safeId}" class="text-xs font-bold text-botanic-700 hover:text-botanic-900 flex items-center space-x-0.5 shrink-0 whitespace-nowrap group-hover:translate-x-0.5 transition-transform">
+                            <span>Detalii</span>
+                            <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                        </a>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            if (badge) {
+                const count = (plantsData[letter] || []).length;
+                badge.textContent = `Litera activă: ${letter} (${count} specii)`;
+            }
+
+            // Update alphabet bar active pill highlight
+            document.querySelectorAll('.alphabet-letter-btn').forEach(btn => {
+                if (btn.getAttribute('data-letter') === letter) {
+                    btn.className = 'alphabet-letter-btn w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-all shrink-0 cursor-pointer bg-botanic-700 text-white shadow-sm ring-2 ring-botanic-500 scale-105 active-letter-btn';
+                } else {
+                    btn.className = 'alphabet-letter-btn w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-all shrink-0 cursor-pointer text-stone-700 hover:bg-botanic-50 hover:text-botanic-800';
+                }
+            });
+
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+
+            container.classList.remove('opacity-0');
+        }, 250);
+    }
+
+    function advanceToNextLetter() {
+        if (isPaused) return;
+        currentLetterIdx = (currentLetterIdx + 1) % activeLetters.length;
+        const letter = activeLetters[currentLetterIdx];
+        const plants = getNextBatchForLetter(letter);
+        renderCards(plants, letter);
+    }
+
+    function resetTimer() {
+        if (rotationTimer) clearInterval(rotationTimer);
+        rotationTimer = setInterval(advanceToNextLetter, ROTATION_INTERVAL_MS);
+    }
+
+    // Expose selectAlphabetLetter to global window for click interaction
+    window.selectAlphabetLetter = function(letter) {
+        const idx = activeLetters.indexOf(letter);
+        if (idx !== -1) {
+            currentLetterIdx = idx;
+            const plants = getNextBatchForLetter(letter);
+            renderCards(plants, letter);
+            resetTimer();
+        }
+    };
+
+    // Pause on hover so users can browse/click comfortably
+    const section = document.getElementById('plante-az-preview-section');
+    if (section) {
+        section.addEventListener('mouseenter', () => { isPaused = true; });
+        section.addEventListener('mouseleave', () => { isPaused = false; });
+    }
+
+    // Start auto rotation
+    resetTimer();
+})();
+</script>
+{% endblock %}

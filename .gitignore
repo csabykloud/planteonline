@@ -1,0 +1,29 @@
+# Large files & archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Temporary & system files
+.DS_Store
+Thumbs.db
+*.log
+stderr.log
+stdout.log
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo

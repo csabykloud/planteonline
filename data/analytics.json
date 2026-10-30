@@ -1,0 +1,520 @@
+{
+  "traffic": {
+    "total_visits": 129,
+    "sources": {
+      "google": 0,
+      "facebook": 32,
+      "instagram": 0,
+      "tiktok": 0,
+      "pinterest": 0,
+      "direct": 97
+    },
+    "recent_visits": [
+      {
+        "timestamp": "29.10.2026 09:17",
+        "source": "direct",
+        "path": "/",
+        "referrer": "127.0.0.1:5000"
+      },
+      {
+        "timestamp": "28.10.2026 09:18",
+        "source": "direct",
+        "path": "/pagina-inexistenta-test-404",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "28.10.2026 09:18",
+        "source": "facebook",
+        "path": "/plante-az",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "28.10.2026 09:18",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "28.10.2026 08:36",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "127.0.0.1:5000/articole?categorie=Plante+de+interior"
+      },
+      {
+        "timestamp": "27.10.2026 15:19",
+        "source": "facebook",
+        "path": "/plante-az",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:19",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:19",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:19",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:19",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:18",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:18",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:18",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:17",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:17",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:17",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:17",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:16",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:16",
+        "source": "direct",
+        "path": "/articole",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:10",
+        "source": "facebook",
+        "path": "/plante-az",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:10",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 15:09",
+        "source": "direct",
+        "path": "/calendar",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 13:52",
+        "source": "facebook",
+        "path": "/plante-az",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 13:52",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 13:51",
+        "source": "direct",
+        "path": "/calendar",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "27.10.2026 09:02",
+        "source": "direct",
+        "path": "/",
+        "referrer": "127.0.0.1:5000/admin?tab=products"
+      },
+      {
+        "timestamp": "26.10.2026 15:57",
+        "source": "facebook",
+        "path": "/plante-az",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "26.10.2026 15:57",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "26.10.2026 15:57",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "26.10.2026 15:13",
+        "source": "facebook",
+        "path": "/plante-az",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "26.10.2026 15:13",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "26.10.2026 15:13",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "26.10.2026 15:09",
+        "source": "facebook",
+        "path": "/plante-az",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "26.10.2026 15:09",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "26.10.2026 15:09",
+        "source": "direct",
+        "path": "/",
+        "referrer": "Direct / Marcaj"
+      }
+    ]
+  },
+  "searches": {
+    "total_searches": 38,
+    "queries": {
+      "anth": {
+        "count": 1,
+        "last_searched": "22.10.2026 12:29",
+        "results_found": 34,
+        "target": "plante"
+      },
+      "cact": {
+        "count": 2,
+        "last_searched": "22.10.2026 12:39",
+        "results_found": 21,
+        "target": "articole"
+      },
+      "bonsai": {
+        "count": 33,
+        "last_searched": "28.10.2026 09:18",
+        "results_found": 0,
+        "target": "plante"
+      },
+      "musc": {
+        "count": 2,
+        "last_searched": "23.10.2026 12:23",
+        "results_found": 2,
+        "target": "plante"
+      }
+    },
+    "recent": [
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "28.10.2026 09:18",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "27.10.2026 15:19",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "27.10.2026 15:10",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "27.10.2026 13:52",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 15:57",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 15:13",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 15:09",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 15:05",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 14:47",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 14:11",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 13:29",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 12:44",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 12:33",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 12:25",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 12:18",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 12:06",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 11:58",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 11:44",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 10:06",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 09:43",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 09:12",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 08:49",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 08:48",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "26.10.2026 08:37",
+        "results": 0
+      },
+      {
+        "query": "musc",
+        "target": "plante",
+        "timestamp": "23.10.2026 12:23",
+        "results": 2
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "23.10.2026 12:11",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "23.10.2026 10:25",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "22.10.2026 15:40",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "22.10.2026 15:26",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "22.10.2026 15:12",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "22.10.2026 15:05",
+        "results": 0
+      },
+      {
+        "query": "musc",
+        "target": "plante",
+        "timestamp": "22.10.2026 14:29",
+        "results": 2
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "22.10.2026 14:12",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "22.10.2026 14:05",
+        "results": 0
+      },
+      {
+        "query": "bonsai",
+        "target": "plante",
+        "timestamp": "22.10.2026 13:29",
+        "results": 0
+      }
+    ]
+  },
+  "products": {
+    "total_views": 133,
+    "total_clicks": 33,
+    "items": {
+      "4": {
+        "name": "Florasol Amestec turba Universal",
+        "brand": "Florasol",
+        "views": 65,
+        "clicks": 32,
+        "last_interacted": "28.10.2026 09:18",
+        "image_url": "/static/uploads/prod_2026_Florasol Amestec turba Universal.png"
+      },
+      "6": {
+        "name": "Florasol Solutie Nutritiva Universal",
+        "brand": "Florasol",
+        "views": 32,
+        "clicks": 0,
+        "last_interacted": "28.10.2026 09:18",
+        "image_url": "/static/uploads/prod_2026_Florasol Solutie Nutritiva Universal.jpeg"
+      },
+      "23": {
+        "name": "Vitaflora Solutie Nutritiva Universal - 1L",
+        "brand": "Vitaflora",
+        "views": 33,
+        "clicks": 0,
+        "last_interacted": "28.10.2026 09:18",
+        "image_url": "/static/uploads/prod_2026_Vitaflora Solutie Nutritiva Universal 1l.png"
+      },
+      "31": {
+        "name": "Vitaflora Solutie Nutritiva pt Plante decorative cu frunze - 1L",
+        "brand": "Vitaflora",
+        "views": 1,
+        "clicks": 0,
+        "last_interacted": "23.10.2026 12:19",
+        "image_url": "/static/uploads/prod_2026_Vitaflora Solutie Nutritiva pt Plante decorative cu frunze 1l.png"
+      },
+      "15": {
+        "name": "Nutrisol Solutie Nutritiva pt Muscate si plante de balcon",
+        "brand": "Nutrisol",
+        "views": 1,
+        "clicks": 1,
+        "last_interacted": "23.10.2026 12:19",
+        "image_url": "/static/uploads/prod_2026_Nutrisol Solutie Nutritiva pt Muscate si plante de balcon.jpeg"
+      },
+      "33": {
+        "name": "Solutie de ingrijire plante Florasol",
+        "brand": "Florasol",
+        "views": 1,
+        "clicks": 0,
+        "last_interacted": "26.10.2026 08:34",
+        "image_url": "/static/uploads/prod_1792568963_Florasol_Solutie_Ingrijire_plante.jpeg"
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Despre Noi - Portal Plante Online",
+  "subtitle": "Pasiune pentru natură, grădinărit și îngrijirea plantelor încă din 2001",
+  "company_name": "Societatea Mont Rose S.R.L.",
+  "founded_year": "2001",
+  "quality_standards": "Standarde Europene de Calitate Exigente",
+  "description": "Societatea Mont Rose a fost înființată în anul 2001 cu scopul de a oferi pasionaților de plante și nu numai, soluțiile, precum și produsele necesare pentru întreținerea acestora.\r\n\r\nPortofoliul companiei noastre include substraturi și amestecuri de turbă, soluții nutritive și produse profesionale pentru îngrijirea plantelor sub brandul propriu Florasol, alături de gamele recunoscute Humiflor, Nutrisol, Plantasol, Vitaflora și Florimo. Toate aceste produse sunt fabricate în Uniunea Europeană, respectând cele mai exigente standarde de calitate și sustenabilitate.\r\n\r\nDatorită faptului că nu numai produsele de întreținere dar și cunoștințele necesare și materialul educațional lipsea de pe piață, ne-am hotărât să punem bazele unei culturi florale moderne, fundamentată pe cunoștințe tehnice și botanice solide.\r\n\r\nCa urmare, am realizat acest portal dedicat plantelor unde oricine să aibă acces facil și să poată obține informațiile de specialitate de care are nevoie. Website-ul conține o serie extinsă de informații utile legate de plante și de produsele profesionale de întreținere.",
+  "mission": "Misiunea noastră este de a oferi comunității de iubitori de flori și grădinari din România informații botanice verificate, ghiduri practice sezoniere și cele mai eficiente produse pentru dezvoltarea armonioasă a plantelor de interior și exterior.",
+  "values": [
+    {
+      "title": "Calitate Certificată",
+      "desc": "Produse fabricate conform celor mai exigente standarde europene de calitate."
+    },
+    {
+      "title": "Educație & Consiliere",
+      "desc": "Articole, calendare sezoniere și sfaturi de specialitate pentru fiecare pasionat."
+    },
+    {
+      "title": "Pasiune pentru Natură",
+      "desc": "Peste două decenii de experiență dedicată frumuseții plantelor și spațiilor verzi."
+    }
+  ],
+  "contact_email": "office@planteonline.ro",
+  "contact_phone": "0265-306.141",
+  "address": "jud. Mures, Romania"
+}

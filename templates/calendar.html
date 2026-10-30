@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Calendarul Grădinarului - Luna {{ current_info.month_name }} - PlanteOnline{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+    <!-- Header Banner -->
+    <div class="bg-gradient-to-br from-[#2d6a4f] via-[#3a8260] to-[#4c956c] text-white rounded-3xl p-5 sm:py-6 sm:px-8 shadow-lg border border-emerald-600/30 relative overflow-hidden">
+        <div class="relative z-10 space-y-2">
+            <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/20 text-lime-100 border border-white/30 backdrop-blur-xs">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1.5 text-lime-200"></i>
+                Calendarul Anotimpurilor & Lucrărilor Horticole
+            </span>
+            <h1 class="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight">
+                Ce facem în grădină: {{ current_info.month_name }}
+            </h1>
+            <p class="text-emerald-50/95 text-xs sm:text-sm leading-relaxed text-justify">
+                Fiecare lună aduce provocări și bucurii diferite pentru grădinari. Consultați calendarul oficial PlanteOnline pentru sfaturi adaptate climei din România.
+            </p>
+        </div>
+    </div>
+
+    <!-- 12 Months Navigation Grid -->
+    <div class="bg-white rounded-3xl p-5 border border-stone-200 shadow-xs">
+        <div class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">
+            Alege luna dorită:
+        </div>
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+            {% for m_num, m_info in calendar.items() %}
+            <a href="{{ url_for('calendar_view', luna=m_num) }}" 
+               class="p-3 rounded-2xl text-center border transition-all flex flex-col items-center justify-center {% if selected_month == (m_num|int) %}bg-botanic-700 text-white border-botanic-700 shadow-sm scale-102{% else %}bg-stone-50 text-stone-700 border-stone-200 hover:bg-botanic-50 hover:border-botanic-300{% endif %}">
+                <span class="text-xs font-bold">{{ m_info.month_name }}</span>
+                <span class="text-[10px] mt-0.5 opacity-80">Luna {{ m_num }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Selected Month Detail Card -->
+    <article class="bg-white rounded-3xl p-6 sm:p-10 border border-stone-200 shadow-xs space-y-8">
+        
+        <div class="border-b border-stone-100 pb-6 space-y-2">
+            <div class="flex items-center space-x-2">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900">
+                    Luna {{ selected_month }} - {{ current_info.month_name }}
+                </span>
+            </div>
+
+            {% set main_title = current_info.main_title or (current_info.title.split(':', 1)[0] if ':' in current_info.title else current_info.title) %}
+            {% set topic_title = current_info.topic or (current_info.title.split(':', 1)[1]|trim if ':' in current_info.title else '') %}
+
+            <h2 class="text-2xl sm:text-3xl font-serif font-bold text-stone-900 leading-tight">
+                {{ main_title }}
+            </h2>
+            {% if topic_title %}
+            <div class="text-base sm:text-xl font-serif font-semibold text-botanic-700 mt-1.5 leading-snug">
+                {{ topic_title }}
+            </div>
+            {% endif %}
+            <p class="text-stone-500 text-xs sm:text-sm text-justify mt-2.5">
+                {{ current_info.subtitle }}
+            </p>
+        </div>
+
+        <!-- Exterior & Interior Highlights (100% zöld eco harmónia) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Bal kártya (Exterior): Hidegebb, friss menta/erdei zöld (#E8F5E9 háttér / smaragdzöld elemek) -->
+            <div class="bg-[#E8F5E9] border border-emerald-200/80 p-6 rounded-3xl space-y-3 shadow-2xs">
+                <div class="flex items-center space-x-2.5 text-emerald-950 font-bold text-sm">
+                    <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs shrink-0">
+                        <i data-lucide="trees" class="w-4 h-4"></i>
+                    </span>
+                    <span>Lucrări Plante de Exterior & Grădină</span>
+                </div>
+                <ul class="space-y-2.5">
+                    {% for it in current_info.exterior_advice|format_advice %}
+                    <li class="text-xs sm:text-[13px] text-[#4A5568] leading-[1.55] flex items-start space-x-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1.5 shrink-0"></span>
+                        <span class="text-justify block w-full">{% if it.prefix %}<strong class="font-bold text-[#2D3748]">{{ it.prefix }}</strong> {% endif %}{{ it.content }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Jobb kártya (Interior): Meleg olíva / Mohazöld tónus (#F7F9F2 háttér, #DFE8D3 border, #5A7341 mohazöld) -->
+            <div class="bg-[#F7F9F2] border border-[#DFE8D3] p-6 rounded-3xl space-y-3 shadow-2xs">
+                <div class="flex items-center space-x-2.5 text-[#2D3E24] font-bold text-sm">
+                    <span class="w-8 h-8 rounded-xl bg-[#5A7341] text-white flex items-center justify-center shadow-xs shrink-0">
+                        <i data-lucide="flower-2" class="w-4 h-4"></i>
+                    </span>
+                    <span>Îngrijire Plante de Interior & Balcon</span>
+                </div>
+                <ul class="space-y-2.5">
+                    {% for it in current_info.interior_advice|format_advice %}
+                    <li class="text-xs sm:text-[13px] text-[#4A5568] leading-[1.55] flex items-start space-x-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#5A7341] mt-1.5 shrink-0"></span>
+                        <span class="text-justify block w-full">{% if it.prefix %}<strong class="font-bold text-[#2D3748]">{{ it.prefix }}</strong> {% endif %}{{ it.content }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Full Article Body -->
+        <div class="space-y-4 pt-4 border-t border-stone-100">
+            <h3 class="font-serif font-bold text-xl text-stone-900">
+                Ghidul Complet al Lunii {{ current_info.month_name }}
+            </h3>
+            
+            <div class="text-stone-600 font-sans text-xs sm:text-sm leading-relaxed text-justify w-full">
+                {{ current_info.full_content|format_article|safe }}
+            </div>
+        </div>
+
+        <!-- External link / reference -->
+        <div class="pt-6 border-t border-stone-100 flex items-center justify-between text-xs text-stone-400">
+            <span>Sursă originală: <a href="{{ current_info.original_url }}" target="_blank" rel="noopener noreferrer" class="text-botanic-700 hover:underline">PlanteOnline.ro / calendar.php</a></span>
+            {% if session.get('admin_logged_in') %}
+            <a href="{{ url_for('admin_panel', tab='calendar') }}" class="text-stone-500 hover:text-stone-900 flex items-center">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5 mr-1"></i> Editează în Panoul de Administrare
+            </a>
+            {% endif %}
+        </div>
+
+    </article>
+
+</div>
+{% endblock %}
