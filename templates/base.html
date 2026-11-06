@@ -247,15 +247,15 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             <!-- Left / Center Main Content (8 or 9 cols) -->
-            <div class="lg:col-span-8 xl:col-span-9 space-y-8">
+            <div class="{% if request.endpoint == 'home' %}contents lg:block lg:space-y-8{% else %}space-y-8{% endif %} lg:col-span-8 xl:col-span-9">
                 {% block content %}{% endblock %}
             </div>
 
             <!-- Right Column: "Produse Recomandate" (4 or 3 cols) - Sticky on scroll -->
-            <aside class="lg:col-span-4 xl:col-span-3 space-y-4 lg:sticky lg:top-24 z-20">
+            <aside class="{% if request.endpoint == 'home' %}contents lg:block lg:space-y-4{% else %}space-y-4{% endif %} lg:col-span-4 xl:col-span-3 lg:sticky lg:top-24 z-20">
                 
                 <!-- Produse Recomandate Card Widget -->
-                <div class="bg-white rounded-3xl p-5 shadow-sm border border-stone-200/80 relative overflow-hidden">
+                <div id="produse-recomandate-widget" class="order-2 lg:order-none min-w-0 bg-white rounded-3xl p-5 shadow-sm border border-stone-200/80 relative overflow-hidden">
                     <div class="flex items-center justify-between mb-2.5">
                         <div class="flex items-center space-x-2">
                             <span class="w-2.5 h-2.5 rounded-full bg-botanic-500 animate-ping"></span>
@@ -333,7 +333,7 @@
                 </div>
 
                 <!-- Showcase / Termékbemutató Képek (Alternating randomly / in carousel) -->
-                <div class="bg-white rounded-3xl p-4 sm:p-4.5 shadow-sm border border-stone-200/80 relative overflow-hidden">
+                <div id="ghid-vizual-widget" class="order-5 lg:order-none min-w-0 bg-white rounded-3xl p-4 sm:p-4.5 shadow-sm border border-stone-200/80 relative overflow-hidden">
                     <div class="flex items-center space-x-2 mb-2.5">
                         <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
                         <h3 class="text-sm font-bold text-stone-900 tracking-tight">

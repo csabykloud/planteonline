@@ -20,8 +20,10 @@ app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='Lax',
     SESSION_COOKIE_SECURE=os.environ.get('HTTPS_ENABLED', '0') == '1',
-    PERMANENT_SESSION_LIFETIME=datetime.timedelta(hours=8)
+    PERMANENT_SESSION_LIFETIME=datetime.timedelta(hours=8),
+    TEMPLATES_AUTO_RELOAD=True
 )
+app.jinja_env.auto_reload = True
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'uploads')

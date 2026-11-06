@@ -3,10 +3,10 @@
 {% block title %}Plante Online - Ghidul Tău Botanic & Îngrijirea Plantelor{% endblock %}
 
 {% block content %}
-<div class="space-y-10">
+<div class="contents lg:block lg:space-y-10">
 
     <!-- 1. BLOKK: INDEXUL PLANTELOR A-Z (Katalógus előnézet & Dinamikus Körforgás) -->
-    <section id="plante-az-preview-section" class="bg-stone-100/70 rounded-3xl p-5 sm:p-7 border border-stone-200 space-y-5">
+    <section id="plante-az-preview-section" class="order-1 lg:order-none min-w-0 bg-stone-100/70 rounded-3xl p-5 sm:p-7 border border-stone-200 space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <div class="flex items-center space-x-2">
@@ -123,7 +123,7 @@
     </section>
 
     <!-- 2. BLOKK: CALENDARUL GRĂDINARULUI (Zöld doboz) -->
-    <section id="calendarul-gradinarului-block" class="bg-gradient-to-br from-[#2d6a4f] via-[#3a8260] to-[#4c956c] rounded-3xl p-6 sm:p-7 md:p-8 text-white shadow-xl border border-emerald-600/30 relative overflow-hidden flex flex-col justify-between min-h-[680px] lg:min-h-[725px]">
+    <section id="calendarul-gradinarului-block" class="order-3 lg:order-none min-w-0 bg-gradient-to-br from-[#2d6a4f] via-[#3a8260] to-[#4c956c] rounded-3xl p-6 sm:p-7 md:p-8 text-white shadow-xl border border-emerald-600/30 relative overflow-hidden flex flex-col justify-between min-h-[680px] lg:min-h-[725px]">
         
         <!-- Background subtle botanical decoration -->
         <div class="absolute -right-6 -bottom-6 opacity-15 pointer-events-none">
@@ -281,7 +281,7 @@
     </section>
 
     <!-- 3. BLOKK: ARTICOLE PE CATEGORII (Articole Recomandate - Views hidden, 2-line clamp) -->
-    <section class="space-y-6">
+    <section id="articole-recomandate-section" class="order-4 lg:order-none min-w-0 space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-200 pb-4">
             <div>
                 <span class="text-xs font-bold text-botanic-600 uppercase tracking-wider">Ghiduri & Cunoștințe</span>
@@ -393,7 +393,7 @@
 
     <!-- SOCIAL MEDIA (Horizontal bar right above Despre Societatea Mont Rose) -->
     {% if social_media and social_media.enabled %}
-    <section class="bg-white rounded-3xl p-5 sm:p-6 border border-stone-200 shadow-xs space-y-4">
+    <section id="social-media-home-section" class="order-6 lg:order-none min-w-0 bg-white rounded-3xl p-5 sm:p-6 border border-stone-200 shadow-xs space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-3">
             <div class="flex items-center space-x-2.5">
                 <span class="w-8 h-8 rounded-xl bg-botanic-100 text-botanic-700 flex items-center justify-center font-bold shrink-0">
@@ -457,7 +457,7 @@
     {% endif %}
 
     <!-- 4. BLOKK: DESPRE NOI SUMMARY & EXPERTISE BANNER -->
-    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+    <section id="despre-noi-section" class="order-7 lg:order-none min-w-0 bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
         <div class="md:col-span-8 space-y-3">
             <span class="text-xs font-bold text-botanic-700 uppercase tracking-wider">Despre Societatea Mont Rose</span>
             <h3 class="text-2xl font-serif font-bold text-stone-900">
