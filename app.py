@@ -532,6 +532,38 @@ def shuffle_products_with_constraints(products, prev_was_v=False):
             
     return result
 
+# Product Menu Categories for "Produse Recomandate" Navigation & Catalog Page
+PRODUCT_MENU_CATEGORIES = [
+    {
+        'slug': 'pamant-flori',
+        'name': 'Amestec turbă / Pământ de flori',
+        'short_name': 'Amestec turbă / Pământ de flori',
+        'icon': 'layers',
+        'description': 'Substraturi profesionale și pământ de flori universal sau specializat (Florasol, Humiflor, Plantasol, Nutrisol) cu pH controlat și structură optimă de aerisire.'
+    },
+    {
+        'slug': 'solutii-nutritive',
+        'name': 'Soluții Nutritive / Îngrășăminte lichide',
+        'short_name': 'Soluții Nutritive / Îngrășăminte lichide',
+        'icon': 'droplets',
+        'description': 'Îngrășăminte lichide concentrate cu macro- și microelemente esențiale (Florasol, Nutrisol, Humiflor, Vitaflora) pentru plante de apartament, balcon, mușcate și grădină.'
+    },
+    {
+        'slug': 'ingrijire-plante',
+        'name': 'Soluții de îngrijire plante',
+        'short_name': 'Soluții de îngrijire plante',
+        'icon': 'shield-check',
+        'description': 'Soluții ecologice și organice cu pulverizator (Florasol, Nutrisol) pentru curățarea frunzelor, fortificarea plantelor și protecție naturală.'
+    },
+    {
+        'slug': 'batoane-fertilizante',
+        'name': 'Batoane fertilizante / Îngrășăminte solide',
+        'short_name': 'Batoane fertilizante / Îngrășăminte solide',
+        'icon': 'sparkles',
+        'description': 'Batoane nutritive cu eliberare treptată timp de 3 luni (Vitaflora) pentru plante decorative cu flori, plante cu frunze și orhidee.'
+    }
+]
+
 # Context processor for global template variables
 @app.context_processor
 def inject_globals():
@@ -623,8 +655,20 @@ def inject_globals():
             'pinterest_url': 'https://www.pinterest.com/planteonline'
         }
 
+    # Count products per menu category for dropdown badges
+    prod_cat_counts = {}
+    for p in products:
+        mc = p.get('menu_category', 'solutii-nutritive')
+        prod_cat_counts[mc] = prod_cat_counts.get(mc, 0) + 1
+    product_menu_cats = []
+    for c in PRODUCT_MENU_CATEGORIES:
+        c_copy = dict(c)
+        c_copy['count'] = prod_cat_counts.get(c['slug'], 0)
+        product_menu_cats.append(c_copy)
+
     return {
         'all_categories': sorted_categories,
+        'product_menu_categories': product_menu_cats,
         'sidebar_products': sidebar_prods,  # All products in random order for carousel
         'all_products': products,
         'showcase_items': sc_items,
@@ -982,6 +1026,60 @@ def calendar_view():
         article=cal_article
     )
 
+@app.route('/produse')
+def products_view():
+    products = load_json('products.json')
+    selected_cat_slug = request.args.get('categorie', '').strip().lower()
+    valid_slugs = [c['slug'] for c in PRODUCT_MENU_CATEGORIES]
+    if selected_cat_slug not in valid_slugs and selected_cat_slug != 'toate':
+        selected_cat_slug = 'pamant-flori' if not selected_cat_slug else 'toate'
+
+    # Sort products by sort_order
+    sorted_prods = sorted(products, key=lambda x: (x.get('sort_order', 9999), x.get('id', 0)))
+
+    # Group by category -> ordered subgroups -> products
+    categories_grouped = []
+    for cat_meta in PRODUCT_MENU_CATEGORIES:
+        if selected_cat_slug != 'toate' and cat_meta['slug'] != selected_cat_slug:
+            continue
+        cat_prods = [p for p in sorted_prods if p.get('menu_category', 'solutii-nutritive') == cat_meta['slug']]
+        if not cat_prods:
+            continue
+
+        subgroups = []
+        subgroup_map = {}
+        for p in cat_prods:
+            sg_title = p.get('subgroup_title') or cat_meta['name']
+            if sg_title not in subgroup_map:
+                sg_obj = {'title': sg_title, 'products': []}
+                subgroup_map[sg_title] = sg_obj
+                subgroups.append(sg_obj)
+            # Parse packaging string into clean badges
+            raw_pkg = p.get('packaging', '')
+            pkg_badges = [x.strip() for x in re.split(r'[,;]', raw_pkg) if x.strip()]
+            p_enriched = dict(p)
+            p_enriched['packaging_badges'] = pkg_badges
+            subgroup_map[sg_title]['products'].append(p_enriched)
+
+        categories_grouped.append({
+            'slug': cat_meta['slug'],
+            'name': cat_meta['name'],
+            'icon': cat_meta['icon'],
+            'description': cat_meta['description'],
+            'total_products': len(cat_prods),
+            'subgroups': subgroups
+        })
+
+    active_category_meta = next((c for c in PRODUCT_MENU_CATEGORIES if c['slug'] == selected_cat_slug), None)
+
+    return render_template(
+        'products.html',
+        categories_grouped=categories_grouped,
+        selected_category=selected_cat_slug,
+        active_category_meta=active_category_meta,
+        all_product_categories=PRODUCT_MENU_CATEGORIES
+    )
+
 @app.route('/despre-noi')
 def about_view():
     about = load_json('about.json')
@@ -1029,6 +1127,11 @@ def sitemap_xml():
         (f"{base_url}/", "daily", "1.0"),
         (f"{base_url}/plante-az", "weekly", "0.9"),
         (f"{base_url}/articole", "weekly", "0.9"),
+        (f"{base_url}/produse", "weekly", "0.9"),
+        (f"{base_url}/produse?categorie=pamant-flori", "weekly", "0.9"),
+        (f"{base_url}/produse?categorie=solutii-nutritive", "weekly", "0.9"),
+        (f"{base_url}/produse?categorie=ingrijire-plante", "weekly", "0.8"),
+        (f"{base_url}/produse?categorie=batoane-fertilizante", "weekly", "0.8"),
         (f"{base_url}/calendar", "monthly", "0.8"),
         (f"{base_url}/despre-noi", "monthly", "0.7"),
     ]
@@ -1075,6 +1178,7 @@ def llms_txt():
         f"- [Enciclopedia Plantelor A-Z ({len(plants)} specii)]({base_url}/plante-az): Fișe botanice cu denumire științifică în latină, origine, lumină, temperatură, udare, substrat și fertilizare.",
         f"- [Calendarul Grădinarului (12 luni)]({base_url}/calendar): Lucrări lunare în grădină, balcon și apartament.",
         f"- [Articole & Ghiduri Horticultură ({len(articles)} articole)]({base_url}/articole): Sfaturi practice pentru plante de interior, exterior și protecția plantelor.",
+        f"- [Produse Recomandate - Catalog Oficial ({len(products)} produse)]({base_url}/produse): Amestec turbă / Pământ de flori, Soluții Nutritive lichide, Soluții de îngrijire plante și Batoane fertilizante.",
         f"- [Despre Societatea Mont Rose S.R.L.]({base_url}/despre-noi): Istoric, mărci și date de contact.",
         "",
         f"## Gama de Produse Profesionale ({len(products)} produse - Substraturi, Pământ de Flori & Fertilizanți)",
@@ -1470,6 +1574,9 @@ def admin_save_product():
     name = request.form.get('name', '').strip()
     brand = request.form.get('brand', 'Florasol').strip()
     code = request.form.get('code', '').strip()
+    packaging = request.form.get('packaging', '').strip()
+    menu_category = request.form.get('menu_category', '').strip()
+    subgroup_title = request.form.get('subgroup_title', '').strip()
     description = request.form.get('description', '').strip()
     external_url = request.form.get('external_url', '').strip()
     image_url = request.form.get('image_url', '').strip()
@@ -1499,13 +1606,19 @@ def admin_save_product():
                 p['brand'] = brand
                 p['code'] = code
                 p.pop('price', None)
+                if packaging:
+                    p['packaging'] = packaging
+                if menu_category:
+                    p['menu_category'] = menu_category
+                if subgroup_title:
+                    p['subgroup_title'] = subgroup_title
                 p['description'] = description
                 p['external_url'] = external_url if external_url else p.get('external_url', '')
                 if image_url:
                     p['image_url'] = image_url
                     if 'images' in p:
                         p['images'].insert(0, image_url)
-                flash('Produsul a fost actualizat cu succes!', 'success')
+                flash('Produsul a fost actualizat cu succes (atât în fereastra pop-up, cât și în meniul Produse Recomandate)!', 'success')
                 break
     else:
         new_id = max([p['id'] for p in products], default=0) + 1
@@ -1514,12 +1627,16 @@ def admin_save_product():
             'name': name,
             'brand': brand,
             'code': code if code else f"MR-{new_id:03d}",
+            'packaging': packaging if packaging else '1 L',
+            'menu_category': menu_category if menu_category else 'solutii-nutritive',
+            'subgroup_title': subgroup_title if subgroup_title else '1. Soluții Nutritive Universale',
+            'sort_order': 950 + new_id,
             'description': description,
             'external_url': external_url if external_url else "https://www.montrose.ro",
             'image_url': image_url,
             'images': [image_url] if image_url else []
         }
-        products.insert(0, new_product)
+        products.append(new_product)
         flash('Produsul recomandat a fost adăugat cu succes!', 'success')
 
     save_json('products.json', products)

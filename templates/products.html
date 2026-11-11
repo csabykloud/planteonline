@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if active_category_meta %}
+{{ active_category_meta.name }} - Produse Recomandate | PlanteOnline.ro
+{% else %}
+Produse Recomandate - Pământ de Flori, Soluții Nutritive & Îngrijire Plante | PlanteOnline.ro
+{% endif %}
+{% endblock %}
+
+{% block meta_description %}
+{% if active_category_meta %}
+{{ active_category_meta.name }}: {{ active_category_meta.description }} Comandă și descoperă instrucțiunile complete de utilizare, compoziție și ambalaje disponibile pe PlanteOnline.ro.
+{% else %}
+Catalog complet de produse recomandate pentru plante: Amestec turbă / Pământ de flori, Soluții Nutritive / Îngrășăminte lichide, Soluții de îngrijire plante și Batoane fertilizante (Florasol, Humiflor, Nutrisol, Plantasol, Vitaflora).
+{% endif %}
+{% endblock %}
+
+{% block canonical_url %}{{ request.url_root.rstrip('/') }}/produse{% if selected_category and selected_category != 'pamant-flori' %}?categorie={{ selected_category }}{% endif %}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Acasă",
+          "item": "{{ request.url_root.rstrip('/') }}/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Produse Recomandate",
+          "item": "{{ request.url_root.rstrip('/') }}/produse"
+        }{% if active_category_meta %},
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": {{ active_category_meta.name|tojson }},
+          "item": "{{ request.url_root.rstrip('/') }}/produse?categorie={{ active_category_meta.slug }}"
+        }{% endif %}
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "name": {{ (active_category_meta.name if active_category_meta else 'Catalog Produse Recomandate PlanteOnline.ro')|tojson }},
+      "itemListElement": [
+        {% set ns = namespace(pos=1) %}
+        {% for cat in categories_grouped %}
+          {% for sg in cat.subgroups %}
+            {% for prod in sg.products %}
+              {% if ns.pos > 1 %},{% endif %}
+              {
+                "@type": "ListItem",
+                "position": {{ ns.pos }},
+                "item": {
+                  "@type": "Product",
+                  "name": {{ prod.name|tojson }},
+                  "brand": {"@type": "Brand", "name": {{ (prod.brand or 'Florasol')|tojson }}},
+                  "description": {{ (prod.description or '')[:300]|tojson }},
+                  "image": "{{ request.url_root.rstrip('/') }}{{ prod.image_url }}",
+                  "size": {{ (prod.packaging or '')|tojson }}
+                }
+              }
+              {% set ns.pos = ns.pos + 1 %}
+            {% endfor %}
+          {% endfor %}
+        {% endfor %}
+      ]
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+    <!-- Top Hero & Category Selector -->
+    <section class="bg-gradient-to-br from-botanic-950 via-botanic-900 to-botanic-800 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+        <div class="absolute -right-12 -top-12 w-56 h-56 rounded-full bg-botanic-500/10 blur-2xl pointer-events-none"></div>
+        <div class="relative z-10 space-y-4">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs border border-white/15 text-botanic-200 text-xs font-semibold">
+                <i data-lucide="award" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>Gama Oficială Florasol &bull; Humiflor &bull; Nutrisol &bull; Plantasol &bull; Vitaflora</span>
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold tracking-tight leading-tight">
+                {% if active_category_meta %}
+                    {{ active_category_meta.name }}
+                {% else %}
+                    Produse Recomandate pentru Plante și Grădinărit
+                {% endif %}
+            </h1>
+
+            <p class="text-botanic-100/90 text-xs sm:text-sm max-w-3xl leading-relaxed text-justify">
+                {% if active_category_meta %}
+                    {{ active_category_meta.description }}
+                {% else %}
+                    Substraturi profesionale de turbă, îngrășăminte lichide concentrate, soluții ecologice de îngrijire și batoane fertilizante testate pentru dezvoltarea viguroasă și înflorirea bogată a plantelor de apartament, balcon și grădină.
+                {% endif %}
+            </p>
+
+            <!-- 4 Main Category Navigation Pills -->
+            <div class="pt-3 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {% for c in product_menu_categories %}
+                <a href="{{ url_for('products_view', categorie=c.slug) }}"
+                   class="flex items-center justify-between px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold transition-all border {% if selected_category == c.slug %}bg-white text-botanic-950 border-white shadow-md{% else %}bg-white/10 hover:bg-white/20 text-white border-white/15{% endif %}">
+                    <span class="flex items-center space-x-2.5 truncate">
+                        <i data-lucide="{{ c.icon }}" class="w-4 h-4 shrink-0 {% if selected_category == c.slug %}text-botanic-700{% else %}text-botanic-300{% endif %}"></i>
+                        <span class="truncate">{{ c.name }}</span>
+                    </span>
+                    <span class="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold shrink-0 {% if selected_category == c.slug %}bg-botanic-100 text-botanic-800{% else %}bg-white/15 text-botanic-100{% endif %}">
+                        {{ c.count }}
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+
+            <div class="pt-1 flex items-center justify-end">
+                <a href="{{ url_for('products_view', categorie='toate') }}"
+                   class="inline-flex items-center space-x-1.5 text-xs font-semibold {% if selected_category == 'toate' %}text-amber-300 underline{% else %}text-botanic-200 hover:text-white{% endif %} transition-colors">
+                    <i data-lucide="layout-list" class="w-3.5 h-3.5"></i>
+                    <span>Afișează toate cele 4 categorii pe o singură pagină</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category & Subgroup Product Listings -->
+    {% for cat in categories_grouped %}
+    <div class="space-y-8" id="categorie-{{ cat.slug }}">
+        {% if selected_category == 'toate' %}
+        <div class="bg-botanic-900 text-white rounded-2xl px-5 py-4 flex items-center justify-between shadow-sm">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center">
+                    <i data-lucide="{{ cat.icon }}" class="w-5 h-5 text-botanic-200"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg sm:text-xl font-serif font-bold">{{ cat.name }}</h2>
+                    <p class="text-xs text-botanic-200">{{ cat.description }}</p>
+                </div>
+            </div>
+            <span class="bg-white/15 text-white text-xs font-bold px-3 py-1 rounded-full shrink-0">
+                {{ cat.total_products }} produse
+            </span>
+        </div>
+        {% endif %}
+
+        {% for sg in cat.subgroups %}
+        <section class="space-y-5">
+            <!-- Numbered Subgroup Header (e.g., 1. Pământ Universal, 2. Substrat pentru Orhidee, etc.) -->
+            <div class="bg-white rounded-2xl px-5 py-3.5 border-l-4 border-l-botanic-600 border border-stone-200/90 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h2 class="text-base sm:text-lg font-serif font-bold text-stone-900 flex items-center space-x-2.5">
+                    <i data-lucide="check-circle-2" class="w-5 h-5 text-botanic-600 shrink-0"></i>
+                    <span>{{ sg.title }}</span>
+                </h2>
+                <span class="text-xs font-semibold text-botanic-800 bg-botanic-50 border border-botanic-200 px-3 py-1 rounded-full self-start sm:self-auto">
+                    {{ sg.products|length }} {% if sg.products|length == 1 %}produs disponibil{% else %}produse disponibile{% endif %}
+                </span>
+            </div>
+
+            <!-- Products List in Subgroup -->
+            <div class="space-y-6">
+                {% for prod in sg.products %}
+                <article id="produs-{{ prod.id }}" class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200/90 shadow-xs hover:shadow-md transition-all">
+                    
+                    <!-- TOP: Product Title, Brand & Available Packaging Sizes (U.M.) -->
+                    <div class="border-b border-stone-100 pb-4 mb-5 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                        <div class="space-y-1.5">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="bg-botanic-100 text-botanic-800 text-xs font-bold px-2.5 py-0.5 rounded-md border border-botanic-200">
+                                    {{ prod.brand or 'Florasol' }}
+                                </span>
+                                {% if prod.code %}
+                                <span class="text-xs text-stone-400 font-mono">Cod: {{ prod.code }}</span>
+                                {% endif %}
+                            </div>
+                            <h3 class="text-lg sm:text-xl font-serif font-bold text-stone-900 leading-snug">
+                                {{ prod.name }}
+                            </h3>
+                        </div>
+
+                        <!-- Packaging Sizes (U.M.) from PDF Catalog -->
+                        {% if prod.packaging %}
+                        <div class="flex flex-wrap items-center gap-1.5 bg-amber-50/90 border border-amber-200/90 px-3.5 py-2 rounded-2xl shrink-0 self-start lg:self-center">
+                            <span class="text-[11px] font-bold text-amber-900 uppercase tracking-wider flex items-center mr-1">
+                                <i data-lucide="package" class="w-3.5 h-3.5 text-amber-600 mr-1"></i>
+                                Ambalaje (U.M.):
+                            </span>
+                            {% for pkg in prod.packaging_badges %}
+                            <span class="bg-white text-stone-900 font-bold text-xs px-2.5 py-0.5 rounded-lg border border-amber-300 shadow-2xs">
+                                {{ pkg }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- BODY: Left Side Image + Purchase Button | Right Side Full Description -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                        
+                        <!-- Left Column: Product Image & Actions (4 cols on desktop) -->
+                        <div class="md:col-span-4 lg:col-span-4 flex flex-col items-center space-y-3">
+                            <div onclick="openProductModal({{ prod.id }})"
+                                 class="w-full h-60 sm:h-64 bg-stone-50 rounded-2xl p-4 border border-stone-200/80 flex items-center justify-center relative group cursor-pointer overflow-hidden">
+                                {% if prod.image_url %}
+                                <img src="{{ prod.image_url }}"
+                                     alt="{{ prod.name }} - {{ prod.brand or 'Florasol' }} ({{ prod.packaging or '' }})"
+                                     loading="lazy" decoding="async"
+                                     class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300 filter drop-shadow-xs"
+                                     onerror="this.src='https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=400&q=80'">
+                                {% else %}
+                                <div class="flex flex-col items-center justify-center text-stone-300">
+                                    <i data-lucide="package" class="w-12 h-12"></i>
+                                    <span class="text-xs mt-1 text-stone-400">Imagine Produs</span>
+                                </div>
+                                {% endif %}
+                                <span class="absolute bottom-2.5 right-2.5 bg-stone-900/75 backdrop-blur-xs text-white text-[10px] font-semibold px-2.5 py-1 rounded-lg flex items-center space-x-1 opacity-90 group-hover:opacity-100 transition-opacity">
+                                    <i data-lucide="zoom-in" class="w-3 h-3"></i>
+                                    <span>Mărește</span>
+                                </span>
+                            </div>
+
+                            <a href="{{ prod.external_url or 'https://www.montrose.ro' }}" target="_blank" rel="noopener noreferrer"
+                               onclick="try { fetch('/api/track/product/{{ prod.id }}', {method: 'POST'}); } catch(e) {}"
+                               class="w-full py-2.5 px-4 bg-gradient-to-r from-botanic-700 to-botanic-600 hover:from-botanic-800 hover:to-botanic-700 text-white font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center space-x-2 shadow-sm transition-all">
+                                <span>Accesează Produsul & Cumpără</span>
+                                <i data-lucide="external-link" class="w-4 h-4"></i>
+                            </a>
+
+                            {% if session.get('admin_logged_in') %}
+                            <a href="{{ url_for('admin_panel', tab='products', edit_id=prod.id) }}#product-form"
+                               class="w-full py-1.5 px-3 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-semibold text-xs rounded-xl flex items-center justify-center space-x-1.5 transition-colors">
+                                <i data-lucide="edit-3" class="w-3.5 h-3.5 text-amber-700"></i>
+                                <span>Editează în Admin</span>
+                            </a>
+                            {% endif %}
+                        </div>
+
+                        <!-- Right Column: Complete Product Description (8 cols on desktop) -->
+                        <div class="md:col-span-8 lg:col-span-8 bg-stone-50/70 rounded-2xl p-4 sm:p-5 border border-stone-100">
+                            <h4 class="text-xs font-bold text-botanic-800 uppercase tracking-wider mb-2.5 flex items-center">
+                                <i data-lucide="file-text" class="w-3.5 h-3.5 text-botanic-600 mr-1.5"></i>
+                                Descriere, Compoziție & Instrucțiuni de Utilizare
+                            </h4>
+                            <div class="text-stone-700 text-xs sm:text-sm leading-relaxed whitespace-pre-line text-justify">{{ prod.description }}</div>
+                        </div>
+
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

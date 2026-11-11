@@ -316,6 +316,8 @@ async function openProductModal(prodId) {
         const titleEl = document.getElementById('modal-product-title');
         const brandEl = document.getElementById('modal-product-brand');
         const codeEl = document.getElementById('modal-product-code');
+        const pkgBoxEl = document.getElementById('modal-product-packaging-box');
+        const pkgEl = document.getElementById('modal-product-packaging');
         const descEl = document.getElementById('modal-product-desc');
         const linkEl = document.getElementById('modal-product-link');
 
@@ -326,6 +328,14 @@ async function openProductModal(prodId) {
         if (titleEl) titleEl.textContent = prod.name;
         if (brandEl) brandEl.textContent = prod.brand || 'Florasol';
         if (codeEl) codeEl.textContent = prod.code ? `Cod: ${prod.code}` : '';
+        if (pkgBoxEl && pkgEl) {
+            if (prod.packaging) {
+                pkgEl.textContent = `Ambalaje disponibile: ${prod.packaging}`;
+                pkgBoxEl.classList.remove('hidden');
+            } else {
+                pkgBoxEl.classList.add('hidden');
+            }
+        }
         if (descEl) descEl.textContent = prod.description || 'Soluție profesională pentru îngrijirea optimă a plantelor.';
         if (linkEl) {
             linkEl.href = prod.external_url || '#';
