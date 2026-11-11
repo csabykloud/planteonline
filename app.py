@@ -1375,6 +1375,71 @@ def products_view(cat_slug=None):
         all_product_categories=PRODUCT_MENU_CATEGORIES
     )
 
+# Visually verified mapping of the 49 showcase images in import_produse/termek_bemutato to product IDs
+SHOWCASE_FILE_TO_PRODUCT_IDS = {
+    'Gemini_Generated_Image_1bq1ec1bq1ec1bq1.png': [11],
+    'Gemini_Generated_Image_2k17442k17442k17.png': [7],
+    'Gemini_Generated_Image_3kbcx73kbcx73kbc.png': [7],
+    'Gemini_Generated_Image_4ljn1q4ljn1q4ljn.png': [7, 8, 9, 10],
+    'Gemini_Generated_Image_behcs5behcs5behc.png': [7],
+    'Gemini_Generated_Image_h21w1wh21w1wh21w.png': [7, 8, 10],
+    'Gemini_Generated_Image_m06t0lm06t0lm06t.png': [7, 8, 9, 10],
+    'Gemini_Generated_Image_odmek0odmek0odme.png': [7],
+    'Gemini_Generated_Image_qy17mqy17mqy17mq.png': [7],
+    'Gemini_Generated_Image_sfe8z7sfe8z7sfe8.png': [20],
+    'Gemini_Generated_Image_w5nk6yw5nk6yw5nk.png': [7],
+    'Gemini_Generated_Image_xiqwc3xiqwc3xiqw.png': [7],
+    'WhatsApp_Image_2026-10-20_at_11.16.49_1.jpeg': [16],
+    'WhatsApp_Image_2026-10-20_at_11.16.49_2.jpeg': [17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (1).png': [12, 16, 17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (2).png': [12, 16, 17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (3).png': [12, 16, 17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (4).png': [12, 16, 17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (5).png': [18, 13],
+    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (6).png': [18, 13],
+    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (7).png': [18, 13],
+    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (8).png': [18, 13],
+    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (9).png': [18, 13],
+    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_.png': [12, 16, 17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag (1).png': [4, 5, 6, 33],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag (2).png': [4, 5, 6, 33],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag.png': [4, 5, 6, 33],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (1).png': [17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (2).png': [17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (3).png': [12, 15],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (4).png': [12, 15],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (5).png': [12, 15],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (6).png': [12, 15],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_.png': [17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (1).png': [7, 11, 8, 9, 10],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (10).png': [16, 17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (11).png': [8, 9, 10],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (12).png': [8, 9, 10],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (13).png': [8, 9, 10],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (2).png': [11, 29],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (3).png': [11, 29],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (4).png': [11, 29],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (5).png': [11, 29],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (6).png': [11, 29],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (7).png': [16, 17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (8).png': [16, 17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (9).png': [16, 17],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i.png': [7, 11, 8, 10],
+    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_p.png': [7, 11, 8, 9, 10],
+}
+
+def get_showcase_images_for_product(product):
+    """Return the list of /showcase_img/<filename> URLs that visually feature this product."""
+    pid = product.get('id')
+    saved_imgs = product.get('showcase_images')
+    if isinstance(saved_imgs, list) and saved_imgs:
+        return saved_imgs
+    urls = []
+    for fname, pids in SHOWCASE_FILE_TO_PRODUCT_IDS.items():
+        if pid in pids and os.path.exists(os.path.join(SHOWCASE_DIR, fname)):
+            urls.append(f"/showcase_img/{urllib.parse.quote(fname)}")
+    return urls
+
 @app.route('/produs/<int:product_id>')
 def product_detail(product_id):
     products = load_json('products.json')
@@ -1385,6 +1450,7 @@ def product_detail(product_id):
         return redirect(url_for('products_view'))
 
     product_enriched = enrich_product_card(product)
+    product_showcase_images = get_showcase_images_for_product(product)
 
     # Matched plants that recommend this product
     matched_plants = []
@@ -1439,7 +1505,8 @@ def product_detail(product_id):
         cat_meta=cat_meta,
         matched_plants=matched_plants[:12],
         related_products=complementary[:6],
-        packaging_badges=product_enriched['packaging_badges']
+        packaging_badges=product_enriched['packaging_badges'],
+        product_showcase_images=product_showcase_images
     )
 
 @app.route('/despre-noi')

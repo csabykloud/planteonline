@@ -357,5 +357,51 @@
     </section>
     {% endif %}
 
+    <!-- 6. Ghid Vizual & Prezentare Practică (Images from Ghid Vizual featuring this specific product) -->
+    {% if product_showcase_images %}
+    <section id="ghid-vizual-produs" class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-4">
+            <div>
+                <span class="text-xs font-bold text-botanic-600 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="images" class="w-3.5 h-3.5 text-botanic-600"></i>
+                    <span>Ghid Vizual &amp; Inspirație Practică</span>
+                </span>
+                <h2 class="text-xl sm:text-2xl font-serif font-bold text-stone-900 mt-0.5">
+                    Prezentare Vizuală — {{ product.name }}
+                </h2>
+                <p class="text-xs sm:text-sm text-stone-500 mt-0.5">
+                    Imagini de prezentare și exemple practice de utilizare pentru <strong>{{ product.name }}</strong> (apăsați pe orice imagine pentru mărire):
+                </p>
+            </div>
+            <span class="bg-botanic-50 text-botanic-800 border border-botanic-200 text-xs font-bold px-3 py-1 rounded-full shrink-0 self-start sm:self-center">
+                {{ product_showcase_images|length }} {% if product_showcase_images|length == 1 %}imagine{% else %}imagini{% endif %}
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {% for sc_img in product_showcase_images %}
+            <div class="group relative bg-stone-50 rounded-2xl overflow-hidden border border-stone-200/90 hover:border-botanic-400 shadow-2xs hover:shadow-md transition-all cursor-pointer"
+                 onclick="openShowcaseLightbox('{{ sc_img }}')">
+                <div class="aspect-4/3 w-full overflow-hidden bg-stone-100 flex items-center justify-center">
+                    <img src="{{ sc_img }}"
+                         alt="{{ product.name }} ({{ product.brand or 'Florasol' }}) - Ghid vizual și prezentare #{{ loop.index }}"
+                         loading="lazy" decoding="async"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3.5">
+                    <span class="text-white text-xs font-semibold drop-shadow-xs truncate pr-2">
+                        {{ product.name }}
+                    </span>
+                    <span class="bg-white/95 text-stone-900 text-[11px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm shrink-0">
+                        <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-botanic-700"></i>
+                        <span>Mărește</span>
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
 </div>
 {% endblock %}

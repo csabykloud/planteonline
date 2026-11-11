@@ -14,7 +14,12 @@
     "packaging": "5 L, 10 L, 20 L, 40 L",
     "menu_category": "pamant-flori",
     "subgroup_title": "1. Pământ Universal",
-    "sort_order": 101
+    "sort_order": 101,
+    "showcase_images": [
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag%20%282%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag.png"
+    ]
   },
   {
     "id": 7,
@@ -34,7 +39,22 @@
     "packaging": "5 L, 10 L, 20 L, 50 L",
     "menu_category": "pamant-flori",
     "subgroup_title": "1. Pământ Universal",
-    "sort_order": 102
+    "sort_order": 102,
+    "showcase_images": [
+      "/showcase_img/Gemini_Generated_Image_2k17442k17442k17.png",
+      "/showcase_img/Gemini_Generated_Image_3kbcx73kbcx73kbc.png",
+      "/showcase_img/Gemini_Generated_Image_4ljn1q4ljn1q4ljn.png",
+      "/showcase_img/Gemini_Generated_Image_behcs5behcs5behc.png",
+      "/showcase_img/Gemini_Generated_Image_h21w1wh21w1wh21w.png",
+      "/showcase_img/Gemini_Generated_Image_m06t0lm06t0lm06t.png",
+      "/showcase_img/Gemini_Generated_Image_odmek0odmek0odme.png",
+      "/showcase_img/Gemini_Generated_Image_qy17mqy17mqy17mq.png",
+      "/showcase_img/Gemini_Generated_Image_w5nk6yw5nk6yw5nk.png",
+      "/showcase_img/Gemini_Generated_Image_xiqwc3xiqwc3xiqw.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_p.png"
+    ]
   },
   {
     "id": 20,
@@ -50,7 +70,10 @@
     "packaging": "5 L, 10 L, 20 L, 50 L",
     "menu_category": "pamant-flori",
     "subgroup_title": "1. Pământ Universal",
-    "sort_order": 103
+    "sort_order": 103,
+    "showcase_images": [
+      "/showcase_img/Gemini_Generated_Image_sfe8z7sfe8z7sfe8.png"
+    ]
   },
   {
     "id": 11,
@@ -67,7 +90,18 @@
     "packaging": "5 L",
     "menu_category": "pamant-flori",
     "subgroup_title": "2. Substrat pentru Orhidee",
-    "sort_order": 201
+    "sort_order": 201,
+    "showcase_images": [
+      "/showcase_img/Gemini_Generated_Image_1bq1ec1bq1ec1bq1.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%282%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%283%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%284%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%285%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%286%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_p.png"
+    ]
   },
   {
     "id": 18,
@@ -83,7 +117,14 @@
     "packaging": "10 L",
     "menu_category": "pamant-flori",
     "subgroup_title": "3. Substraturi Speciale",
-    "sort_order": 301
+    "sort_order": 301,
+    "showcase_images": [
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%285%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%286%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%287%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%288%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%289%29.png"
+    ]
   },
   {
     "id": 19,
@@ -99,7 +140,8 @@
     "packaging": "20 L",
     "menu_category": "pamant-flori",
     "subgroup_title": "3. Substraturi Speciale",
-    "sort_order": 302
+    "sort_order": 302,
+    "showcase_images": []
   },
   {
     "id": 12,
@@ -117,7 +159,18 @@
     "packaging": "20 L, 50 L",
     "menu_category": "pamant-flori",
     "subgroup_title": "3. Substraturi Speciale",
-    "sort_order": 303
+    "sort_order": 303,
+    "showcase_images": [
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%282%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%283%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%284%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_%20%283%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_%20%284%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_%20%285%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_%20%286%29.png"
+    ]
   },
   {
     "id": 6,
@@ -134,7 +187,12 @@
     "packaging": "0.5 L, 1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "1. Soluții Nutritive Universale",
-    "sort_order": 401
+    "sort_order": 401,
+    "showcase_images": [
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag%20%282%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag.png"
+    ]
   },
   {
     "id": 23,
@@ -150,7 +208,8 @@
     "packaging": "0.1 L, 0.5 L, 1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "1. Soluții Nutritive Universale",
-    "sort_order": 402
+    "sort_order": 402,
+    "showcase_images": []
   },
   {
     "id": 5,
@@ -167,7 +226,12 @@
     "packaging": "0.5 L, 1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "2. Soluții Nutritive pentru Mușcate și Plante de Balcon",
-    "sort_order": 501
+    "sort_order": 501,
+    "showcase_images": [
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag%20%282%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag.png"
+    ]
   },
   {
     "id": 15,
@@ -183,7 +247,13 @@
     "packaging": "1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "2. Soluții Nutritive pentru Mușcate și Plante de Balcon",
-    "sort_order": 502
+    "sort_order": 502,
+    "showcase_images": [
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_%20%283%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_%20%284%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_%20%285%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_%20%286%29.png"
+    ]
   },
   {
     "id": 8,
@@ -199,7 +269,18 @@
     "packaging": "1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "2. Soluții Nutritive pentru Mușcate și Plante de Balcon",
-    "sort_order": 503
+    "sort_order": 503,
+    "showcase_images": [
+      "/showcase_img/Gemini_Generated_Image_4ljn1q4ljn1q4ljn.png",
+      "/showcase_img/Gemini_Generated_Image_h21w1wh21w1wh21w.png",
+      "/showcase_img/Gemini_Generated_Image_m06t0lm06t0lm06t.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2811%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2812%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2813%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_p.png"
+    ]
   },
   {
     "id": 28,
@@ -215,7 +296,8 @@
     "packaging": "0.1 L, 0.5 L, 1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "2. Soluții Nutritive pentru Mușcate și Plante de Balcon",
-    "sort_order": 504
+    "sort_order": 504,
+    "showcase_images": []
   },
   {
     "id": 9,
@@ -231,7 +313,16 @@
     "packaging": "1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "3. Soluții Nutritive pentru Plante de Cameră",
-    "sort_order": 601
+    "sort_order": 601,
+    "showcase_images": [
+      "/showcase_img/Gemini_Generated_Image_4ljn1q4ljn1q4ljn.png",
+      "/showcase_img/Gemini_Generated_Image_m06t0lm06t0lm06t.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2811%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2812%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2813%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_p.png"
+    ]
   },
   {
     "id": 13,
@@ -247,7 +338,14 @@
     "packaging": "1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "3. Soluții Nutritive pentru Plante de Cameră",
-    "sort_order": 602
+    "sort_order": 602,
+    "showcase_images": [
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%285%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%286%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%287%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%288%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%289%29.png"
+    ]
   },
   {
     "id": 31,
@@ -263,7 +361,8 @@
     "packaging": "0.1 L, 0.5 L, 1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "3. Soluții Nutritive pentru Plante de Cameră",
-    "sort_order": 603
+    "sort_order": 603,
+    "showcase_images": []
   },
   {
     "id": 10,
@@ -279,7 +378,18 @@
     "packaging": "1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "4. Soluții Nutritive pentru Plante de Grădină",
-    "sort_order": 701
+    "sort_order": 701,
+    "showcase_images": [
+      "/showcase_img/Gemini_Generated_Image_4ljn1q4ljn1q4ljn.png",
+      "/showcase_img/Gemini_Generated_Image_h21w1wh21w1wh21w.png",
+      "/showcase_img/Gemini_Generated_Image_m06t0lm06t0lm06t.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2811%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2812%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2813%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_p.png"
+    ]
   },
   {
     "id": 14,
@@ -295,7 +405,8 @@
     "packaging": "1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "4. Soluții Nutritive pentru Plante de Grădină",
-    "sort_order": 702
+    "sort_order": 702,
+    "showcase_images": []
   },
   {
     "id": 30,
@@ -311,7 +422,8 @@
     "packaging": "0.1 L, 0.5 L, 1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "5. Soluții Nutritive Speciale – Pentru Plante cu Flori",
-    "sort_order": 801
+    "sort_order": 801,
+    "showcase_images": []
   },
   {
     "id": 32,
@@ -327,7 +439,8 @@
     "packaging": "0.1 L, 0.5 L, 1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "6. Soluții Nutritive Speciale – Pentru Stimularea Înfloririi",
-    "sort_order": 802
+    "sort_order": 802,
+    "showcase_images": []
   },
   {
     "id": 27,
@@ -343,7 +456,8 @@
     "packaging": "1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "7. Soluții Nutritive Speciale – Pentru Gazon",
-    "sort_order": 803
+    "sort_order": 803,
+    "showcase_images": []
   },
   {
     "id": 22,
@@ -359,7 +473,8 @@
     "packaging": "0.5 L, 1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "8. Soluții Nutritive Speciale – Pentru Plante Curgătoare",
-    "sort_order": 804
+    "sort_order": 804,
+    "showcase_images": []
   },
   {
     "id": 29,
@@ -375,7 +490,14 @@
     "packaging": "0.1 L, 0.5 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "9. Soluții Nutritive Speciale – Pentru Orhidee",
-    "sort_order": 805
+    "sort_order": 805,
+    "showcase_images": [
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%282%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%283%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%284%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%285%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%286%29.png"
+    ]
   },
   {
     "id": 24,
@@ -391,7 +513,8 @@
     "packaging": "0.1 L, 0.5 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "10. Soluții Nutritive Speciale – Pentru Cactuși și Suculente",
-    "sort_order": 806
+    "sort_order": 806,
+    "showcase_images": []
   },
   {
     "id": 26,
@@ -407,7 +530,8 @@
     "packaging": "1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "11. Soluții Nutritive Speciale – Pentru Conifere și Rododendroni",
-    "sort_order": 807
+    "sort_order": 807,
+    "showcase_images": []
   },
   {
     "id": 25,
@@ -423,7 +547,8 @@
     "packaging": "1 L",
     "menu_category": "solutii-nutritive",
     "subgroup_title": "12. Soluții Nutritive Speciale – Pentru Căpșuni și Legume",
-    "sort_order": 808
+    "sort_order": 808,
+    "showcase_images": []
   },
   {
     "id": 33,
@@ -439,7 +564,12 @@
     "packaging": "0.5 L (pulverizator)",
     "menu_category": "ingrijire-plante",
     "subgroup_title": "1. Soluții Ecologice și Organice pentru Îngrijirea și Protecția Plantelor",
-    "sort_order": 901
+    "sort_order": 901,
+    "showcase_images": [
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag%20%282%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_creaza_o_imag.png"
+    ]
   },
   {
     "id": 16,
@@ -455,7 +585,19 @@
     "packaging": "0.5 L (pulverizator)",
     "menu_category": "ingrijire-plante",
     "subgroup_title": "1. Soluții Ecologice și Organice pentru Îngrijirea și Protecția Plantelor",
-    "sort_order": 902
+    "sort_order": 902,
+    "showcase_images": [
+      "/showcase_img/WhatsApp_Image_2026-10-20_at_11.16.49_1.jpeg",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%282%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%283%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%284%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2810%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%287%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%288%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%289%29.png"
+    ]
   },
   {
     "id": 17,
@@ -471,7 +613,22 @@
     "packaging": "0.5 L (pulverizator)",
     "menu_category": "ingrijire-plante",
     "subgroup_title": "1. Soluții Ecologice și Organice pentru Îngrijirea și Protecția Plantelor",
-    "sort_order": 903
+    "sort_order": 903,
+    "showcase_images": [
+      "/showcase_img/WhatsApp_Image_2026-10-20_at_11.16.49_2.jpeg",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%282%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%283%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_%20%284%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Genereaza_o_imagine_.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_%20%281%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_%20%282%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_fa_o_imagine_.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%2810%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%287%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%288%29.png",
+      "/showcase_img/gemini-2.5-flash-image-preview%20%28nano-banana%29_Te_rog_genereaza_o_i%20%289%29.png"
+    ]
   },
   {
     "id": 2,
@@ -487,7 +644,8 @@
     "packaging": "30 g (30 buc / pachet)",
     "menu_category": "batoane-fertilizante",
     "subgroup_title": "1. Batoane Fertilizante cu Eliberare Treptată (Efect Nutritiv 3 Luni)",
-    "sort_order": 1001
+    "sort_order": 1001,
+    "showcase_images": []
   },
   {
     "id": 3,
@@ -503,7 +661,8 @@
     "packaging": "30 g (30 buc / pachet)",
     "menu_category": "batoane-fertilizante",
     "subgroup_title": "1. Batoane Fertilizante cu Eliberare Treptată (Efect Nutritiv 3 Luni)",
-    "sort_order": 1002
+    "sort_order": 1002,
+    "showcase_images": []
   },
   {
     "id": 1,
@@ -525,6 +684,7 @@
     "packaging": "15 g (15 buc / pachet)",
     "menu_category": "batoane-fertilizante",
     "subgroup_title": "1. Batoane Fertilizante cu Eliberare Treptată (Efect Nutritiv 3 Luni)",
-    "sort_order": 1003
+    "sort_order": 1003,
+    "showcase_images": []
   }
 ]

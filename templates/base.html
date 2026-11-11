@@ -552,6 +552,19 @@
         </div>
     </div>
 
+    <!-- SHOWCASE / GHID VIZUAL LIGHTBOX MODAL -->
+    <div id="showcase-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+        <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center transform scale-95 transition-all duration-300">
+            <button type="button" onclick="closeShowcaseLightbox()"
+                    class="absolute -top-3 -right-2 sm:top-2 sm:right-2 z-20 w-10 h-10 rounded-full bg-stone-900/90 hover:bg-stone-800 text-white border border-stone-700 flex items-center justify-center shadow-lg transition-colors cursor-pointer"
+                    aria-label="Închide imaginea">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <img id="showcase-modal-img" src="" alt="Prezentare vizuală produs PlanteOnline.ro"
+                 class="max-h-[85vh] max-w-full w-auto object-contain rounded-2xl shadow-2xl border border-stone-700/60 bg-white">
+        </div>
+    </div>
+
     <!-- Modern Botanical Footer -->
     <footer class="bg-stone-900 text-stone-300 pt-16 pb-8 border-t border-stone-800 mt-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
