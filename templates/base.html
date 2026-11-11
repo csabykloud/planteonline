@@ -168,7 +168,7 @@
 
                     <!-- Produse Recomandate Dropdown Menu (Between Articole and Despre Noi) -->
                     <div class="relative group shrink-0">
-                        <a href="{{ url_for('products_view', categorie='pamant-flori') }}" class="px-3 xl:px-3.5 py-2 rounded-lg hover:text-botanic-700 hover:bg-botanic-50 transition-colors flex items-center space-x-1.5 whitespace-nowrap {% if request.endpoint == 'products_view' %}text-botanic-700 bg-botanic-50 font-semibold{% endif %}">
+                        <a href="{{ url_for('products_view') }}" class="px-3 xl:px-3.5 py-2 rounded-lg hover:text-botanic-700 hover:bg-botanic-50 transition-colors flex items-center space-x-1.5 whitespace-nowrap {% if request.endpoint in ['products_view', 'product_detail'] %}text-botanic-700 bg-botanic-50 font-semibold{% endif %}">
                             <span>Produse Recomandate</span>
                             <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-hover:rotate-180"></i>
                         </a>
@@ -177,11 +177,20 @@
                         <div class="absolute left-0 mt-1 w-[380px] bg-white rounded-2xl shadow-xl border border-stone-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-3.5 z-50">
                             <div class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2 px-2 flex justify-between items-center">
                                 <span>Categorii de produse</span>
-                                <a href="{{ url_for('products_view', categorie='toate') }}" class="text-botanic-600 hover:underline normal-case font-medium">Toate produsele &rarr;</a>
+                                <a href="{{ url_for('products_view') }}" class="text-botanic-600 hover:underline normal-case font-medium">Toate produsele ({{ all_products|length }}) &rarr;</a>
                             </div>
                             <div class="space-y-1">
+                                <a href="{{ url_for('products_view') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-botanic-800 bg-botanic-50/60 hover:bg-botanic-100 transition-colors text-sm font-bold group/pitem">
+                                    <span class="flex items-center space-x-2.5 truncate">
+                                        <i data-lucide="layout-grid" class="w-4 h-4 text-botanic-700 shrink-0"></i>
+                                        <span class="truncate">Toate produsele din catalog</span>
+                                    </span>
+                                    <span class="text-xs bg-botanic-200/80 text-botanic-900 px-2 py-0.5 rounded-full font-bold shrink-0 ml-2">
+                                        {{ all_products|length }}
+                                    </span>
+                                </a>
                                 {% for pcat in product_menu_categories %}
-                                <a href="{{ url_for('products_view', categorie=pcat.slug) }}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-stone-700 hover:text-botanic-800 hover:bg-botanic-50 transition-colors text-sm group/pitem">
+                                <a href="{{ url_for('products_view', cat_slug=pcat.slug) }}" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-stone-700 hover:text-botanic-800 hover:bg-botanic-50 transition-colors text-sm group/pitem">
                                     <span class="flex items-center space-x-2.5 truncate">
                                         <i data-lucide="{{ pcat.icon }}" class="w-4 h-4 text-botanic-600 group-hover/pitem:text-botanic-800 shrink-0"></i>
                                         <span class="truncate font-medium">{{ pcat.name }}</span>
@@ -284,19 +293,26 @@
                 </div>
 
                 <!-- Produse Recomandate in Mobile Drawer (Between Articole and Despre Noi) -->
-                <a href="{{ url_for('products_view', categorie='pamant-flori') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-colors {% if request.endpoint == 'products_view' %}text-botanic-700 bg-botanic-50 font-bold{% else %}hover:bg-stone-50{% endif %}">
+                <a href="{{ url_for('products_view') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-colors {% if request.endpoint in ['products_view', 'product_detail'] %}text-botanic-700 bg-botanic-50 font-bold{% else %}hover:bg-stone-50{% endif %}">
                     <div class="flex items-center space-x-2.5">
                         <i data-lucide="package-check" class="w-4 h-4 text-botanic-600"></i>
                         <span>Produse Recomandate</span>
                     </div>
-                    <span class="text-xs text-botanic-600 font-semibold">Catalog &rarr;</span>
+                    <span class="text-xs text-botanic-600 font-semibold">Toate ({{ all_products|length }}) &rarr;</span>
                 </a>
 
                 <div class="pl-3 pr-2 py-1.5 space-y-1 bg-botanic-50/60 rounded-2xl border border-botanic-100 my-1">
                     <div class="text-[11px] font-bold text-botanic-800 uppercase tracking-wider px-2 pt-1">Categorii Produse Recomandate:</div>
                     <div class="space-y-1 text-xs">
+                        <a href="{{ url_for('products_view') }}" class="text-botanic-800 hover:text-botanic-900 px-2.5 py-1.5 rounded-lg hover:bg-white flex items-center justify-between transition-colors font-bold">
+                            <span class="flex items-center space-x-2 truncate">
+                                <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-botanic-700 shrink-0"></i>
+                                <span class="truncate">Toate produsele</span>
+                            </span>
+                            <span class="text-[10px] text-botanic-800 bg-botanic-200/80 px-1.5 py-0.5 rounded-full font-bold ml-1">{{ all_products|length }}</span>
+                        </a>
                         {% for pcat in product_menu_categories %}
-                        <a href="{{ url_for('products_view', categorie=pcat.slug) }}" class="text-stone-700 hover:text-botanic-800 px-2.5 py-1.5 rounded-lg hover:bg-white flex items-center justify-between transition-colors font-medium">
+                        <a href="{{ url_for('products_view', cat_slug=pcat.slug) }}" class="text-stone-700 hover:text-botanic-800 px-2.5 py-1.5 rounded-lg hover:bg-white flex items-center justify-between transition-colors font-medium">
                             <span class="flex items-center space-x-2 truncate">
                                 <i data-lucide="{{ pcat.icon }}" class="w-3.5 h-3.5 text-botanic-600 shrink-0"></i>
                                 <span class="truncate">{{ pcat.name }}</span>
@@ -352,7 +368,7 @@
                 {% block content %}{% endblock %}
             </div>
 
-            <!-- Right Column: "Produse Recomandate" (4 or 3 cols) - Sticky on scroll -->
+            <!-- Right Column: "Produse Recomandate" + "Categorii Produse" (4 or 3 cols) - Sticky on scroll -->
             <aside class="{% if request.endpoint == 'home' %}contents lg:block lg:space-y-4{% else %}space-y-4{% endif %} lg:col-span-4 xl:col-span-3 lg:sticky lg:top-24 z-20">
                 
                 <!-- Produse Recomandate Card Widget -->
@@ -364,6 +380,7 @@
                                 Produse Recomandate
                             </h3>
                         </div>
+                        <a href="{{ url_for('products_view') }}" class="text-[11px] font-bold text-botanic-700 hover:underline">Toate &rarr;</a>
                     </div>
                     
                     <p class="text-xs text-stone-500 mb-3 leading-relaxed text-justify">
@@ -392,7 +409,7 @@
                              data-product-id="{{ prod.id }}"
                              data-is-vitaflora="{{ 'true' if prod.is_vitaflora_solutie else 'false' }}">
                             <div class="bg-stone-50 rounded-2xl p-3.5 border border-stone-200 text-center relative hover:shadow-md transition-all cursor-pointer group/card"
-                                 onclick="openProductModal({{ prod.id }})">
+                                 onclick="window.location.href='{{ url_for('product_detail', product_id=prod.id) }}'">
                                 
                                 <!-- Brand badge -->
                                 <span class="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-sm shadow-xs border border-stone-200 text-botanic-800 text-[10px] font-bold px-2 py-0.5 rounded-md">
@@ -419,18 +436,14 @@
                                 </h4>
                                 
                                 <p class="text-stone-500 text-xs mt-1 line-clamp-2 leading-relaxed text-justify">
-                                    {{ (prod.description or 'Soluție eficientă pentru plante sănătoase și rezistente.')[:155] }}{% if prod.description and prod.description|length > 155 %}...{% endif %}
+                                    {{ (prod.description or 'Soluție eficientă pentru plante sănătoase și rezistente.')[:135] }}{% if prod.description and prod.description|length > 135 %}...{% endif %}
                                 </p>
 
-                                <button type="button" 
-                                        class="mt-3 w-full py-2 px-3 bg-botanic-700 hover:bg-botanic-800 text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 shadow-sm transition-colors">
-                                    <span>Vezi detalii & link achiziție</span>
-                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                                </button>
                                 <a href="{{ url_for('product_detail', product_id=prod.id) }}"
                                    onclick="event.stopPropagation()"
-                                   class="mt-1.5 inline-flex items-center justify-center text-[11px] font-semibold text-botanic-700 hover:text-botanic-900 hover:underline">
-                                    <span>Vezi instrucțiunile de utilizare &rarr;</span>
+                                   class="mt-3 w-full py-2 px-3 bg-botanic-700 hover:bg-botanic-800 text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-1.5 shadow-sm transition-colors">
+                                    <span>Vezi produsul</span>
+                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                                 </a>
                             </div>
                         </div>
@@ -438,61 +451,48 @@
                     </div>
                 </div>
 
-                <!-- Showcase / Termékbemutató Képek (Alternating randomly / in carousel) -->
-                <div id="ghid-vizual-widget" class="order-5 lg:order-none min-w-0 bg-white rounded-3xl p-4 sm:p-4.5 shadow-sm border border-stone-200/80 relative overflow-hidden">
-                    <div class="flex items-center space-x-2 mb-2.5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
-                        <h3 class="text-sm font-bold text-stone-900 tracking-tight">
-                            Ghid vizual
-                        </h3>
-                    </div>
-
-                    <!-- Showcase Rotating Display -->
-                    <div id="showcase-carousel-container" class="relative group touch-pan-y">
-                        <!-- Navigation Arrows (Centered vertically on left & right) -->
-                        <button type="button" 
-                                onclick="prevShowcaseSlide(); event.stopPropagation();" 
-                                class="absolute -left-1 sm:-left-2 top-1/2 -translate-y-1/2 z-20 w-8.5 h-8.5 rounded-full bg-white/95 hover:bg-white text-stone-700 hover:text-botanic-700 shadow-md hover:shadow-lg border border-stone-200/90 flex items-center justify-center transition-all hover:scale-110 active:scale-95 focus:outline-none cursor-pointer"
-                                title="Imaginea anterioară" aria-label="Imaginea anterioară">
-                            <i data-lucide="chevron-left" class="w-4 h-4 stroke-[2.5]"></i>
-                        </button>
-                        <button type="button" 
-                                onclick="nextShowcaseSlide(); event.stopPropagation();" 
-                                class="absolute -right-1 sm:-right-2 top-1/2 -translate-y-1/2 z-20 w-8.5 h-8.5 rounded-full bg-white/95 hover:bg-white text-stone-700 hover:text-botanic-700 shadow-md hover:shadow-lg border border-stone-200/90 flex items-center justify-center transition-all hover:scale-110 active:scale-95 focus:outline-none cursor-pointer"
-                                title="Imaginea următoare" aria-label="Imaginea următoare">
-                            <i data-lucide="chevron-right" class="w-4 h-4 stroke-[2.5]"></i>
-                        </button>
-
-                        {% for sc in showcase_items %}
-                        <div class="showcase-slide {% if loop.first %}block{% else %}hidden{% endif %} transition-all duration-300" data-sc-index="{{ loop.index0 }}">
-                            <div class="bg-stone-50 rounded-2xl p-2.5 border border-stone-200 relative hover:shadow-md transition-all cursor-pointer group/sc"
-                                 onclick="openShowcaseLightbox('{{ sc.image_url }}')">
-                                
-                                <div class="w-full h-48 sm:h-50 overflow-hidden rounded-xl bg-white relative flex items-center justify-center border border-stone-100">
-                                    <img src="{{ sc.image_url }}" alt="Ghid vizual îngrijire plante și substraturi Florasol, Humiflor, Vitaflora - {{ sc.title or ('Imagine ' ~ loop.index) }}" 
-                                         loading="lazy" decoding="async"
-                                         class="w-full h-full object-cover group-hover/sc:scale-105 transition-transform duration-300"
-                                         onerror="this.src='https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=400&q=80'">
-                                    <span class="absolute bottom-2 right-2 bg-stone-900/80 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded flex items-center space-x-1">
-                                        <i data-lucide="zoom-in" class="w-3 h-3"></i>
-                                        <span>Mărește</span>
-                                    </span>
-                                </div>
-                            </div>
+                <!-- Categorii Produse Navigation Widget (Moves to bottom on mobile via order-last lg:order-none) -->
+                <div id="categorii-produse-sidebar-widget" class="order-last lg:order-none min-w-0 bg-white rounded-3xl p-5 shadow-sm border border-stone-200/80">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="layers" class="w-4 h-4 text-botanic-700"></i>
+                            <h3 class="text-sm font-bold text-stone-900 tracking-tight uppercase">
+                                Categorii Produse
+                            </h3>
                         </div>
-                        {% endfor %}
                     </div>
+                    <nav class="space-y-1.5" aria-label="Categorii Produse">
+                        <a href="{{ url_for('products_view') }}"
+                           class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all {% if request.endpoint == 'products_view' and (not selected_category or selected_category == 'toate') %}bg-botanic-700 text-white shadow-xs{% else %}bg-stone-50 hover:bg-botanic-50 text-stone-800 hover:text-botanic-800 border border-stone-200/70{% endif %}">
+                            <span class="flex items-center space-x-2 truncate">
+                                <i data-lucide="layout-grid" class="w-3.5 h-3.5 shrink-0 {% if request.endpoint == 'products_view' and (not selected_category or selected_category == 'toate') %}text-botanic-200{% else %}text-botanic-600{% endif %}"></i>
+                                <span class="truncate">Toate produsele</span>
+                            </span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0 ml-1 {% if request.endpoint == 'products_view' and (not selected_category or selected_category == 'toate') %}bg-botanic-800 text-white{% else %}bg-stone-200/80 text-stone-700{% endif %}">
+                                {{ all_products|length }}
+                            </span>
+                        </a>
+                        {% for pcat in product_menu_categories %}
+                        {% set is_active_pcat = (request.endpoint == 'products_view' and selected_category == pcat.slug) or (request.endpoint == 'product_detail' and cat_meta and cat_meta.slug == pcat.slug) %}
+                        <a href="{{ url_for('products_view', cat_slug=pcat.slug) }}"
+                           class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all {% if is_active_pcat %}bg-botanic-700 text-white shadow-xs{% else %}bg-stone-50 hover:bg-botanic-50 text-stone-700 hover:text-botanic-800 border border-stone-200/70{% endif %}">
+                            <span class="flex items-center space-x-2 truncate">
+                                <i data-lucide="{{ pcat.icon }}" class="w-3.5 h-3.5 shrink-0 {% if is_active_pcat %}text-botanic-200{% else %}text-botanic-600{% endif %}"></i>
+                                <span class="truncate">{{ pcat.name }}</span>
+                            </span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0 ml-1 {% if is_active_pcat %}bg-botanic-800 text-white{% else %}bg-stone-200/80 text-stone-700{% endif %}">
+                                {{ pcat.count }}
+                            </span>
+                        </a>
+                        {% endfor %}
+                    </nav>
                 </div>
-
-
-
-
 
             </aside>
         </div>
     </main>
 
-    <!-- PRODUCT DETAIL MODAL DIALOG (Prompt requirement: click image opens large image, description & purchase link) -->
+    <!-- PRODUCT DETAIL MODAL DIALOG (Kept for backwards compatibility if triggered) -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto border border-stone-200 transform scale-95 transition-all duration-300 relative">
             
@@ -547,20 +547,6 @@
                         Descriere & Domenii de Utilizare
                     </h4>
                     <p id="modal-product-desc" class="text-stone-600 text-xs sm:text-sm leading-relaxed whitespace-pre-line text-justify"></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SHOWCASE LIGHTBOX MODAL (For full-size demonstration images) -->
-    <div id="showcase-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full max-h-[92vh] overflow-hidden border border-stone-200 transform scale-95 transition-all duration-300 relative p-3 sm:p-6">
-            <button type="button" onclick="closeShowcaseLightbox()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            <div class="space-y-4">
-                <div class="w-full h-[65vh] sm:h-[75vh] max-h-[600px] bg-stone-50 rounded-2xl overflow-hidden flex items-center justify-center p-2 border border-stone-100">
-                    <img id="showcase-modal-img" src="" alt="Demonstrație Produs" class="max-h-full max-w-full object-contain rounded-xl">
                 </div>
             </div>
         </div>
@@ -634,18 +620,18 @@
                     <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Catalog & Produse</h4>
                     <ul class="space-y-2 text-xs">
                         <li><a href="{{ url_for('plants_az') }}" class="hover:text-botanic-400 transition-colors">Indexul Plantelor A-Z ({{ total_catalog_plants }} specii)</a></li>
-                        <li><a href="{{ url_for('products_view', categorie='pamant-flori') }}" class="hover:text-botanic-400 transition-colors">Amestec turbă / Pământ de flori</a></li>
-                        <li><a href="{{ url_for('products_view', categorie='solutii-nutritive') }}" class="hover:text-botanic-400 transition-colors">Soluții Nutritive & Fertilizanți</a></li>
-                        <li><a href="{{ url_for('products_view', categorie='ingrijire-plante') }}" class="hover:text-botanic-400 transition-colors">Soluții de îngrijire plante</a></li>
-                        <li><a href="{{ url_for('products_view', categorie='batoane-fertilizante') }}" class="hover:text-botanic-400 transition-colors">Batoane fertilizante</a></li>
+                        <li><a href="{{ url_for('products_view') }}" class="hover:text-botanic-400 transition-colors font-semibold text-botanic-300">Toate Produsele ({{ all_products|length }})</a></li>
+                        <li><a href="{{ url_for('products_view', cat_slug='pamant-flori') }}" class="hover:text-botanic-400 transition-colors">Amestec turbă / Pământ de flori</a></li>
+                        <li><a href="{{ url_for('products_view', cat_slug='solutii-nutritive') }}" class="hover:text-botanic-400 transition-colors">Soluții Nutritive & Fertilizanți</a></li>
+                        <li><a href="{{ url_for('products_view', cat_slug='ingrijire-plante') }}" class="hover:text-botanic-400 transition-colors">Soluții de îngrijire plante</a></li>
+                        <li><a href="{{ url_for('products_view', cat_slug='batoane-fertilizante') }}" class="hover:text-botanic-400 transition-colors">Batoane fertilizante</a></li>
                         <li><a href="{{ url_for('calendar_view') }}" class="hover:text-botanic-400 transition-colors">Calendarul Anotimpurilor</a></li>
-                        <li><a href="{{ url_for('about_view') }}" class="hover:text-botanic-400 transition-colors">Despre Mont Rose S.R.L.</a></li>
                     </ul>
                 </div>
 
-                <!-- Col 4: Contact & Distribuție -->
+                <!-- Col 4: Contact, Distribuție & Informații Legale -->
                 <div class="space-y-3">
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Informații & Distribuție</h4>
+                    <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Informații & Legal</h4>
                     <p class="text-xs text-stone-400 leading-relaxed text-justify">
                         Producător și deținător al mărcii <strong>Florasol</strong> pentru pământ de flori și fertilizanți, respectiv distribuitor oficial al gamei de produse <strong>Humiflor</strong>, <strong>Nutrisol</strong>, <strong>Plantasol</strong>, <strong>Vitaflora</strong> și <strong>Florimo</strong>.
                     </p>
@@ -662,29 +648,99 @@
                             <a href="tel:{{ about_meta.contact_phone|replace(' ', '')|replace('-', '') }}" class="hover:text-botanic-300 transition-colors">{{ about_meta.contact_phone }}</a>
                         </div>
                         {% endif %}
-                        {% if about_meta and about_meta.address %}
-                        <div class="flex items-center space-x-2">
-                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-botanic-400 shrink-0"></i>
-                            <span>{{ about_meta.address }}</span>
-                        </div>
-                        {% endif %}
                     </div>
+                    <ul class="space-y-1.5 text-xs pt-2 border-t border-stone-800">
+                        <li><a href="{{ url_for('legal_terms') }}" class="text-stone-300 hover:text-botanic-400 transition-colors flex items-center space-x-1.5"><i data-lucide="file-text" class="w-3.5 h-3.5 text-botanic-400"></i><span>Termeni și condiții</span></a></li>
+                        <li><a href="{{ url_for('legal_privacy') }}" class="text-stone-300 hover:text-botanic-400 transition-colors flex items-center space-x-1.5"><i data-lucide="shield" class="w-3.5 h-3.5 text-botanic-400"></i><span>Politica de confidențialitate (GDPR)</span></a></li>
+                        <li><a href="{{ url_for('legal_cookies') }}" class="text-stone-300 hover:text-botanic-400 transition-colors flex items-center space-x-1.5"><i data-lucide="cookie" class="w-3.5 h-3.5 text-botanic-400"></i><span>Politica de utilizare cookie-uri</span></a></li>
+                    </ul>
                 </div>
 
             </div>
 
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4">
+            <!-- Mandatory ANPC SAL & SOL Consumer Protection Banners -->
+            <div class="py-6 border-b border-stone-800 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <!-- ANPC SAL Pill Banner -->
+                <a href="https://anpc.ro/ce-este-sal/" target="_blank" rel="noopener noreferrer"
+                   aria-label="ANPC - Soluționarea Alternativă a Litigiilor (SAL)"
+                   class="group flex items-center justify-between w-full sm:w-auto min-w-[270px] max-w-[330px] bg-white hover:bg-stone-50 text-stone-900 rounded-full px-3.5 py-2 border-2 border-blue-900 shadow-sm transition-transform hover:scale-[1.02]">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-9 h-9 rounded-full bg-blue-900 text-amber-400 flex flex-col items-center justify-center shrink-0 font-extrabold text-[8px] leading-none border border-amber-400">
+                            <span>ANPC</span>
+                            <span class="text-[7px] text-white mt-0.5">SAL</span>
+                        </div>
+                        <div class="text-left leading-tight">
+                            <span class="block text-[9px] font-extrabold text-blue-950 uppercase tracking-tight">Soluționarea Alternativă</span>
+                            <span class="block text-[9px] font-extrabold text-blue-950 uppercase tracking-tight">a Litigiilor</span>
+                        </div>
+                    </div>
+                    <span class="ml-3 px-3 py-1 rounded-full bg-blue-900 group-hover:bg-blue-800 text-white text-[10px] font-extrabold uppercase tracking-wider shrink-0">
+                        Detalii
+                    </span>
+                </a>
+
+                <!-- EU ODR / SOL Pill Banner -->
+                <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer"
+                   aria-label="SOL - Soluționarea Online a Litigiilor"
+                   class="group flex items-center justify-between w-full sm:w-auto min-w-[270px] max-w-[330px] bg-white hover:bg-stone-50 text-stone-900 rounded-full px-3.5 py-2 border-2 border-blue-900 shadow-sm transition-transform hover:scale-[1.02]">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-9 h-9 rounded-full bg-blue-900 text-white flex flex-col items-center justify-center shrink-0 font-extrabold text-[9px] leading-none border border-amber-400">
+                            <span class="text-amber-400 text-[8px]">UE</span>
+                            <span>SOL</span>
+                        </div>
+                        <div class="text-left leading-tight">
+                            <span class="block text-[9px] font-extrabold text-blue-950 uppercase tracking-tight">Soluționarea Online</span>
+                            <span class="block text-[9px] font-extrabold text-blue-950 uppercase tracking-tight">a Litigiilor</span>
+                        </div>
+                    </div>
+                    <span class="ml-3 px-3 py-1 rounded-full bg-blue-900 group-hover:bg-blue-800 text-white text-[10px] font-extrabold uppercase tracking-wider shrink-0">
+                        Detalii
+                    </span>
+                </a>
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4">
                 <p>&copy; {{ current_year }} PlanteOnline.ro & {{ (about_meta.company_name if about_meta and about_meta.company_name else 'Societatea Mont Rose S.R.L.') }}. Toate drepturile rezervate.</p>
-                <div class="flex items-center space-x-4">
+                <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
                     <a href="{{ url_for('about_view') }}" class="hover:text-stone-300">Despre noi</a>
                     <span>&bull;</span>
-                    <a href="{{ url_for('plants_az') }}" class="hover:text-stone-300">Plante A-Z</a>
+                    <a href="{{ url_for('legal_terms') }}" class="hover:text-stone-300">Termeni și condiții</a>
+                    <span>&bull;</span>
+                    <a href="{{ url_for('legal_privacy') }}" class="hover:text-stone-300">Confidențialitate</a>
+                    <span>&bull;</span>
+                    <a href="{{ url_for('legal_cookies') }}" class="hover:text-stone-300">Cookie-uri</a>
+                    <span>&bull;</span>
+                    <button type="button" onclick="resetCookieConsent()" class="hover:text-stone-300 underline cursor-pointer">Setări Cookie</button>
                 </div>
             </div>
         </div>
     </footer>
 
-    
+    <!-- GDPR Cookie Consent Banner -->
+    <div id="cookie-consent-banner" class="fixed bottom-0 inset-x-0 z-50 p-3 sm:p-4 hidden">
+        <div class="max-w-5xl mx-auto bg-stone-900/95 backdrop-blur-md text-stone-200 rounded-2xl p-4 sm:p-5 shadow-2xl border border-stone-700/80 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="space-y-1 text-xs leading-relaxed pr-2">
+                <div class="flex items-center space-x-2 text-white font-bold text-sm">
+                    <i data-lucide="cookie" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                    <span>Respectăm confidențialitatea datelor dumneavoastră (GDPR & Cookie-uri)</span>
+                </div>
+                <p class="text-stone-300">
+                    Acest site utilizează cookie-uri strict necesare și analitice pentru a vă oferi o experiență optimă de navigare. Continuarea navigării sau apăsarea butonului „Acceptă toate” reprezintă acordul dumneavoastră. Consultați <a href="{{ url_for('legal_privacy') }}" class="text-botanic-400 underline hover:text-botanic-300">Politica de Confidențialitate</a> și <a href="{{ url_for('legal_cookies') }}" class="text-botanic-400 underline hover:text-botanic-300">Politica de Cookie-uri</a>.
+                </p>
+            </div>
+            <div class="flex items-center space-x-2.5 shrink-0 w-full md:w-auto justify-end">
+                <button type="button" onclick="acceptCookies('essential')"
+                        class="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-600 text-xs font-semibold transition-colors cursor-pointer">
+                    Doar necesare
+                </button>
+                <button type="button" onclick="acceptCookies('all')"
+                        class="px-4 py-2 rounded-xl bg-botanic-600 hover:bg-botanic-500 text-white text-xs font-bold shadow-sm transition-colors cursor-pointer">
+                    Acceptă toate
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Floating Back to Top Button for Mobile & Long Pages -->
     <button id="back-to-top-btn" type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
             class="fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full bg-botanic-700/90 hover:bg-botanic-800 text-white shadow-lg border border-botanic-600/30 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none"
@@ -696,6 +752,30 @@
     <script src="{{ url_for('static', filename='js/app.js') }}?v=20261026_dnd"></script>
     <script>
         lucide.createIcons();
+        (function() {
+            try {
+                var consent = localStorage.getItem('planteonline_cookie_consent');
+                var banner = document.getElementById('cookie-consent-banner');
+                if (!consent && banner) {
+                    banner.classList.remove('hidden');
+                }
+            } catch (e) {}
+        })();
+        function acceptCookies(level) {
+            try {
+                localStorage.setItem('planteonline_cookie_consent', level);
+                localStorage.setItem('planteonline_cookie_date', new Date().toISOString());
+            } catch (e) {}
+            var banner = document.getElementById('cookie-consent-banner');
+            if (banner) banner.classList.add('hidden');
+        }
+        function resetCookieConsent() {
+            try {
+                localStorage.removeItem('planteonline_cookie_consent');
+            } catch (e) {}
+            var banner = document.getElementById('cookie-consent-banner');
+            if (banner) banner.classList.remove('hidden');
+        }
     </script>
 </body>
 </html>

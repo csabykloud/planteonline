@@ -18,9 +18,9 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "Acasă", "item": {{ (request.url_root.rstrip('/') ~ url_for('home')) | tojson }}},
-        {"@type": "ListItem", "position": 2, "name": "Produse Recomandate", "item": {{ (request.url_root.rstrip('/') ~ url_for('products_view')) | tojson }}},
+        {"@type": "ListItem", "position": 2, "name": "Produse", "item": {{ (request.url_root.rstrip('/') ~ url_for('products_view')) | tojson }}},
         {% if cat_meta %}
-        {"@type": "ListItem", "position": 3, "name": {{ cat_meta.name | tojson }}, "item": {{ (request.url_root.rstrip('/') ~ url_for('products_view', categorie=cat_meta.slug)) | tojson }}},
+        {"@type": "ListItem", "position": 3, "name": {{ cat_meta.name | tojson }}, "item": {{ (request.url_root.rstrip('/') ~ url_for('products_view', cat_slug=cat_meta.slug)) | tojson }}},
         {"@type": "ListItem", "position": 4, "name": {{ product.name | tojson }}, "item": {{ request.base_url | tojson }}}
         {% else %}
         {"@type": "ListItem", "position": 3, "name": {{ product.name | tojson }}, "item": {{ request.base_url | tojson }}}
@@ -69,35 +69,58 @@
 <div class="space-y-8">
 
     <!-- Top Product Card -->
-    <article class="bg-white rounded-3xl p-6 sm:p-10 border border-stone-200 shadow-xs space-y-6">
+    <article class="bg-white rounded-3xl p-5 sm:p-9 border border-stone-200 shadow-xs space-y-6">
 
-        <!-- Breadcrumbs -->
-        <nav class="text-xs text-stone-400 border-b border-stone-100 pb-4 flex items-center space-x-2 flex-wrap">
-            <a href="{{ url_for('home') }}" class="hover:text-botanic-700">Acasă</a>
+        <!-- 1. Clickable Breadcrumbs (Acasă / Produse / Categorie / Produs) -->
+        <nav aria-label="Breadcrumb" class="text-xs text-stone-400 border-b border-stone-100 pb-3.5 flex items-center space-x-2 flex-wrap">
+            <a href="{{ url_for('home') }}" class="hover:text-botanic-700 transition-colors">Acasă</a>
             <span>/</span>
-            <a href="{{ url_for('products_view') }}" class="hover:text-botanic-700">Produse Recomandate</a>
+            <a href="{{ url_for('products_view') }}" class="hover:text-botanic-700 transition-colors">Produse</a>
             {% if cat_meta %}
             <span>/</span>
-            <a href="{{ url_for('products_view', categorie=cat_meta.slug) }}" class="hover:text-botanic-700 font-medium">
-                {{ cat_meta.short_name }}
+            <a href="{{ url_for('products_view', cat_slug=cat_meta.slug) }}" class="hover:text-botanic-700 font-medium transition-colors">
+                {{ cat_meta.name }}
             </a>
             {% endif %}
             <span>/</span>
             <span class="text-stone-700 font-semibold truncate max-w-xs">{{ product.name }}</span>
         </nav>
 
-        <!-- Main Product Presentation -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- 2. Title (H1) & Short 1-2 line summary right at the top -->
+        <div class="space-y-2">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="bg-botanic-100 text-botanic-800 text-xs font-bold px-3 py-1 rounded-full border border-botanic-200">
+                    Marca: {{ product.brand or 'Florasol' }}
+                </span>
+                {% if product.code %}
+                <span class="text-xs text-stone-400 font-mono bg-stone-100 px-2.5 py-0.5 rounded-md">
+                    Cod produs: {{ product.code }}
+                </span>
+                {% endif %}
+                {% if cat_meta %}
+                <a href="{{ url_for('products_view', cat_slug=cat_meta.slug) }}" class="text-xs text-stone-600 hover:text-botanic-700 bg-stone-100 hover:bg-botanic-50 px-2.5 py-0.5 rounded-md transition-colors">
+                    {{ cat_meta.name }}
+                </a>
+                {% endif %}
+            </div>
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-stone-900 tracking-tight leading-snug">
+                {{ product.name }}
+            </h1>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed max-w-3xl text-justify">
+                {{ product.short_summary }}
+            </p>
+        </div>
 
-            <!-- Left: Product Image & Quick Actions (5 cols) -->
+        <!-- 3. Main Product Presentation: Image + Packaging + CTA on Left, Detailed Description & Table on Right -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-1">
+
+            <!-- Left: Product Image, Packaging & CTA (5 cols) -->
             <div class="lg:col-span-5 flex flex-col space-y-4">
-                <div {% if product.image_url %}onclick="openShowcaseLightbox('{{ product.image_url }}')"{% endif %}
-                     class="w-full h-72 sm:h-84 bg-stone-50 rounded-2xl p-6 border border-stone-200/90 flex items-center justify-center relative group cursor-pointer overflow-hidden"
-                     title="Click pentru a mări imaginea">
+                <div class="w-full h-64 sm:h-80 bg-stone-50 rounded-2xl p-5 border border-stone-200/90 flex items-center justify-center relative overflow-hidden">
                     {% if product.image_url %}
                     <img src="{{ product.image_url }}"
                          alt="{{ product.name }} - {{ product.brand or 'Florasol' }}{% if product.packaging %} (ambalaje: {{ product.packaging }}){% endif %}"
-                         class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300 filter drop-shadow-sm"
+                         class="max-h-full max-w-full object-contain transition-transform duration-300 filter drop-shadow-sm"
                          onerror="this.src='https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=400&q=80'">
                     {% else %}
                     <div class="flex flex-col items-center justify-center text-stone-300">
@@ -105,10 +128,6 @@
                         <span class="text-xs mt-2 text-stone-400">Imagine Produs</span>
                     </div>
                     {% endif %}
-                    <span class="absolute bottom-3 right-3 bg-stone-900/80 backdrop-blur-xs text-white text-[11px] font-semibold px-3 py-1.5 rounded-xl flex items-center space-x-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
-                        <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i>
-                        <span>Mărește imaginea</span>
-                    </span>
                 </div>
 
                 <!-- Ambalaje disponibile -->
@@ -116,7 +135,7 @@
                 <div class="bg-amber-50/90 border border-amber-200/90 p-4 rounded-2xl space-y-2">
                     <span class="text-xs font-bold text-amber-950 uppercase tracking-wider flex items-center">
                         <i data-lucide="package" class="w-4 h-4 text-amber-700 mr-1.5"></i>
-                        Ambalaje disponibile conform catalogului oficial:
+                        Ambalaj / volum disponibil:
                     </span>
                     <div class="flex flex-wrap gap-2 pt-1">
                         {% for pkg in packaging_badges %}
@@ -129,7 +148,7 @@
                 {% endif %}
 
                 <!-- Action CTA Buttons -->
-                <div class="space-y-2.5 pt-2">
+                <div class="space-y-2.5 pt-1">
                     <a href="{{ product.external_url or 'https://www.montrose.ro' }}" target="_blank" rel="noopener noreferrer"
                        onclick="try { fetch('/api/track/product/{{ product.id }}', {method: 'POST'}); } catch(e) {}"
                        class="w-full py-3.5 px-4 bg-gradient-to-r from-botanic-700 to-botanic-600 hover:from-botanic-800 hover:to-botanic-700 text-white font-bold text-sm rounded-2xl flex items-center justify-center space-x-2 shadow-sm hover:shadow-md transition-all">
@@ -137,37 +156,17 @@
                         <i data-lucide="external-link" class="w-4 h-4"></i>
                     </a>
                     {% if cat_meta %}
-                    <a href="{{ url_for('products_view', categorie=cat_meta.slug) }}"
+                    <a href="{{ url_for('products_view', cat_slug=cat_meta.slug) }}"
                        class="w-full py-2.5 px-4 bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold text-xs rounded-2xl flex items-center justify-center space-x-1.5 transition-colors">
                         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-                        <span>Vezi toată categoria {{ cat_meta.short_name }}</span>
+                        <span>Vezi toată categoria {{ cat_meta.name }}</span>
                     </a>
                     {% endif %}
                 </div>
             </div>
 
-            <!-- Right: Details, Botanical Formula & Usage (7 cols) -->
-            <div class="lg:col-span-7 space-y-6">
-                <div>
-                    <div class="flex flex-wrap items-center gap-2 mb-2">
-                        <span class="bg-botanic-100 text-botanic-800 text-xs font-bold px-3 py-1 rounded-full border border-botanic-200">
-                            Marca: {{ product.brand or 'Florasol' }}
-                        </span>
-                        {% if product.code %}
-                        <span class="text-xs text-stone-400 font-mono bg-stone-100 px-2.5 py-0.5 rounded-md">
-                            Cod produs: {{ product.code }}
-                        </span>
-                        {% endif %}
-                        {% if cat_meta %}
-                        <span class="text-xs text-stone-500 bg-stone-100 px-2.5 py-0.5 rounded-md">
-                            {{ cat_meta.short_name }}
-                        </span>
-                        {% endif %}
-                    </div>
-                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-stone-900 tracking-tight leading-snug">
-                        {{ product.name }}
-                    </h1>
-                </div>
+            <!-- Right: Technical Table & Long Structured Description (7 cols) -->
+            <div class="lg:col-span-7 space-y-5">
 
                 <!-- Tabel sintetic cu caracteristici tehnice (SEO #5: tabele și liste în text HTML) -->
                 <div class="overflow-hidden rounded-2xl border border-stone-200/90 bg-stone-50/60">
@@ -190,7 +189,7 @@
                             <tr>
                                 <th class="py-2 px-4 font-semibold text-stone-600">Categorie produs</th>
                                 <td class="py-2 px-4 text-stone-800">
-                                    <a href="{{ url_for('products_view', categorie=cat_meta.slug) }}" class="text-botanic-700 hover:underline font-medium">
+                                    <a href="{{ url_for('products_view', cat_slug=cat_meta.slug) }}" class="text-botanic-700 hover:underline font-medium">
                                         {{ cat_meta.name }}
                                     </a>
                                 </td>
@@ -220,29 +219,98 @@
                 <div class="bg-stone-50/70 rounded-2xl p-5 border border-stone-200/80 space-y-2">
                     <h2 class="text-base sm:text-lg font-serif font-bold text-stone-900 mb-2 flex items-center">
                         <i data-lucide="book-open-check" class="w-4 h-4 text-botanic-700 mr-2"></i>
-                        <span>Descriere, Avantaje și Instrucțiuni de Utilizare</span>
+                        <span>Descriere Detaliată, Avantaje și Instrucțiuni de Utilizare</span>
                     </h2>
                     <div>
                         {{ product.description | format_product_desc | safe }}
                     </div>
                 </div>
 
-                <!-- Producător / Distribuitor Box -->
-                <div class="bg-stone-50 rounded-2xl p-5 border border-stone-200/80 space-y-3">
-                    <div class="flex items-center space-x-2 text-xs font-bold text-stone-700 uppercase tracking-wider">
-                        <i data-lucide="building-2" class="w-4 h-4 text-botanic-600"></i>
-                        <span>Producător & Distribuitor Oficial</span>
-                    </div>
-                    <p class="text-xs text-stone-600 leading-relaxed text-justify">
-                        <strong>Societatea Mont Rose S.R.L.</strong> (fondată în anul 2001) este producătorul mărcii <strong>Florasol</strong> și distribuitorul oficial al mărcilor <strong>Humiflor, Nutrisol, Plantasol, Vitaflora</strong> și <strong>Florimo</strong> în România. Produsele sunt testate și recomandate de specialiștii horticultori PlanteOnline.
-                    </p>
-                </div>
-
             </div>
         </div>
     </article>
 
-    <!-- Matched Plants Section: Plants that benefit from this product -->
+    <!-- 4. ALTE PRODUSE RECOMANDATE (CARE SE POT UTILIZA ÎMPREUNĂ SAU DIN ACEEAȘI GAMĂ) - Compact Wireframe Cards -->
+    {% if related_products %}
+    <section class="bg-white rounded-3xl p-5 sm:p-8 border border-stone-200 shadow-xs space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-4">
+            <div>
+                <span class="text-xs font-bold text-botanic-600 uppercase tracking-wider">Recomandări Complementare</span>
+                <h2 class="text-xl sm:text-2xl font-serif font-bold text-stone-900">
+                    Alte produse recomandate (care se pot utiliza împreună)
+                </h2>
+                <p class="text-xs sm:text-sm text-stone-500 mt-0.5">
+                    Substraturi, fertilizanți și soluții de îngrijire complementare pentru un program complet de nutriție:
+                </p>
+            </div>
+            <a href="{{ url_for('products_view') }}" class="text-xs font-bold text-botanic-700 hover:underline flex items-center shrink-0">
+                <span>Vezi toate produsele</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
+            </a>
+        </div>
+
+        <!-- Compact Cards Grid (3 columns on Desktop, horizontal cards on Mobile) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-5">
+            {% for rprod in related_products %}
+            <article class="bg-stone-50/80 hover:bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4.5 border border-stone-200/90 hover:border-botanic-400 hover:shadow-md transition-all flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-3.5 sm:gap-3 group">
+                
+                <!-- Left on Mobile / Top on Desktop: Product Image -->
+                <a href="{{ url_for('product_detail', product_id=rprod.id) }}"
+                   class="w-24 h-28 sm:w-full sm:h-40 shrink-0 bg-white rounded-xl sm:rounded-2xl p-2 sm:p-3 border border-stone-100 flex items-center justify-center relative overflow-hidden">
+                    <span class="hidden sm:inline-block absolute top-2.5 left-2.5 bg-botanic-50 text-botanic-800 border border-botanic-200 text-[10px] font-bold px-2 py-0.5 rounded-md z-10">
+                        {{ rprod.brand or 'Florasol' }}
+                    </span>
+                    {% if rprod.image_url %}
+                    <img src="{{ rprod.image_url }}"
+                         alt="{{ rprod.name }} - {{ rprod.brand or 'Florasol' }}{% if rprod.packaging %} ({{ rprod.packaging }}){% endif %}"
+                         loading="lazy" decoding="async"
+                         class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300">
+                    {% else %}
+                    <i data-lucide="package" class="w-8 h-8 text-stone-300"></i>
+                    {% endif %}
+                </a>
+
+                <!-- Right on Mobile / Bottom on Desktop: Info + Ambalaj + Vezi produsul -->
+                <div class="flex-1 min-w-0 flex flex-col justify-between sm:grow space-y-2">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-1.5 sm:hidden">
+                            <span class="bg-botanic-100 text-botanic-800 text-[10px] font-bold px-2 py-0.5 rounded-md">
+                                {{ rprod.brand or 'Florasol' }}
+                            </span>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-serif font-bold text-stone-900 group-hover:text-botanic-700 transition-colors leading-snug line-clamp-2">
+                            <a href="{{ url_for('product_detail', product_id=rprod.id) }}">
+                                {{ rprod.name }}
+                            </a>
+                        </h3>
+                        <p class="hidden sm:block text-xs text-stone-500 line-clamp-2 leading-relaxed">
+                            {{ rprod.short_summary }}
+                        </p>
+                        {% if rprod.packaging %}
+                        <div class="text-[11px] sm:text-xs text-stone-600 pt-0.5 flex items-center gap-1 flex-wrap">
+                            <span class="font-semibold text-stone-500">Ambalaj:</span>
+                            <span class="font-bold text-amber-900 bg-amber-50/90 border border-amber-200/70 px-2 py-0.5 rounded-md">
+                                {{ rprod.packaging }}
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="pt-1 sm:pt-2">
+                        <a href="{{ url_for('product_detail', product_id=rprod.id) }}"
+                           class="w-full py-2 px-3.5 bg-botanic-700 hover:bg-botanic-800 text-white font-semibold text-xs rounded-xl flex items-center justify-center space-x-1.5 shadow-2xs transition-colors">
+                            <span>Vezi produsul</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- 5. Matched Plants Section: Plants that benefit from this product -->
     {% if matched_plants %}
     <section class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-4">
@@ -284,64 +352,6 @@
                     <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-botanic-600 shrink-0"></i>
                 </div>
             </a>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-
-    <!-- Related Products in Same Category -->
-    {% if related_products %}
-    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-5">
-        <div class="flex items-center justify-between border-b border-stone-100 pb-4">
-            <div>
-                <span class="text-xs font-bold text-botanic-600 uppercase tracking-wider">Catalog Horticultură</span>
-                <h2 class="text-xl sm:text-2xl font-serif font-bold text-stone-900">
-                    Produse Complementare Recomandate
-                </h2>
-            </div>
-            <a href="{{ url_for('products_view') }}" class="text-xs font-bold text-botanic-700 hover:underline flex items-center">
-                <span>Vezi Catalogul Complet</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {% for rprod in related_products %}
-            <div class="bg-stone-50 rounded-2xl p-4 border border-stone-200 hover:border-botanic-400 hover:shadow-md transition-all flex flex-col justify-between group">
-                <div class="space-y-3">
-                    <a href="{{ url_for('product_detail', product_id=rprod.id) }}"
-                       class="w-full h-36 bg-white rounded-xl overflow-hidden flex items-center justify-center p-2 border border-stone-100 block">
-                        {% if rprod.image_url %}
-                        <img src="{{ rprod.image_url }}" alt="{{ rprod.name }} - {{ rprod.brand or 'Florasol' }}{% if rprod.packaging %} ({{ rprod.packaging }}){% endif %}"
-                             loading="lazy" decoding="async"
-                             class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300">
-                        {% else %}
-                        <i data-lucide="package" class="w-10 h-10 text-stone-300"></i>
-                        {% endif %}
-                    </a>
-                    <div>
-                        <span class="text-[10px] font-bold text-botanic-800 bg-botanic-100 px-2 py-0.5 rounded">
-                            {{ rprod.brand or 'Florasol' }}
-                        </span>
-                        <h3 class="text-xs font-serif font-bold text-stone-900 mt-1 line-clamp-2">
-                            <a href="{{ url_for('product_detail', product_id=rprod.id) }}" class="hover:text-botanic-700">
-                                {{ rprod.name }}
-                            </a>
-                        </h3>
-                    </div>
-                </div>
-                <div class="pt-3 mt-3 border-t border-stone-200 flex items-center justify-between gap-2">
-                    <a href="{{ url_for('product_detail', product_id=rprod.id) }}"
-                       class="text-xs font-bold text-botanic-700 hover:text-botanic-900 flex items-center">
-                        <span>Vezi instrucțiunile de utilizare</span>
-                        <i data-lucide="arrow-right" class="w-3 h-3 ml-0.5"></i>
-                    </a>
-                    <a href="{{ rprod.external_url or 'https://www.montrose.ro' }}" target="_blank" rel="noopener noreferrer"
-                       class="text-[11px] font-semibold text-stone-500 hover:text-stone-800">
-                        Comandă &rarr;
-                    </a>
-                </div>
-            </div>
             {% endfor %}
         </div>
     </section>

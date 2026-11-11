@@ -1,70 +1,124 @@
 {% extends "base.html" %}
 
-{% block title %}Indexul Plantelor A-Z ({{ total_catalog_plants }} Specii Botanice){% if selected_letter and selected_letter != 'ALL' %} - Litera {{ selected_letter }}{% endif %}{% if selected_subtype %} - {{ selected_subtype }}{% endif %} | PlanteOnline{% endblock %}
-{% block meta_description %}Catalog botanic alfabetic A-Z cu {{ total_catalog_plants }} specii de plante{% if selected_letter and selected_letter != 'ALL' %} (litera {{ selected_letter }}: {{ total_plants }} specii){% endif %}: denumire științifică în latină, origine, lumină, udare, temperatură, substrat și fertilizare recomandată.{% endblock %}
+{% block title %}{% if active_plant_category %}{{ active_plant_category.title }} ({{ total_plants }} Specii) — Plante A-Z | PlanteOnline.ro{% elif selected_letter and selected_letter != 'ALL' %}Plante de la Litera {{ selected_letter }} ({{ total_plants }} Specii) — Indexul Plantelor A-Z | PlanteOnline.ro{% else %}Plante de la A la Z ({{ total_catalog_plants }} Specii Botanice) — Enciclopedie & Îngrijire | PlanteOnline.ro{% endif %}{% endblock %}
+{% block meta_description %}{% if active_plant_category %}{{ active_plant_category.short_desc }} Descoperă {{ total_plants }} specii din categoria {{ active_plant_category.name }} cu fișe botanice, substrat și fertilizare recomandată.{% else %}Catalog botanic alfabetic A-Z cu {{ total_catalog_plants }} specii de plante{% if selected_letter and selected_letter != 'ALL' %} (litera {{ selected_letter }}: {{ total_plants }} specii){% endif %}: denumire științifică în latină, origine, lumină, udare, temperatură, substrat și fertilizare recomandată.{% endif %}{% endblock %}
 
 {% block content %}
-<div class="space-y-8">
+<div class="space-y-6"
+     id="plants-az-root"
+     data-search-json-url="{{ url_for('serve_plants_search_json') }}"
+     data-plant-base-url="{{ url_for('plant_detail', plant_id=1)[:-1] }}"
+     data-az-base-url="{{ url_for('plants_az') }}">
 
-    <!-- Header & Search Controls -->
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-6">
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            <div>
-                <nav class="text-xs text-stone-400 mb-2 flex items-center space-x-2">
-                    <a href="{{ url_for('home') }}" class="hover:text-botanic-700">Acasă</a>
+    <!-- Header, Breadcrumb, Short Description & Search/Filter Controls -->
+    <div class="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-xs space-y-5">
+        <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+            <div class="space-y-1.5">
+                <!-- Clickable Breadcrumb -->
+                <nav aria-label="Breadcrumb" class="text-xs text-stone-400 flex flex-wrap items-center gap-1.5">
+                    <a href="{{ url_for('home') }}" class="hover:text-botanic-700 transition-colors">Acasă</a>
                     <span>/</span>
-                    <span class="text-stone-700 font-medium">Indexul Plantelor de la A la Z</span>
+                    {% if active_plant_category %}
+                    <a href="{{ url_for('plants_az') }}" class="hover:text-botanic-700 transition-colors">Plante A-Z</a>
+                    <span>/</span>
+                    <span class="text-stone-700 font-semibold">{{ active_plant_category.name }}</span>
+                    {% elif selected_letter and selected_letter != 'ALL' %}
+                    <a href="{{ url_for('plants_az') }}" class="hover:text-botanic-700 transition-colors">Plante A-Z</a>
+                    <span>/</span>
+                    <span class="text-stone-700 font-semibold">Litera {{ selected_letter }}</span>
+                    {% else %}
+                    <span class="text-stone-700 font-semibold">Plante de la A la Z</span>
+                    {% endif %}
                 </nav>
-                <h1 class="text-2xl sm:text-3xl font-serif font-bold text-stone-900 tracking-tight flex items-center gap-3">
+
+                <!-- H1 Category or Catalog Title -->
+                <h1 id="az-page-heading" class="text-2xl sm:text-3xl font-serif font-bold text-stone-900 tracking-tight flex flex-wrap items-center gap-2.5">
+                    {% if active_plant_category %}
+                    <span>{{ active_plant_category.title }}</span>
+                    <span class="text-xs font-sans font-bold bg-botanic-100 text-botanic-800 px-3 py-1 rounded-full">
+                        {{ total_plants }} Specii
+                    </span>
+                    {% else %}
                     <span>Plante de la A la Z</span>
                     <span class="text-xs font-sans font-bold bg-botanic-100 text-botanic-800 px-3 py-1 rounded-full">
                         {{ total_catalog_plants }} Specii Înregistrate
                     </span>
+                    {% endif %}
                 </h1>
-                <p class="text-xs sm:text-sm text-stone-500 mt-1">
-                    Catalogul enciclopedic complet de specii florale, arbori, arbuști și plante de apartament.
+
+                <!-- Short 1-2 line description -->
+                <p id="az-page-short-desc" class="text-xs sm:text-sm text-stone-600 leading-relaxed max-w-3xl text-justify">
+                    {% if active_plant_category %}
+                        {{ active_plant_category.short_desc }}
+                    {% else %}
+                        Catalogul enciclopedic complet de specii florale, plante de apartament, perene, arbuști, conifere și arbori ornamentali, cu ghid de îngrijire și substraturi recomandate.
+                    {% endif %}
                 </p>
             </div>
 
-            <!-- Search & Filter Form -->
-            <form action="{{ url_for('plants_az') }}" method="GET" class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full lg:w-auto">
-                <input type="hidden" name="l" value="{{ selected_letter }}">
-                
+            <!-- Search & Category Filter Form -->
+            <form id="plants-az-filter-form" action="{{ url_for('plants_az') }}" method="GET" class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full lg:w-auto shrink-0">
                 <!-- Search input -->
-                <div class="relative w-full sm:w-60">
-                    <input type="text" name="q" value="{{ search_query }}" placeholder="Caută după nume (ro sau lat)..." 
+                <div class="relative w-full sm:w-56">
+                    <input id="plants-az-search-input" type="text" name="q" value="{{ search_query }}" placeholder="Caută după nume (ro sau lat)..." 
                            class="w-full pl-9 pr-4 py-2.5 rounded-2xl text-xs bg-stone-50 border border-stone-200 focus:outline-none focus:ring-2 focus:ring-botanic-500">
                     <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3 top-3"></i>
                 </div>
 
-                <!-- Subtype select -->
-                <select name="subtip" onchange="this.form.submit()" 
-                        class="w-full sm:w-auto py-2.5 px-3 rounded-2xl text-xs bg-stone-50 border border-stone-200 text-stone-700 focus:outline-none focus:ring-2 focus:ring-botanic-500">
-                    <option value="">Toate tipurile de plante</option>
-                    {% for sub in subtypes %}
-                    <option value="{{ sub }}" {% if selected_subtype == sub %}selected{% endif %}>{{ sub }}</option>
+                <!-- Category select (navigates directly to dedicated category SEO URL) -->
+                <select id="plants-az-category-select" name="subtip"
+                        onchange="handlePlantCategorySelect(this)"
+                        aria-label="Selectează categoria de plante"
+                        class="w-full sm:w-auto py-2.5 px-3 rounded-2xl text-xs bg-stone-50 border border-stone-200 text-stone-700 font-medium focus:outline-none focus:ring-2 focus:ring-botanic-500 cursor-pointer">
+                    <option value="" data-url="{{ url_for('plants_az') }}">Toate tipurile de plante ({{ total_catalog_plants }})</option>
+                    {% for pc in plant_categories_nav %}
+                    <option value="{{ pc.name }}"
+                            data-url="{{ url_for('plants_az', cat_slug=pc.slug) }}"
+                            {% if (active_plant_category and active_plant_category.slug == pc.slug) or selected_subtype == pc.name %}selected{% endif %}>
+                        {{ pc.name }} ({{ pc.count }})
+                    </option>
                     {% endfor %}
                 </select>
 
-                <button type="submit" class="w-full sm:w-auto px-4 py-2.5 bg-botanic-700 hover:bg-botanic-800 text-white rounded-2xl text-xs font-semibold shadow-xs">
+                <button type="submit" class="w-full sm:w-auto px-4 py-2.5 bg-botanic-700 hover:bg-botanic-800 text-white rounded-2xl text-xs font-semibold shadow-xs cursor-pointer">
                     Filtrează
                 </button>
             </form>
         </div>
 
+        <!-- Plant Category Quick-Select Pills -->
+        <div class="pt-3 border-t border-stone-100">
+            <div class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-2">
+                Categorii Botanice:
+            </div>
+            <div class="flex overflow-x-auto sm:flex-wrap gap-1.5 pb-1 scrollbar-none">
+                <a href="{{ url_for('plants_az', letter='ALL') }}"
+                   class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 whitespace-nowrap {% if not active_plant_category and selected_letter == 'ALL' %}bg-botanic-700 text-white shadow-xs{% else %}bg-stone-100 text-stone-700 hover:bg-botanic-50 hover:text-botanic-800{% endif %}">
+                    Toate categoriile ({{ total_catalog_plants }})
+                </a>
+                {% for pc in plant_categories_nav %}
+                <a href="{{ url_for('plants_az', cat_slug=pc.slug) }}"
+                   class="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center space-x-1.5 shrink-0 whitespace-nowrap {% if active_plant_category and active_plant_category.slug == pc.slug %}bg-botanic-700 text-white shadow-xs{% else %}bg-stone-100 text-stone-700 hover:bg-botanic-50 hover:text-botanic-800{% endif %}">
+                    <span>{{ pc.name }}</span>
+                    <span class="text-[10px] opacity-75">({{ pc.count }})</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
         <!-- A-Z Alphabet Navigation Bar -->
-        <div class="pt-4 border-t border-stone-100">
-            <div class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2.5">
+        <div class="pt-3 border-t border-stone-100">
+            <div class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-2">
                 Navigare Alfabetică:
             </div>
-            <div class="flex overflow-x-auto sm:flex-wrap gap-1.5 pb-2 scrollbar-none">
-                <a href="{{ url_for('plants_az', l='ALL') }}" 
-                   class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 whitespace-nowrap {% if selected_letter == 'ALL' %}bg-stone-900 text-white shadow-xs{% else %}bg-stone-100 text-stone-700 hover:bg-stone-200{% endif %}">
-                    Toate
+            <div class="flex overflow-x-auto sm:flex-wrap gap-1.5 pb-1 scrollbar-none">
+                <a href="{{ url_for('plants_az', letter='ALL') }}" 
+                   class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 whitespace-nowrap {% if selected_letter == 'ALL' and not active_plant_category %}bg-stone-900 text-white shadow-xs{% else %}bg-stone-100 text-stone-700 hover:bg-stone-200{% endif %}">
+                    Toate ({{ total_catalog_plants }})
                 </a>
                 {% for letter, count in letters %}
-                <a href="{{ url_for('plants_az', l=letter) }}" 
-                   class="px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 shrink-0 {% if selected_letter == letter %}bg-botanic-700 text-white shadow-xs scale-105{% else %}bg-stone-100 text-stone-700 hover:bg-botanic-50 hover:text-botanic-700{% endif %}">
+                <a href="{{ url_for('plants_az', letter=letter) }}" 
+                   class="px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 shrink-0 {% if selected_letter == letter and not active_plant_category %}bg-botanic-700 text-white shadow-xs scale-105{% else %}bg-stone-100 text-stone-700 hover:bg-botanic-50 hover:text-botanic-700{% endif %}">
                     <span>{{ letter }}</span>
                     <span class="text-[9px] opacity-75">({{ count }})</span>
                 </a>
@@ -75,156 +129,358 @@
     </div>
 
     <!-- Active Filter Info -->
-    <div class="flex items-center justify-between text-xs text-stone-500 px-2">
-        <span>
+    <div id="az-filter-status-bar" class="flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500 px-2">
+        <span id="az-filter-status-text">
             Se afișează <strong>{{ plants|length }}</strong> din <strong>{{ total_plants }}</strong> plante găsite
-            {% if selected_letter and selected_letter != 'ALL' %}pentru litera <strong>"{{ selected_letter }}"</strong>{% endif %}
-            {% if search_query %}după termenul <strong>"{{ search_query }}"</strong>{% endif %}
+            {% if active_plant_category %}în categoria <strong>„{{ active_plant_category.name }}”</strong>{% endif %}
+            {% if selected_letter and selected_letter != 'ALL' %}pentru litera <strong>„{{ selected_letter }}”</strong>{% endif %}
+            {% if search_query %}după termenul <strong>„{{ search_query }}”</strong>{% endif %}
             (din totalul de <strong>{{ total_catalog_plants }}</strong> specii din catalog)
         </span>
-        {% if search_query or selected_subtype or (selected_letter and selected_letter != 'A') %}
-        <a href="{{ url_for('plants_az', l='A') }}" class="text-botanic-700 hover:underline font-semibold flex items-center">
+        {% if search_query or selected_subtype or active_plant_category or (selected_letter and selected_letter != 'A') %}
+        <a href="{{ url_for('plants_az', letter='A') }}" class="text-botanic-700 hover:underline font-semibold flex items-center">
             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 mr-1"></i> Resetează filtrele
         </a>
         {% endif %}
     </div>
 
-    <!-- Plants Grid -->
-    {% if plants %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for plant in plants %}
-        <div class="bg-white rounded-3xl p-5 border border-stone-200 hover:shadow-lg hover:border-botanic-400 transition-all flex flex-col justify-between group">
-            <div>
-                <!-- Thumbnail -->
-                <div class="w-full h-44 bg-stone-50 rounded-2xl overflow-hidden mb-4 flex items-center justify-center relative border border-stone-100">
-                    {% if plant.images and plant.images|length > 0 %}
-                    <img src="{{ plant.images[0] }}" alt="{{ plant.name }}" 
-                         loading="lazy" decoding="async"
-                         data-fallback="{{ plant.images[1] if plant.images|length > 1 else '' }}"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                         onerror="if(this.dataset.fallback && this.src !== this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.classList.remove('hidden');}">
-                    <div class="hidden flex-col items-center justify-center text-stone-300">
-                        <i data-lucide="sprout" class="w-12 h-12"></i>
-                        <span class="text-[10px] text-stone-400 mt-1">Foto plantă</span>
-                    </div>
-                    {% else %}
-                    <div class="flex flex-col items-center justify-center text-stone-300">
-                        <i data-lucide="sprout" class="w-12 h-12"></i>
-                        <span class="text-[10px] text-stone-400 mt-1">Foto plantă</span>
-                    </div>
-                    {% endif %}
+    <!-- Plants Grid Container (Server-rendered, and updated dynamically on client-side search/pagination) -->
+    <div id="az-plants-grid-wrapper">
+        {% if plants %}
+        <div id="az-plants-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {% for plant in plants %}
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-stone-200 hover:shadow-lg hover:border-botanic-400 transition-all flex flex-col justify-between group">
+                <div>
+                    <!-- Thumbnail -->
+                    <a href="{{ url_for('plant_detail', plant_id=plant.id) }}" class="block w-full h-44 bg-stone-50 rounded-2xl overflow-hidden mb-3.5 flex items-center justify-center relative border border-stone-100">
+                        {% if plant.images and plant.images|length > 0 %}
+                        <img src="{{ plant.images[0] }}" alt="{{ plant.name }}" 
+                             loading="lazy" decoding="async"
+                             data-fallback="{{ plant.images[1] if plant.images|length > 1 else '' }}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                             onerror="if(this.dataset.fallback && this.src !== this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.classList.remove('hidden');}">
+                        <div class="hidden flex-col items-center justify-center text-stone-300">
+                            <i data-lucide="sprout" class="w-12 h-12"></i>
+                            <span class="text-[10px] text-stone-400 mt-1">Foto plantă</span>
+                        </div>
+                        {% else %}
+                        <div class="flex flex-col items-center justify-center text-stone-300">
+                            <i data-lucide="sprout" class="w-12 h-12"></i>
+                            <span class="text-[10px] text-stone-400 mt-1">Foto plantă</span>
+                        </div>
+                        {% endif %}
+                        
+                        <span class="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-xs text-stone-800 text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-2xs border border-stone-200">
+                            {{ plant.category or 'Plante' }}
+                        </span>
+                        
+                        <span class="absolute bottom-2.5 right-2.5 bg-stone-900/80 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
+                            #{{ plant.id }}
+                        </span>
+                    </a>
+
+                    <!-- Plant Names -->
+                    <h3 class="font-bold text-stone-900 text-base group-hover:text-botanic-700 transition-colors leading-snug line-clamp-1">
+                        <a href="{{ url_for('plant_detail', plant_id=plant.id) }}">{{ plant.name }}</a>
+                    </h3>
                     
-                    <span class="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-xs text-stone-800 text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-2xs border border-stone-200">
-                        {{ plant.category or 'Plante' }}
-                    </span>
-                    
-                    <span class="absolute bottom-2.5 right-2.5 bg-stone-900/80 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
-                        #{{ plant.id }}
-                    </span>
+                    <div class="text-xs text-stone-400 italic font-serif line-clamp-1 mt-0.5">
+                        {{ plant.latin_name or 'Denumire botanică' }}
+                    </div>
+
+                    <!-- Plant Description Snippet -->
+                    <p class="text-[11px] text-stone-500 mt-2 line-clamp-2 leading-relaxed text-justify">
+                        {{ plant.description or 'Specie botanică decorativă din catalogul A-Z PlanteOnline.' }}
+                    </p>
+
+                    <!-- Botanical Specs Preview -->
+                    <div class="mt-3 space-y-1 text-xs text-stone-600 bg-stone-50 p-2.5 rounded-xl border border-stone-100">
+                        {% if plant.origin %}
+                        <div class="flex items-center text-[11px] truncate">
+                            <span class="text-stone-400 w-16 shrink-0 font-medium">Origine:</span>
+                            <span class="font-medium text-stone-800 truncate">{{ plant.origin }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if plant.care_guide and plant.care_guide.lumina %}
+                        <div class="flex items-center text-[11px] truncate">
+                            <span class="text-stone-400 w-16 shrink-0 font-medium">Lumină:</span>
+                            <span class="font-medium text-stone-800 truncate">{{ plant.care_guide.lumina }}</span>
+                        </div>
+                        {% elif plant.requirements %}
+                        <div class="flex items-center text-[11px] truncate">
+                            <span class="text-stone-400 w-16 shrink-0 font-medium">Cerințe:</span>
+                            <span class="font-medium text-stone-800 truncate">{{ plant.requirements }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
                 </div>
 
-                <!-- Plant Names -->
-                <h3 class="font-bold text-stone-900 text-base group-hover:text-botanic-700 transition-colors leading-snug line-clamp-1">
-                    {{ plant.name }}
-                </h3>
-                
-                <div class="text-xs text-stone-400 italic font-serif line-clamp-1 mt-0.5">
-                    {{ plant.latin_name or 'Denumire botanică în curs de actualizare' }}
-                </div>
-
-                <!-- Plant Description Snippet -->
-                <p class="text-[11px] text-stone-500 mt-2 line-clamp-2 leading-relaxed text-justify">
-                    {{ plant.description or 'Specie botanică decorativă din catalogul A-Z PlanteOnline.' }}
-                </p>
-
-                <!-- Botanical Specs Preview -->
-                <div class="mt-3 space-y-1.5 text-xs text-stone-600 bg-stone-50 p-3 rounded-xl border border-stone-100">
-                    {% if plant.origin %}
-                    <div class="flex items-center text-[11px] truncate">
-                        <span class="text-stone-400 w-16 shrink-0 font-medium">Origine:</span>
-                        <span class="font-medium text-stone-800 truncate">{{ plant.origin }}</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if plant.care_guide and plant.care_guide.lumina %}
-                    <div class="flex items-center text-[11px] truncate">
-                        <span class="text-stone-400 w-16 shrink-0 font-medium">Lumină:</span>
-                        <span class="font-medium text-stone-800 truncate">{{ plant.care_guide.lumina }}</span>
-                    </div>
-                    {% elif plant.requirements %}
-                    <div class="flex items-center text-[11px] truncate">
-                        <span class="text-stone-400 w-16 shrink-0 font-medium">Cerințe:</span>
-                        <span class="font-medium text-stone-800 truncate">{{ plant.requirements }}</span>
-                    </div>
-                    {% endif %}
-
-                    {% if plant.leaves %}
-                    <div class="flex items-center text-[11px] truncate">
-                        <span class="text-stone-400 w-16 shrink-0 font-medium">Frunziș:</span>
-                        <span class="font-medium text-stone-800 truncate">{{ plant.leaves }}</span>
-                    </div>
-                    {% endif %}
+                <!-- Card Actions -->
+                <div class="pt-3.5 mt-3.5 border-t border-stone-100 flex items-center justify-between">
+                    <span class="text-[11px] text-stone-400 font-mono">Litera {{ plant.letter }}</span>
+                    <a href="{{ url_for('plant_detail', plant_id=plant.id) }}" 
+                       class="px-3.5 py-1.5 bg-botanic-700 hover:bg-botanic-800 text-white rounded-xl text-xs font-semibold inline-flex items-center space-x-1 transition-colors">
+                        <span>Vezi fișa plantei</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </a>
                 </div>
 
             </div>
-
-            <!-- Card Actions -->
-            <div class="pt-4 mt-4 border-t border-stone-100 flex items-center justify-between">
-                <span class="text-[11px] text-stone-400 font-mono">Litera {{ plant.letter }}</span>
-                <a href="{{ url_for('plant_detail', plant_id=plant.id) }}" 
-                   class="px-3.5 py-1.5 bg-botanic-700 hover:bg-botanic-800 text-white rounded-xl text-xs font-semibold inline-flex items-center space-x-1 transition-colors">
-                    <span>Fișă Botanică</span>
-                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                </a>
-            </div>
-
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
 
-    <!-- Pagination -->
-    {% if total_pages > 1 %}
-    <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-6">
-        {% if page > 1 %}
-        <a href="{{ url_for('plants_az', l=selected_letter, q=search_query, subtip=selected_subtype, pagina=page-1) }}" 
-           class="px-4 py-2 rounded-xl bg-white border border-stone-200 text-stone-700 hover:bg-stone-50 text-xs font-semibold">
-            &larr; Anterior
-        </a>
-        {% endif %}
-
-        {% for p_num in range(1, total_pages + 1) %}
-            {% if p_num == page or (p_num <= 3) or (p_num >= total_pages - 1) or (p_num >= page - 1 and p_num <= page + 1) %}
-            <a href="{{ url_for('plants_az', l=selected_letter, q=search_query, subtip=selected_subtype, pagina=p_num) }}" 
-               class="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-semibold transition-all {% if p_num == page %}bg-botanic-700 text-white shadow-xs{% else %}bg-white border border-stone-200 text-stone-700 hover:bg-stone-50{% endif %}">
-                {{ p_num }}
+        <!-- Pagination -->
+        {% if total_pages > 1 %}
+        <div id="az-pagination-bar" class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-6">
+            {% if page > 1 %}
+            <a href="{% if active_plant_category %}{{ url_for('plants_az', cat_slug=active_plant_category.slug, pagina=page-1) }}{% elif selected_letter %}{{ url_for('plants_az', letter=selected_letter, q=search_query or None, pagina=page-1) }}{% else %}{{ url_for('plants_az', q=search_query or None, pagina=page-1) }}{% endif %}" 
+               class="px-4 py-2 rounded-xl bg-white border border-stone-200 text-stone-700 hover:bg-stone-50 text-xs font-semibold">
+                &larr; Anterior
             </a>
-            {% elif p_num == 4 and page > 4 %}
-            <span class="text-stone-400 text-xs">...</span>
-            {% elif p_num == total_pages - 2 and page < total_pages - 3 %}
-            <span class="text-stone-400 text-xs">...</span>
             {% endif %}
-        {% endfor %}
 
-        {% if page < total_pages %}
-        <a href="{{ url_for('plants_az', l=selected_letter, q=search_query, subtip=selected_subtype, pagina=page+1) }}" 
-           class="px-4 py-2 rounded-xl bg-white border border-stone-200 text-stone-700 hover:bg-stone-50 text-xs font-semibold">
-            Următor &rarr;
-        </a>
+            {% for p_num in range(1, total_pages + 1) %}
+                {% if p_num == page or (p_num <= 3) or (p_num >= total_pages - 1) or (p_num >= page - 1 and p_num <= page + 1) %}
+                <a href="{% if active_plant_category %}{{ url_for('plants_az', cat_slug=active_plant_category.slug, pagina=p_num) }}{% elif selected_letter %}{{ url_for('plants_az', letter=selected_letter, q=search_query or None, pagina=p_num) }}{% else %}{{ url_for('plants_az', q=search_query or None, pagina=p_num) }}{% endif %}" 
+                   class="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-semibold transition-all {% if p_num == page %}bg-botanic-700 text-white shadow-xs{% else %}bg-white border border-stone-200 text-stone-700 hover:bg-stone-50{% endif %}">
+                    {{ p_num }}
+                </a>
+                {% elif p_num == 4 and page > 4 %}
+                <span class="text-stone-400 text-xs">...</span>
+                {% elif p_num == total_pages - 2 and page < total_pages - 3 %}
+                <span class="text-stone-400 text-xs">...</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page < total_pages %}
+            <a href="{% if active_plant_category %}{{ url_for('plants_az', cat_slug=active_plant_category.slug, pagina=page+1) }}{% elif selected_letter %}{{ url_for('plants_az', letter=selected_letter, q=search_query or None, pagina=page+1) }}{% else %}{{ url_for('plants_az', q=search_query or None, pagina=page+1) }}{% endif %}" 
+               class="px-4 py-2 rounded-xl bg-white border border-stone-200 text-stone-700 hover:bg-stone-50 text-xs font-semibold">
+                Următor &rarr;
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="bg-white rounded-3xl p-12 text-center border border-stone-200 max-w-lg mx-auto">
+            <i data-lucide="sprout" class="w-12 h-12 text-stone-300 mx-auto mb-3"></i>
+            <h3 class="font-serif font-bold text-lg text-stone-900">Nu am găsit plante pentru criteriile alese</h3>
+            <p class="text-xs text-stone-500 mt-1 mb-4">Verifică ortografia sau încearcă să selectezi o altă literă sau categorie din catalog.</p>
+            <a href="{{ url_for('plants_az', letter='A') }}" class="px-4 py-2 bg-botanic-700 text-white rounded-xl text-xs font-semibold">
+                Înapoi la catalogul A-Z
+            </a>
+        </div>
         {% endif %}
     </div>
-    {% endif %}
 
-    {% else %}
-    <!-- Empty State -->
-    <div class="bg-white rounded-3xl p-12 text-center border border-stone-200 max-w-lg mx-auto">
-        <i data-lucide="sprout" class="w-12 h-12 text-stone-300 mx-auto mb-3"></i>
-        <h3 class="font-serif font-bold text-lg text-stone-900">Nu am găsit plante pentru criteriile alese</h3>
-        <p class="text-xs text-stone-500 mt-1 mb-4">Verifică ortografia sau încearcă să selectezi o altă literă din catalog.</p>
-        <a href="{{ url_for('plants_az', l='A') }}" class="px-4 py-2 bg-botanic-700 text-white rounded-xl text-xs font-semibold">
-            Înapoi la litera A
-        </a>
-    </div>
-    {% endif %}
+    <!-- Detailed Bottom Category Description (SEO & AI Structured Content below cards) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-xs space-y-4">
+        {% if active_plant_category %}
+        <div class="flex items-center space-x-2.5 border-b border-stone-100 pb-3">
+            <span class="w-8 h-8 rounded-xl bg-botanic-100 text-botanic-700 flex items-center justify-center shrink-0">
+                <i data-lucide="book-open-check" class="w-4 h-4"></i>
+            </span>
+            <h2 class="text-lg sm:text-xl font-serif font-bold text-stone-900">
+                Descriere detaliată: {{ active_plant_category.title }}
+            </h2>
+        </div>
+        <div class="prose prose-stone max-w-none text-xs sm:text-sm text-stone-600 leading-relaxed space-y-3 text-justify [&_h3]:text-sm [&_h3]:sm:text-base [&_h3]:font-serif [&_h3]:font-bold [&_h3]:text-stone-900 [&_h3]:mt-4 [&_h3]:mb-1.5">
+            {{ active_plant_category.long_desc_html | safe }}
+        </div>
+        {% else %}
+        <div class="flex items-center space-x-2.5 border-b border-stone-100 pb-3">
+            <span class="w-8 h-8 rounded-xl bg-botanic-100 text-botanic-700 flex items-center justify-center shrink-0">
+                <i data-lucide="book-open-check" class="w-4 h-4"></i>
+            </span>
+            <h2 class="text-lg sm:text-xl font-serif font-bold text-stone-900">
+                Ghidul Botanic PlanteOnline A–Z: Îngrijire, Substrat și Nutriție pe Categorii de Plante
+            </h2>
+        </div>
+        <div class="prose prose-stone max-w-none text-xs sm:text-sm text-stone-600 leading-relaxed space-y-3 text-justify">
+            <p>
+                <strong>Enciclopedia Plantelor de la A la Z</strong> reunește <strong>{{ total_catalog_plants }} specii botanice</strong> cultivate în România — de la plante de apartament decorative prin frunze sau flori, până la plante perene de grădină, arbuști ornamentali, conifere, arbori și flori de balcon. Fiecare fișă botanică include denumirea științifică în latină, originea, cerințele de lumină, temperatură, udare și înmulțire, precum și recomandări directe de pământ de flori și soluții nutritive compatibile.
+            </p>
+            <h3 class="text-sm sm:text-base font-serif font-bold text-stone-900 pt-2">Alege categoria botanică dorită pentru sfaturi specifice:</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1 not-prose">
+                {% for pc in plant_categories_nav %}
+                <a href="{{ url_for('plants_az', cat_slug=pc.slug) }}"
+                   class="p-3.5 rounded-2xl bg-stone-50 hover:bg-botanic-50 border border-stone-200 hover:border-botanic-300 transition-all group">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-xs sm:text-sm text-stone-900 group-hover:text-botanic-800">{{ pc.name }}</span>
+                        <span class="text-[11px] font-bold bg-botanic-100 text-botanic-800 px-2 py-0.5 rounded-full">{{ pc.count }} specii</span>
+                    </div>
+                    <p class="text-[11px] text-stone-500 mt-1 line-clamp-2">{{ pc.short_desc }}</p>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </section>
 
 </div>
+
+<script>
+function handlePlantCategorySelect(selectEl) {
+    var opt = selectEl.options[selectEl.selectedIndex];
+    var targetUrl = opt ? opt.getAttribute('data-url') : '';
+    var qInput = document.getElementById('plants-az-search-input');
+    var qVal = qInput ? qInput.value.trim() : '';
+    if (targetUrl && !qVal) {
+        window.location.href = targetUrl;
+    } else if (selectEl.form) {
+        selectEl.form.submit();
+    }
+}
+
+// Client-side search & pagination support (ensures ?q=... and ?pagina=... work on static GitHub Pages and Flask)
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    var q = (params.get('q') || '').trim();
+    var subtip = (params.get('subtip') || '').trim();
+    var pageParam = parseInt(params.get('pagina') || '1', 10);
+    if (isNaN(pageParam) || pageParam < 1) pageParam = 1;
+
+    // Run client-side rendering whenever ?q= is present, or on static pages when ?pagina= > 1 or ?subtip= is used
+    if (!q && !subtip && pageParam <= 1) return;
+
+    var root = document.getElementById('plants-az-root');
+    if (!root) return;
+    var searchJsonUrl = root.getAttribute('data-search-json-url') || '/data/plants_search.json';
+    var plantBaseUrl = root.getAttribute('data-plant-base-url') || '/planta/';
+    var azBaseUrl = root.getAttribute('data-az-base-url') || '/plante-az';
+
+    var qInput = document.getElementById('plants-az-search-input');
+    if (qInput && q) qInput.value = q;
+
+    function escapeHtml(str) {
+        return String(str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    // Determine active category or letter from URL path if no q
+    var path = window.location.pathname;
+    var pathLetter = '';
+    var pathCatSlug = '';
+    var mLetter = path.match(/\/plante-az\/litera\/([A-Za-z]+)/);
+    if (mLetter) pathLetter = mLetter[1].toUpperCase();
+    var mCat = path.match(/\/plante-az\/categorie\/([a-z0-9-]+)/);
+    if (mCat) pathCatSlug = mCat[1].toLowerCase();
+
+    var catSlugToName = {
+        'plante-de-apartament': 'Plante de apartament',
+        'perene': 'Perene',
+        'arbusti': 'Arbusti',
+        'conifere': 'Conifere',
+        'arbori': 'Arbori',
+        'plante-de-balcon-si-terase': 'Plante de balcon si terase',
+        'anuale': 'Anuale'
+    };
+    var effectiveCat = subtip || (pathCatSlug ? (catSlugToName[pathCatSlug] || '') : '');
+
+    fetch(searchJsonUrl)
+        .then(function(r) { return r.json(); })
+        .then(function(allPlants) {
+            var qLower = q.toLowerCase();
+            var matches = allPlants.filter(function(p) {
+                if (effectiveCat && (p.category || '').toLowerCase() !== effectiveCat.toLowerCase()) {
+                    return false;
+                }
+                if (!qLower && pathLetter && pathLetter !== 'ALL') {
+                    if ((p.letter || '').toUpperCase() !== pathLetter) return false;
+                }
+                if (qLower) {
+                    return (p.name || '').toLowerCase().indexOf(qLower) !== -1 ||
+                           (p.latin_name || '').toLowerCase().indexOf(qLower) !== -1 ||
+                           (p.origin || '').toLowerCase().indexOf(qLower) !== -1 ||
+                           (p.category || '').toLowerCase().indexOf(qLower) !== -1;
+                }
+                return true;
+            });
+
+            var perPage = 24;
+            var totalMatches = matches.length;
+            var totalPages = Math.max(1, Math.ceil(totalMatches / perPage));
+            var currentPage = Math.min(pageParam, totalPages);
+            var startIdx = (currentPage - 1) * perPage;
+            var pageItems = matches.slice(startIdx, startIdx + perPage);
+
+            var statusText = document.getElementById('az-filter-status-text');
+            if (statusText) {
+                var extra = '';
+                if (effectiveCat) extra += ' în categoria <strong>„' + escapeHtml(effectiveCat) + '”</strong>';
+                if (q) extra += ' după termenul <strong>„' + escapeHtml(q) + '”</strong>';
+                statusText.innerHTML = 'Se afișează <strong>' + pageItems.length + '</strong> din <strong>' + totalMatches + '</strong> plante găsite' + extra + ' (pagina ' + currentPage + ' din ' + totalPages + ')';
+            }
+
+            var wrapper = document.getElementById('az-plants-grid-wrapper');
+            if (!wrapper) return;
+
+            if (pageItems.length === 0) {
+                wrapper.innerHTML = '<div class="bg-white rounded-3xl p-12 text-center border border-stone-200 max-w-lg mx-auto">' +
+                    '<h3 class="font-serif font-bold text-lg text-stone-900">Nu am găsit plante pentru „' + escapeHtml(q || effectiveCat) + '”</h3>' +
+                    '<p class="text-xs text-stone-500 mt-1 mb-4">Verifică ortografia sau încearcă un alt termen.</p>' +
+                    '<a href="' + azBaseUrl + '" class="px-4 py-2 bg-botanic-700 text-white rounded-xl text-xs font-semibold">Înapoi la catalogul A-Z</a></div>';
+                return;
+            }
+
+            var cardsHtml = '<div id="az-plants-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">';
+            pageItems.forEach(function(plant) {
+                var pUrl = plantBaseUrl + encodeURIComponent(plant.id);
+                var imgHtml = plant.image ?
+                    '<img src="' + escapeHtml(plant.image) + '" alt="' + escapeHtml(plant.name) + '" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">' :
+                    '<div class="flex flex-col items-center justify-center text-stone-300"><span class="text-[10px] text-stone-400">Foto plantă</span></div>';
+                cardsHtml += '<div class="bg-white rounded-3xl p-4 sm:p-5 border border-stone-200 hover:shadow-lg hover:border-botanic-400 transition-all flex flex-col justify-between group">' +
+                    '<div>' +
+                    '<a href="' + pUrl + '" class="block w-full h-44 bg-stone-50 rounded-2xl overflow-hidden mb-3.5 flex items-center justify-center relative border border-stone-100">' +
+                    imgHtml +
+                    '<span class="absolute top-2.5 left-2.5 bg-white/95 text-stone-800 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-stone-200">' + escapeHtml(plant.category || 'Plante') + '</span>' +
+                    '<span class="absolute bottom-2.5 right-2.5 bg-stone-900/80 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">#' + escapeHtml(plant.id) + '</span>' +
+                    '</a>' +
+                    '<h3 class="font-bold text-stone-900 text-base group-hover:text-botanic-700 transition-colors leading-snug line-clamp-1"><a href="' + pUrl + '">' + escapeHtml(plant.name) + '</a></h3>' +
+                    '<div class="text-xs text-stone-400 italic font-serif line-clamp-1 mt-0.5">' + escapeHtml(plant.latin_name || '') + '</div>' +
+                    '<p class="text-[11px] text-stone-500 mt-2 line-clamp-2 leading-relaxed text-justify">' + escapeHtml(plant.description || '') + '</p>' +
+                    '</div>' +
+                    '<div class="pt-3.5 mt-3.5 border-t border-stone-100 flex items-center justify-between">' +
+                    '<span class="text-[11px] text-stone-400 font-mono">Litera ' + escapeHtml(plant.letter || 'A') + '</span>' +
+                    '<a href="' + pUrl + '" class="px-3.5 py-1.5 bg-botanic-700 hover:bg-botanic-800 text-white rounded-xl text-xs font-semibold inline-flex items-center space-x-1 transition-colors"><span>Vezi fișa plantei</span><span>&rarr;</span></a>' +
+                    '</div></div>';
+            });
+            cardsHtml += '</div>';
+
+            if (totalPages > 1) {
+                function buildPageUrl(targetPage) {
+                    var sp = new URLSearchParams();
+                    if (q) sp.set('q', q);
+                    if (subtip) sp.set('subtip', subtip);
+                    sp.set('pagina', String(targetPage));
+                    return window.location.pathname + '?' + sp.toString();
+                }
+                cardsHtml += '<div id="az-pagination-bar" class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-6">';
+                if (currentPage > 1) {
+                    cardsHtml += '<a href="' + buildPageUrl(currentPage - 1) + '" class="px-4 py-2 rounded-xl bg-white border border-stone-200 text-stone-700 hover:bg-stone-50 text-xs font-semibold">&larr; Anterior</a>';
+                }
+                for (var pNum = 1; pNum <= totalPages; pNum++) {
+                    var activeCls = (pNum === currentPage) ? 'bg-botanic-700 text-white shadow-xs' : 'bg-white border border-stone-200 text-stone-700 hover:bg-stone-50';
+                    cardsHtml += '<a href="' + buildPageUrl(pNum) + '" class="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-semibold transition-all ' + activeCls + '">' + pNum + '</a>';
+                }
+                if (currentPage < totalPages) {
+                    cardsHtml += '<a href="' + buildPageUrl(currentPage + 1) + '" class="px-4 py-2 rounded-xl bg-white border border-stone-200 text-stone-700 hover:bg-stone-50 text-xs font-semibold">Următor &rarr;</a>';
+                }
+                cardsHtml += '</div>';
+            }
+
+            wrapper.innerHTML = cardsHtml;
+            if (window.lucide) window.lucide.createIcons();
+        })
+        .catch(function(err) {
+            console.error('Search load error:', err);
+        });
+})();
+</script>
 {% endblock %}

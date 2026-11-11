@@ -101,8 +101,12 @@
                 <a href="{{ url_for('home') }}" class="hover:text-botanic-700">Acasă</a>
                 <span>/</span>
                 <a href="{{ url_for('plants_az') }}" class="hover:text-botanic-700">Plante A-Z</a>
+                {% if plant_cat_meta %}
                 <span>/</span>
-                <a href="{{ url_for('plants_az', l=plant.letter) }}" class="hover:text-botanic-700">Litera {{ plant.letter }}</a>
+                <a href="{{ url_for('plants_az', cat_slug=plant_cat_meta.slug) }}" class="hover:text-botanic-700">{{ plant_cat_meta.name }}</a>
+                {% endif %}
+                <span>/</span>
+                <a href="{{ url_for('plants_az', letter=plant.letter) }}" class="hover:text-botanic-700">Litera {{ plant.letter }}</a>
                 <span>/</span>
                 <span class="text-stone-700 font-semibold truncate">{{ plant.name }}</span>
             </nav>
@@ -111,7 +115,7 @@
                     <i data-lucide="printer" class="w-3.5 h-3.5"></i>
                     <span>Tipărește Fișa</span>
                 </button>
-                <a href="{{ url_for('plants_az', l=plant.letter) }}" class="text-botanic-700 hover:underline font-semibold flex items-center space-x-1">
+                <a href="{{ url_for('plants_az', letter=plant.letter) }}" class="text-botanic-700 hover:underline font-semibold flex items-center space-x-1">
                     <span>&larr; Înapoi la litera {{ plant.letter }}</span>
                 </a>
             </div>
@@ -120,9 +124,15 @@
         <!-- 1. PLANT NAME & TITLE BLOCK (LOCATED ABOVE THE IMAGE) -->
         <div class="space-y-1.5">
             <div class="flex items-center space-x-2.5 flex-wrap">
+                {% if plant_cat_meta %}
+                <a href="{{ url_for('plants_az', cat_slug=plant_cat_meta.slug) }}" class="bg-botanic-100 hover:bg-botanic-200 text-botanic-800 text-xs font-bold px-3 py-1 rounded-full border border-botanic-200/60 transition-colors">
+                    {{ plant.category or 'Plante' }}
+                </a>
+                {% else %}
                 <span class="bg-botanic-100 text-botanic-800 text-xs font-bold px-3 py-1 rounded-full border border-botanic-200/60">
                     {{ plant.category or 'Plante' }}
                 </span>
+                {% endif %}
                 <span class="text-xs text-stone-400 font-mono">Index #{{ plant.id }}</span>
             </div>
 

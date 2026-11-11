@@ -656,30 +656,141 @@ PRODUCT_MENU_CATEGORIES = [
         'name': 'Amestec turbă / Pământ de flori',
         'short_name': 'Amestec turbă / Pământ de flori',
         'icon': 'layers',
-        'description': 'Substraturi profesionale și pământ de flori universal sau specializat (Florasol, Humiflor, Plantasol, Nutrisol) cu pH controlat și structură optimă de aerisire.'
+        'description': 'Substraturi profesionale și pământ de flori universal sau specializat (Florasol, Humiflor, Plantasol, Nutrisol) cu pH controlat și structură optimă de aerisire.',
+        'long_description_html': (
+            '<p>Alegerea unui <strong>amestec de turbă și pământ de flori</strong> de calitate reprezintă baza dezvoltării sănătoase a oricărei plante cultivate în ghiveci, jardinieră sau grădină. Substraturile profesionale din gama <strong>Florasol, Humiflor, Plantasol și Nutrisol</strong> sunt formulate din turbă blondă (oligotrofă) și turbă neagră (eutrofă), îmbogățite cu humus activ și compost vegetal pentru a oferi rădăcinilor echilibrul ideal între reținerea apei și drenajul aerului.</p>'
+            '<h3>Cum alegi pământul de flori potrivit și ce avantaje oferă?</h3>'
+            '<p>Spre deosebire de pământul obișnuit de grădină — care se tasează rapid în ghiveci, blochează oxigenarea rădăcinilor și poate conține semințe de buruieni sau agenți patogeni — un substrat certificat are un <strong>pH calibrat (6,0 – 7,0)</strong> și o structură fibroasă afânată. Pământul universal (precum <em>Florasol Universal</em> în ambalaje de 5 L, 10 L, 20 L, 40 L sau <em>Humiflor</em> și <em>Plantasol</em> în saci de până la 50 L) este ideal pentru majoritatea florilor de interior și exterior, în timp ce substraturile dedicate (pentru orhidee epifite, mușcate de balcon sau straturi înălțate de grădină) răspund cerințelor specifice fiecărei culturi.</p>'
+            '<h3>Recomandări la plantare și transplantare</h3>'
+            '<p>Transplantarea plantelor de apartament se realizează primăvara, într-un vas cu orificii de scurgere, folosind întotdeauna substrat proaspăt. Rezerva nutritivă din amestecul de turbă hrănește planta în primele 3–4 săptămâni după plantare, urmând ca ulterior nutriția să fie completată regulat cu soluții nutritive lichide sau batoane fertilizante.</p>'
+        )
     },
     {
         'slug': 'solutii-nutritive',
         'name': 'Soluții Nutritive / Îngrășăminte lichide',
         'short_name': 'Soluții Nutritive / Îngrășăminte lichide',
         'icon': 'droplets',
-        'description': 'Îngrășăminte lichide concentrate cu macro- și microelemente esențiale (Florasol, Nutrisol, Humiflor, Vitaflora) pentru plante de apartament, balcon, mușcate și grădină.'
+        'description': 'Îngrășăminte lichide concentrate cu macro- și microelemente esențiale (Florasol, Nutrisol, Humiflor, Vitaflora) pentru plante de apartament, balcon, mușcate și grădină.',
+        'long_description_html': (
+            '<p>Plantele cultivate în ghivece și jardiniere epuizează rapid rezervele minerale din sol din cauza volumului limitat de substrat și a udărilor repetate. <strong>Soluțiile nutritive și îngrășămintele lichide concentrate</strong> din gamele <strong>Florasol, Vitaflora, Humiflor și Nutrisol</strong> asigură aportul complet de macroelemente — Azot (N), Fosfor (P), Potasiu (K) — și microelemente chelatate (Fier, Magneziu, Bor, Cupru, Mangan, Zinc), dizolvându-se instantaneu în apa de udare pentru o absorbție radiculară rapidă și uniformă.</p>'
+            '<h3>Formule specializate pentru fiecare grupă de plante</h3>'
+            '<p>Fiecare specie are nevoi metabolice diferite: plantele decorative prin frunze (Ficus, Monstera, Palmieri, Ferigi) necesită un conținut mai ridicat de azot pentru un frunziș verde intens; mușcatele și plantele curgătoare de balcon (Petunii, Surfinii) au nevoie de fosfor, potasiu și fier suplimentar pentru înflorire continuă și prevenirea îngălbenirii frunzelor (cloroză ferică); iar orhideele, cactușii și coniferele necesită formule cu salinitate redusă și raport NPK dedicat.</p>'
+            '<h3>Mod corect de dozare și aplicare</h3>'
+            '<p>Îngrășămintele lichide se diluează în apa de udare conform instrucțiunilor de pe fiecare flacon (disponibile în variante de 0.1 L, 0.5 L și 1 L) și se aplică săptămânal în sezonul de creștere activă (martie – octombrie), respectiv la 2–4 săptămâni în perioada de repaus hibernal, întotdeauna pe substratul umezit în prealabil.</p>'
+        )
     },
     {
         'slug': 'ingrijire-plante',
         'name': 'Soluții de îngrijire plante',
         'short_name': 'Soluții de îngrijire plante',
         'icon': 'shield-check',
-        'description': 'Soluții ecologice și organice cu pulverizator (Florasol, Nutrisol) pentru curățarea frunzelor, fortificarea plantelor și protecție naturală.'
+        'description': 'Soluții ecologice și organice cu pulverizator (Florasol, Nutrisol) pentru curățarea frunzelor, fortificarea plantelor și protecție naturală.',
+        'long_description_html': (
+            '<p>Categoria <strong>Soluții de îngrijire plante</strong> reunește spray-uri ecologice și organice gata de utilizare, ambalate în flacoane ergonomice cu pulverizator (0.5 L), create pentru igienizarea foliară, revitalizarea și protecția naturală a plantelor ornamentale de interior și exterior, fără utilizarea pesticidelor chimice agresive.</p>'
+            '<h3>Protecție ecologică cu săpun de potasiu și extract organic de urzică</h3>'
+            '<p>Produsele pe bază de <strong>oleat de potasiu (săpun K)</strong> — precum <em>Florasol Soluție Ecologică</em> și <em>Nutrisol Soluție de Îngrijire Ecologică</em> — curăță eficient praful, depunerile calcaroase și secrețiile lipicioase („roua de miere”) de pe stomatele frunzelor, limitând totodată dezvoltarea insectelor fitofage cu corp moale (afide, musculiță albă, acarieni). În completare, <em>Nutrisol Soluție de Îngrijire Organică</em> pe bază de <strong>extract natural de urzică (Urtica)</strong> furnizează siliciu și fier organic care întăresc pereții celulari ai frunzelor și cresc imunitatea naturală a plantelor.</p>'
+        )
     },
     {
         'slug': 'batoane-fertilizante',
         'name': 'Batoane fertilizante / Îngrășăminte solide',
         'short_name': 'Batoane fertilizante / Îngrășăminte solide',
         'icon': 'sparkles',
-        'description': 'Batoane nutritive cu eliberare treptată timp de 3 luni (Vitaflora) pentru plante decorative cu flori, plante cu frunze și orhidee.'
+        'description': 'Batoane nutritive cu eliberare treptată timp de 3 luni (Vitaflora) pentru plante decorative cu flori, plante cu frunze și orhidee.',
+        'long_description_html': (
+            '<p><strong>Batoanele fertilizante cu eliberare treptată Vitaflora</strong> oferă cea mai practică și sigură metodă de hrănire pe termen lung a plantelor din ghivece și jardiniere. O singură aplicare în substrat asigură nutriția completă și echilibrată a plantei timp de <strong>3 luni (90 de zile)</strong>, eliberând progresiv substanțele active la fiecare udare.</p>'
+            '<h3>Avantajele batoanelor nutritive pentru flori, plante verzi și orhidee</h3>'
+            '<p>Eliminând riscul de supradozare și nevoia măsurării săptămânale a soluțiilor lichide, batoanele fertilizante sunt disponibile în trei variante specializate: pentru <strong>plante decorative cu flori</strong> (30 g / 30 bucăți, bogate în fosfor și potasiu pentru stimularea bobocilor), pentru <strong>plante decorative prin frunze</strong> (30 g / 30 bucăți, bogate în azot și magneziu pentru frunziș bogat) și pentru <strong>orhidee</strong> (15 g / 15 bucăți, cu formulă delicată adaptată scoarței de pin și rădăcinilor sensibile).</p>'
+        )
     }
 ]
+
+ALL_PRODUCTS_LONG_DESC_HTML = (
+    '<p>Catalogul oficial de <strong>produse horticole PlanteOnline.ro</strong> reunește 32 de produse profesionale distribuite și fabricate de <strong>Societatea Mont Rose S.R.L.</strong> (fondată în anul 2001): producător al mărcii <strong>Florasol</strong> și distribuitor oficial al mărcilor <strong>Humiflor, Nutrisol, Plantasol, Vitaflora și Florimo</strong> în România.</p>'
+    '<h3>Ghid complet de selecție: Substraturi, Fertilizanți Lichizi, Batoane și Îngrijire Ecologică</h3>'
+    '<p>Pentru o dezvoltare viguroasă și o înflorire spectaculoasă, plantele de apartament, balcon și grădină au nevoie de trei elemente complementare: un <strong>pământ de flori / substrat de turbă</strong> cu pH și drenaj adaptate speciei, o <strong>nutriție regulată</strong> (sub formă de soluții nutritive lichide sau batoane fertilizante cu eliberare lentă pe 3 luni) și o <strong>îngrijire foliară ecologică</strong> care să mențină frunzele curate și rezistente. Selectează orice produs din lista de mai sus pentru a consulta fișa tehnică detaliată, compoziția NPK/pH, ambalajele disponibile și instrucțiunile de aplicare pas cu pas.</p>'
+)
+
+PLANT_CATEGORIES_META = [
+    {
+        'slug': 'plante-de-apartament',
+        'name': 'Plante de apartament',
+        'title': 'Plante de Apartament și Interior',
+        'short_desc': 'Specii decorative prin frunze și flori adaptate pentru cultivarea în ghivece, în locuințe, birouri și spații interioare.',
+        'long_desc_html': (
+            '<p>Categoria <strong>Plante de apartament</strong> cuprinde specii tropicale și subtropicale cultivate în ghivece pentru frunzișul lor spectaculos (<em>Ficus, Monstera, Dracaena, Dieffenbachia, Filodendron, Calathea, Schefflera, Zamioculcas, Sansevieria</em>) sau pentru înflorirea lor îndelungată în spații interioare (<em>Spatifilum, Anthurium, Afelandra, Violete africane, Orhidee Phalaenopsis, Kalanchoe, Guzmania</em>).</p>'
+            '<h3>Lumină, udare și substrat recomandat pentru plantele de interior</h3>'
+            '<p>Majoritatea plantelor de cameră preferă lumina naturală intensă, dar filtrată (fără soare arzător direct pe frunze în lunile de vară), temperaturi constante între 18–25 °C și o udare moderată, lăsând stratul superior al substratului să se zvânte între două udări. La transplantare se recomandă <strong>Nutrisol Pământ de flori pentru Plante de Cameră</strong> sau <strong>Florasol / Humiflor / Plantasol Universal</strong>, iar pentru hrănirea regulată, <strong>Soluțiile Nutritive pentru Plante de Cameră și Decorative cu Frunze sau Flori (Vitaflora, Florasol, Humiflor, Nutrisol)</strong> ori batoanele fertilizante cu efect timp de 3 luni.</p>'
+        )
+    },
+    {
+        'slug': 'perene',
+        'name': 'Perene',
+        'title': 'Plante Perene de Grădină',
+        'short_desc': 'Plante erbacee și flori perene rezistente peste iarnă, care reînfloresc an de an în straturi, borduri și rocării.',
+        'long_desc_html': (
+            '<p><strong>Plantele perene</strong> reprezintă coloana vertebrală a oricărei grădini ornamentale durabile. După plantare, sistemul lor radicular supraviețuiește în sol peste iarnă, regenerând în fiecare primăvară tufe mai bogate și înfloriri tot mai spectaculoase (<em>Lavandă, Hosta, Hemerocallis, Bujori, Iris, Echinacea, Rudbeckia, Phlox, Sedum, Bergenia, Heuchera, Astilbe</em>).</p>'
+            '<h3>Îngrijirea și fertilizarea florilor perene</h3>'
+            '<p>La înființarea straturilor perene, îmbogățirea solului local cu <strong>Nutrisol Pământ pentru Plante de Grădină și Straturi Înălțate</strong> sau <strong>Florasol / Humiflor Universal</strong> asigură o înrădăcinare profundă și un drenaj optim. Din aprilie până în august, administrarea regulată a soluțiilor nutritive pentru grădină susține formarea bobocilor și rezistența la secetă.</p>'
+        )
+    },
+    {
+        'slug': 'arbusti',
+        'name': 'Arbusti',
+        'title': 'Arbuști Ornamentali pentru Grădină și Gard Viu',
+        'short_desc': 'Arbuști decorativi cu flori parfumate sau frunziș persistent și căzător, ideali pentru garduri vii, grupuri peisagistice și exemplare solitare.',
+        'long_desc_html': (
+            '<p><strong>Arbuștii ornamentali</strong> oferă volum, structură arhitecturală și culoare grădinii din primăvară până toamna târziu. Această categorie include atât arbuști cu înflorire spectaculoasă (<em>Hortensia, Hibiscus syriacus, Forsythia, Liliac, Magnolie arbustivă, Iasomie de grădină, Spiraea, Weigela, Rododendron, Trandafiri</em>), cât și specii pentru garduri vii și borduri verzi (<em>Buxus, Ligustrum, Berberis, Euonymus, Cotoneaster</em>).</p>'
+            '<h3>Plantarea și nutriția arbuștilor decorativi</h3>'
+            '<p>La plantarea arbuștilor în grădină, groapa de plantare se completează în proporție de 30–50% cu substrat nutritiv pe bază de turbă (<strong>Florasol, Humiflor sau Plantasol Universal</strong>), iar pentru speciile acidofile (hortensii, azalee, rododendroni) se utilizează îngrășăminte cu reacție acidă, precum <strong>Vitaflora Soluție Nutritivă pentru Conifere și Rododendroni</strong>.</p>'
+        )
+    },
+    {
+        'slug': 'conifere',
+        'name': 'Conifere',
+        'title': 'Conifere și Rășinoase Ornamentale',
+        'short_desc': 'Arbori și arbuști rășinoși veșnic verzi (Tuia, Ienupăr, Molid, Pin, Tisă, Chiparos) pentru decor permanent în toate cele 4 anotimpuri.',
+        'long_desc_html': (
+            '<p><strong>Coniferele ornamentale</strong> asigură culoare și intimitate în grădină pe tot parcursul anului, inclusiv în timpul iernii. De la garduri vii compacte din <em>Thuja occidentalis Smaragd</em> sau <em>Brabant</em>, până la forme târâtoare și columnare de <em>Juniperus (Ienupăr), Picea (Molid argintiu și conic), Pinus mugo (Jneapăn), Taxus (Tisă)</em> și <em>Chamaecyparis</em>, rășinoasele sunt esențiale în amenajările peisagistice moderne.</p>'
+            '<h3>Prevenirea brunificării acelor la conifere</h3>'
+            '<p>Coniferele preferă solurile ușor acide, bine drenate, și au o nevoie ridicată de magneziu și microelemente. Pentru prevenirea și oprirea îngălbenirii sau brunificării acelor, se recomandă fertilizarea din aprilie până în august cu <strong>Vitaflora Soluție Nutritivă pentru Conifere și Rododendroni</strong>, bogată în magneziu și cu reacție ușor acidă.</p>'
+        )
+    },
+    {
+        'slug': 'arbori',
+        'name': 'Arbori',
+        'title': 'Arbori Ornamentali și de Aliniament',
+        'short_desc': 'Arbori foioși decorativi prin port, coroană, flori de primăvară sau coloritul spectaculos al frunzișului de toamnă.',
+        'long_desc_html': (
+            '<p><strong>Arborii ornamentali</strong> creează umbră, microclimat plăcut și puncte focale verticale în grădinile medii și mari. În catalogul A–Z regăsiți specii apreciate precum <em>Arțarul japonez (Acer palmatum), Magnolia, Catalpa, Paulownia, Albizia (Arborele de mătase), Mesteacănul, Salcia plângătoare și Prunus-ul ornamental</em>.</p>'
+            '<h3>Sfaturi pentru plantarea și înrădăcinarea arborilor</h3>'
+            '<p>În primii 2–3 ani de la plantare, dezvoltarea viguroasă a sistemului radicular este decisivă. Amestecarea pământului din groapa de plantare cu substrat organic <strong>Florasol, Humiflor sau Plantasol</strong> și udarea regulată asigură prinderea sigură a arborilor tineri.</p>'
+        )
+    },
+    {
+        'slug': 'plante-de-balcon-si-terase',
+        'name': 'Plante de balcon si terase',
+        'title': 'Plante de Balcon, Terase și Jardiniere',
+        'short_desc': 'Flori curgătoare și de ghiveci cu înflorire abundentă (Mușcate, Petunii, Surfinii) pentru decorarea balcoanelor și teraselor însorite.',
+        'long_desc_html': (
+            '<p><strong>Plantele de balcon și terasă</strong> transformă pervazurile și balustradele în adevărate cascade de flori din luna mai până la primele brume de toamnă. Speciile vedetă — <em>Mușcatele zonale și curgătoare (Pelargonium), Petuniile, Surfiniile, Fucsiile, Verbenele și Begoniile</em> — au o creștere rapidă și un consum ridicat de apă și minerale.</p>'
+            '<h3>Substratul și fertilizarea pentru o înflorire continuă pe balcon</h3>'
+            '<p>Pentru plantarea în jardiniere se recomandă <strong>Nutrisol Pământ de flori pentru Mușcate și Plante de Balcon</strong>, iar pentru susținerea valurilor continue de flori, administrarea săptămânală de <strong>Florasol, Nutrisol, Humiflor sau Vitaflora Soluție Nutritivă pentru Mușcate și Plante Curgătoare</strong> (îmbogățită cu fier contra clorozei).</p>'
+        )
+    },
+    {
+        'slug': 'anuale',
+        'name': 'Anuale',
+        'title': 'Plante Floricole Anuale și Bienale',
+        'short_desc': 'Flori de grădină și răsaduri cu înflorire neîntreruptă pe durata unui sezon, ideale pentru ronduri, borduri și ghivece.',
+        'long_desc_html': (
+            '<p><strong>Plantele anuale</strong> își parcurg întregul ciclu vegetativ într-un singur sezon, răsplătind grădinarii cu o explozie de culoare din primăvară până toamna târziu. Sunt ideale pentru umplerea spațiilor dintre arbuști și perene, pentru borduri florale și ghivece decorative.</p>'
+            '<h3>Îngrijire și stimulare a înfloririi</h3>'
+            '<p>Plantate într-un substrat afânat (<strong>Florasol sau Plantasol Universal</strong>) și hrănite săptămânal cu <strong>Vitaflora Soluție Nutritivă pentru Plante cu Flori</strong> sau <strong>Stimularea Înfloririi</strong>, florile anuale își mențin aspectul compact și formează neîncetat boboci noi.</p>'
+        )
+    }
+]
+
 
 # Context processor for global template variables
 @app.context_processor
@@ -786,9 +897,23 @@ def inject_globals():
         c_copy['count'] = prod_cat_counts.get(c['slug'], 0)
         product_menu_cats.append(c_copy)
 
+    # Count plants per category for navigation & SEO category pages
+    plant_cat_counts = {}
+    if isinstance(plants, list):
+        for pl in plants:
+            pcat = (pl.get('category') or '').strip()
+            if pcat:
+                plant_cat_counts[pcat] = plant_cat_counts.get(pcat, 0) + 1
+    plant_categories_nav = []
+    for pc in PLANT_CATEGORIES_META:
+        pc_copy = dict(pc)
+        pc_copy['count'] = plant_cat_counts.get(pc['name'], 0)
+        plant_categories_nav.append(pc_copy)
+
     return {
         'all_categories': sorted_categories,
         'product_menu_categories': product_menu_cats,
+        'plant_categories_nav': plant_categories_nav,
         'sidebar_products': sidebar_prods,  # All products in random order for carousel
         'all_products': products,
         'showcase_items': sc_items,
@@ -800,6 +925,23 @@ def inject_globals():
         'total_catalog_plants': total_catalog_plants,
         'plants_count_badge': plants_count_badge
     }
+
+
+def enrich_product_card(p):
+    """Enrich a product dict with short_summary and packaging_badges for compact cards."""
+    p_copy = dict(p)
+    raw_pkg = (p.get('packaging') or '').strip()
+    p_copy['packaging_badges'] = [x.strip() for x in re.split(r'[,;]', raw_pkg) if x.strip()]
+    desc = (p.get('description') or '').strip()
+    first_para = desc.split('\n')[0].strip() if desc else ''
+    # Extract first sentence or clean 120-char summary
+    sent_match = re.split(r'(?<=[.!?])\s+', first_para)
+    first_sent = sent_match[0].strip() if sent_match and sent_match[0] else first_para
+    if len(first_sent) > 135:
+        first_sent = first_sent[:132].rsplit(' ', 1)[0] + '...'
+    p_copy['short_summary'] = first_sent or 'Substrat și fertilizant profesional pentru îngrijirea plantelor.'
+    return p_copy
+
 
 # --- ROUTES ---
 
@@ -984,19 +1126,52 @@ def article_detail(article_id):
     )
 
 @app.route('/plante-az')
-def plants_az():
+@app.route('/plante-az/litera/<letter>')
+@app.route('/plante-az/categorie/<cat_slug>')
+def plants_az(letter=None, cat_slug=None):
     plants = load_json('plants.json')
-    selected_letter = request.args.get('l', '').upper().strip()
+    selected_letter = (letter or request.args.get('l') or request.args.get('litera') or '').upper().strip()
     search_query = request.args.get('q', '').strip().lower()
     subtype_filter = request.args.get('subtip', '').strip()
 
-    # Calculate letter counts
+    # Resolve plant category from slug or subtype_filter
+    active_plant_category = None
+    if cat_slug:
+        active_plant_category = next((c for c in PLANT_CATEGORIES_META if c['slug'] == cat_slug.lower().strip()), None)
+        if active_plant_category:
+            subtype_filter = active_plant_category['name']
+    elif subtype_filter:
+        active_plant_category = next(
+            (c for c in PLANT_CATEGORIES_META if c['name'].lower() == subtype_filter.lower() or c['slug'] == subtype_filter.lower()),
+            None
+        )
+        if active_plant_category:
+            subtype_filter = active_plant_category['name']
+
+    # Calculate letter counts across catalog
     letters = {}
     for p in plants:
         l = p.get('letter', 'A').upper()
         letters[l] = letters.get(l, 0) + 1
 
-    filtered = plants
+    filtered = list(plants)
+    if subtype_filter:
+        filtered = [p for p in filtered if p.get('category', '').lower() == subtype_filter.lower()]
+        if not selected_letter:
+            selected_letter = 'ALL'
+
+    if search_query:
+        selected_letter = 'ALL'
+        filtered = [
+            p for p in filtered
+            if search_query in p.get('name', '').lower()
+            or search_query in p.get('latin_name', '').lower()
+            or search_query in p.get('origin', '').lower()
+            or search_query in p.get('category', '').lower()
+        ]
+        if len(search_query) >= 2:
+            record_search(search_query, target='plante', results_count=len(filtered))
+
     if selected_letter and selected_letter != 'ALL':
         filtered = [p for p in filtered if p.get('letter', '').upper() == selected_letter]
     elif not selected_letter and not search_query and not subtype_filter:
@@ -1004,29 +1179,20 @@ def plants_az():
         selected_letter = 'A'
         filtered = [p for p in filtered if p.get('letter', '').upper() == 'A']
 
-    if search_query:
-        filtered = [
-            p for p in plants
-            if search_query in p.get('name', '').lower() 
-            or search_query in p.get('latin_name', '').lower()
-            or search_query in p.get('origin', '').lower()
-        ]
-        if len(search_query) >= 2:
-            record_search(search_query, target='plante', results_count=len(filtered))
-
-    if subtype_filter:
-        filtered = [p for p in filtered if subtype_filter.lower() in p.get('category', '').lower()]
-
     # Pagination
     page = request.args.get('pagina', default=1, type=int)
     per_page = 24
     total_plants = len(filtered)
     total_pages = max(1, (total_plants + per_page - 1) // per_page)
+    if page < 1:
+        page = 1
+    elif page > total_pages:
+        page = total_pages
     start = (page - 1) * per_page
     paginated = filtered[start:start + per_page]
 
-    # Unique subtypes
-    subtypes = sorted(list(set([p.get('category', '') for p in plants if p.get('category')])))
+    # Unique subtypes with their slugs
+    subtypes = [c['name'] for c in PLANT_CATEGORIES_META]
 
     return render_template(
         'plants_az.html',
@@ -1036,12 +1202,33 @@ def plants_az():
         search_query=search_query,
         subtypes=subtypes,
         selected_subtype=subtype_filter,
+        active_plant_category=active_plant_category,
+        plant_categories_meta=PLANT_CATEGORIES_META,
         page=page,
         total_pages=total_pages,
         total_plants=total_plants,
         filtered_count=total_plants,
         total_catalog_plants=len(plants)
     )
+
+@app.route('/data/plants_search.json')
+def serve_plants_search_json():
+    plants = load_json('plants.json')
+    compact_plants = []
+    for p in plants:
+        raw_desc = (p.get('description') or p.get('requirements') or 'Specie botanică decorativă.').strip()
+        short_desc = (raw_desc[:115] + '...') if len(raw_desc) > 118 else raw_desc
+        compact_plants.append({
+            'id': p.get('id'),
+            'name': p.get('name', ''),
+            'latin_name': p.get('latin_name', ''),
+            'category': p.get('category', ''),
+            'origin': p.get('origin', ''),
+            'letter': p.get('letter', 'A'),
+            'image': p.get('images', [''])[0] if p.get('images') else '',
+            'description': short_desc
+        })
+    return jsonify(compact_plants)
 
 @app.route('/planta/<int:plant_id>')
 def plant_detail(plant_id):
@@ -1093,9 +1280,13 @@ def plant_detail(plant_id):
     # Similar plants
     similar = [p for p in plants if p['id'] != plant_id and p.get('category') == plant.get('category')][:4]
 
+    # Resolve plant category meta for breadcrumb link
+    plant_cat_meta = next((c for c in PLANT_CATEGORIES_META if c['name'].lower() == (plant.get('category') or '').lower()), None)
+
     return render_template(
         'plant_detail.html',
         plant=plant,
+        plant_cat_meta=plant_cat_meta,
         primary_substrate=primary_substrate,
         primary_fertilizer=primary_fertilizer,
         alternatives=alternatives,
@@ -1129,18 +1320,20 @@ def calendar_view():
     )
 
 @app.route('/produse')
-def products_view():
+@app.route('/produse/categorie/<cat_slug>')
+def products_view(cat_slug=None):
     products = load_json('products.json')
-    selected_cat_slug = request.args.get('categorie', '').strip().lower()
+    selected_cat_slug = (cat_slug or request.args.get('categorie') or '').strip().lower()
     valid_slugs = [c['slug'] for c in PRODUCT_MENU_CATEGORIES]
-    if selected_cat_slug not in valid_slugs and selected_cat_slug != 'toate':
-        selected_cat_slug = 'pamant-flori' if not selected_cat_slug else 'toate'
+    if selected_cat_slug not in valid_slugs:
+        selected_cat_slug = 'toate'
 
     # Sort products by sort_order
     sorted_prods = sorted(products, key=lambda x: (x.get('sort_order', 9999), x.get('id', 0)))
 
     # Group by category -> ordered subgroups -> products
     categories_grouped = []
+    flat_products = []
     for cat_meta in PRODUCT_MENU_CATEGORIES:
         if selected_cat_slug != 'toate' and cat_meta['slug'] != selected_cat_slug:
             continue
@@ -1156,18 +1349,16 @@ def products_view():
                 sg_obj = {'title': sg_title, 'products': []}
                 subgroup_map[sg_title] = sg_obj
                 subgroups.append(sg_obj)
-            # Parse packaging string into clean badges
-            raw_pkg = p.get('packaging', '')
-            pkg_badges = [x.strip() for x in re.split(r'[,;]', raw_pkg) if x.strip()]
-            p_enriched = dict(p)
-            p_enriched['packaging_badges'] = pkg_badges
+            p_enriched = enrich_product_card(p)
             subgroup_map[sg_title]['products'].append(p_enriched)
+            flat_products.append(p_enriched)
 
         categories_grouped.append({
             'slug': cat_meta['slug'],
             'name': cat_meta['name'],
             'icon': cat_meta['icon'],
             'description': cat_meta['description'],
+            'long_description_html': cat_meta.get('long_description_html', ''),
             'total_products': len(cat_prods),
             'subgroups': subgroups
         })
@@ -1177,8 +1368,10 @@ def products_view():
     return render_template(
         'products.html',
         categories_grouped=categories_grouped,
+        flat_products=flat_products,
         selected_category=selected_cat_slug,
         active_category_meta=active_category_meta,
+        all_products_long_desc_html=ALL_PRODUCTS_LONG_DESC_HTML,
         all_product_categories=PRODUCT_MENU_CATEGORIES
     )
 
@@ -1188,8 +1381,10 @@ def product_detail(product_id):
     plants = load_json('plants.json')
     product = next((p for p in products if p['id'] == product_id), None)
     if not product:
-        flash('Produsul solicitat nu a fost găsit în catalog.', 'warning')
+        flash('Produsul solicitat nu a fost găsită în catalog.', 'warning')
         return redirect(url_for('products_view'))
+
+    product_enriched = enrich_product_card(product)
 
     # Matched plants that recommend this product
     matched_plants = []
@@ -1211,24 +1406,40 @@ def product_detail(product_id):
         if is_match and plant not in matched_plants:
             matched_plants.append(plant)
 
-    # Related products from same menu category or brand
+    # Complementary & related products (that can be used together or are from same range)
     cat_slug = product.get('menu_category', 'pamant-flori')
-    related = [p for p in products if p['id'] != product_id and (p.get('menu_category') == cat_slug or p.get('brand') == product.get('brand'))][:4]
+    complementary = []
+    # 1. Pick complementary products from other categories that work well together
+    other_prods = [p for p in products if p['id'] != product_id]
+    # Try matching keywords (e.g. orhidee, cactusi, muscate, citrice, trandafiri, palmieri, universal)
+    spec_keywords = ['orhidee', 'cactus', 'cactuși', 'mușcate', 'muscate', 'citrice', 'trandafir', 'palmier', 'rododendron', 'conifer', 'verde', 'verzi', 'flori']
+    matched_kw = [kw for kw in spec_keywords if kw in p_name_lower]
+    for p in other_prods:
+        pname = p.get('name', '').lower()
+        if p.get('menu_category') != cat_slug and any(kw in pname for kw in matched_kw):
+            complementary.append(enrich_product_card(p))
+    # 2. Add a complementary care spray or fertilizer/substrate if not already included
+    for target_cat in ['pamant-flori', 'solutii-nutritive', 'ingrijire-plante', 'batoane-fertilizante']:
+        if target_cat != cat_slug and len(complementary) < 3:
+            cand = next((p for p in other_prods if p.get('menu_category') == target_cat and p['id'] not in [x['id'] for x in complementary]), None)
+            if cand:
+                complementary.append(enrich_product_card(cand))
+    # 3. Fill up to 6 with same-category or same-brand products
+    for p in other_prods:
+        if len(complementary) >= 6:
+            break
+        if p['id'] not in [x['id'] for x in complementary] and (p.get('menu_category') == cat_slug or p.get('brand') == product.get('brand')):
+            complementary.append(enrich_product_card(p))
 
     cat_meta = next((c for c in PRODUCT_MENU_CATEGORIES if c['slug'] == cat_slug), None)
 
-    # Packaging badges
-    packaging_badges = []
-    if product.get('packaging'):
-        packaging_badges = [b.strip() for b in re.split(r'[,;]', product['packaging']) if b.strip()]
-
     return render_template(
         'product_detail.html',
-        product=product,
+        product=product_enriched,
         cat_meta=cat_meta,
         matched_plants=matched_plants[:12],
-        related_products=related,
-        packaging_badges=packaging_badges
+        related_products=complementary[:6],
+        packaging_badges=product_enriched['packaging_badges']
     )
 
 @app.route('/despre-noi')
@@ -1236,6 +1447,20 @@ def about_view():
     about = load_json('about.json')
     products = load_json('products.json')
     return render_template('about.html', about=about, featured_products=products[:4])
+
+# --- LEGAL & GDPR PAGES ---
+
+@app.route('/termeni-si-conditii')
+def legal_terms():
+    return render_template('legal.html', page_type='termeni', page_title='Termeni și Condiții de Utilizare')
+
+@app.route('/politica-de-confidentialitate')
+def legal_privacy():
+    return render_template('legal.html', page_type='confidentialitate', page_title='Politica de Confidențialitate și Protecția Datelor (GDPR)')
+
+@app.route('/politica-cookies')
+def legal_cookies():
+    return render_template('legal.html', page_type='cookies', page_title='Politica de Utilizare Cookie-uri')
 
 # --- SEO & GEO ENDPOINTS (robots.txt, sitemap.xml, llms.txt) ---
 
@@ -1279,13 +1504,19 @@ def sitemap_xml():
         (f"{base_url}/plante-az", "weekly", "0.9"),
         (f"{base_url}/articole", "weekly", "0.9"),
         (f"{base_url}/produse", "weekly", "0.9"),
-        (f"{base_url}/produse?categorie=pamant-flori", "weekly", "0.9"),
-        (f"{base_url}/produse?categorie=solutii-nutritive", "weekly", "0.9"),
-        (f"{base_url}/produse?categorie=ingrijire-plante", "weekly", "0.8"),
-        (f"{base_url}/produse?categorie=batoane-fertilizante", "weekly", "0.8"),
         (f"{base_url}/calendar", "monthly", "0.8"),
         (f"{base_url}/despre-noi", "monthly", "0.7"),
+        (f"{base_url}/termeni-si-conditii", "yearly", "0.5"),
+        (f"{base_url}/politica-de-confidentialitate", "yearly", "0.5"),
+        (f"{base_url}/politica-cookies", "yearly", "0.5"),
     ]
+    for pc in PRODUCT_MENU_CATEGORIES:
+        urls.append((f"{base_url}/produse/categorie/{pc['slug']}", "weekly", "0.9"))
+    for plc in PLANT_CATEGORIES_META:
+        urls.append((f"{base_url}/plante-az/categorie/{plc['slug']}", "weekly", "0.85"))
+    letters_set = sorted(list(set([p.get('letter', 'A').upper() for p in plants if p.get('letter')])))
+    for l_char in letters_set:
+        urls.append((f"{base_url}/plante-az/litera/{l_char}", "monthly", "0.75"))
     for m in range(1, 13):
         urls.append((f"{base_url}/calendar?luna={m}", "monthly", "0.7"))
     for p in plants:
