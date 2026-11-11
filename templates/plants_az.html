@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}Indexul Plantelor A-Z ({{ total_plants }} Specii Botanice) - PlanteOnline{% endblock %}
+{% block title %}Indexul Plantelor A-Z ({{ total_plants }} Specii Botanice){% if selected_letter and selected_letter != 'ALL' %} - Litera {{ selected_letter }}{% endif %}{% if selected_subtype %} - {{ selected_subtype }}{% endif %} | PlanteOnline{% endblock %}
+{% block meta_description %}Catalog botanic alfabetic A-Z cu {{ total_plants }} specii de plante{% if selected_letter and selected_letter != 'ALL' %} la litera {{ selected_letter }}{% endif %}: denumire științifică în latină, origine, lumină, udare, temperatură, substrat și fertilizare recomandată.{% endblock %}
 
 {% block content %}
 <div class="space-y-8">

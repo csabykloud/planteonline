@@ -4,11 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#15803d">
-    <meta name="description" content="PlanteOnline.ro - Ghidul tău botanic complet: peste 530 de specii de plante A-Z, calendarul grădinarului, sfaturi de îngrijire și produse profesionale Florasol, Humiflor, Nutrisol, Plantasol, Vitaflora și Florimo.">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <meta name="description" content="{% block meta_description %}PlanteOnline.ro - Enciclopedie botanică cu peste 540 de specii de plante A-Z, calendarul grădinarului pe 12 luni, sfaturi practice de îngrijire și substraturi & fertilizanți profesionali Florasol, Humiflor, Nutrisol, Plantasol, Vitaflora și Florimo.{% endblock %}">
+    <link rel="canonical" href="{% block canonical_url %}{{ request.base_url }}{% endblock %}">
     <meta property="og:site_name" content="PlanteOnline.ro">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:locale" content="ro_RO">
+    <meta property="og:url" content="{{ request.base_url }}">
+    <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+    <meta property="og:description" content="{{ self.meta_description() }}">
+    {% block og_image %}{% endblock %}
+    <meta name="twitter:card" content="summary_large_image">
     <title>{% block title %}Plante Online - Ghidul Tău Botanic & Îngrijirea Plantelor{% endblock %}</title>
+    <!-- Schema.org JSON-LD for SEO & GEO (AI Search Engines) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "{{ request.url_root.rstrip('/') }}/#organization",
+          "name": "Societatea Mont Rose S.R.L. - PlanteOnline.ro",
+          "url": "{{ request.url_root.rstrip('/') }}/",
+          "foundingDate": "2001",
+          "description": "Producător și deținător al mărcii Florasol pentru pământ de flori și fertilizanți, și distribuitor oficial al mărcilor Humiflor, Nutrisol, Plantasol, Vitaflora și Florimo în România.",
+          "brand": [
+            {"@type": "Brand", "name": "Florasol"},
+            {"@type": "Brand", "name": "Humiflor"},
+            {"@type": "Brand", "name": "Nutrisol"},
+            {"@type": "Brand", "name": "Plantasol"},
+            {"@type": "Brand", "name": "Vitaflora"},
+            {"@type": "Brand", "name": "Florimo"}
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "{{ request.url_root.rstrip('/') }}/#website",
+          "url": "{{ request.url_root.rstrip('/') }}/",
+          "name": "PlanteOnline.ro - Ghid Botanic & Horticultură",
+          "inLanguage": "ro-RO",
+          "publisher": {"@id": "{{ request.url_root.rstrip('/') }}/#organization"},
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ request.url_root.rstrip('/') }}/plante-az?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
+    {% block structured_data %}{% endblock %}
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -301,7 +346,7 @@
                                 <!-- Image Container -->
                                 <div class="w-full h-44 my-2 flex items-center justify-center overflow-hidden rounded-xl bg-white p-2 border border-stone-100">
                                     {% if prod.image_url %}
-                                    <img src="{{ prod.image_url }}" alt="{{ prod.name }}" 
+                                    <img src="{{ prod.image_url }}" alt="{{ prod.name }} - {{ prod.brand or 'Florasol' }} substrat și nutriție plante" 
                                          loading="lazy" decoding="async"
                                          class="max-h-full object-contain group-hover/card:scale-105 transition-transform duration-300"
                                          onerror="this.src='https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=400&q=80'">
@@ -363,7 +408,7 @@
                                  onclick="openShowcaseLightbox('{{ sc.image_url }}')">
                                 
                                 <div class="w-full h-48 sm:h-50 overflow-hidden rounded-xl bg-white relative flex items-center justify-center border border-stone-100">
-                                    <img src="{{ sc.image_url }}" alt="Demonstrație Produs" 
+                                    <img src="{{ sc.image_url }}" alt="Ghid vizual îngrijire plante și substraturi Florasol, Humiflor, Vitaflora - {{ sc.title or ('Imagine ' ~ loop.index) }}" 
                                          loading="lazy" decoding="async"
                                          class="w-full h-full object-cover group-hover/sc:scale-105 transition-transform duration-300"
                                          onerror="this.src='https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=400&q=80'">

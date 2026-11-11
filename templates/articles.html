@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}{% if current_category %}{{ current_category }} - Articole PlanteOnline{% else %}Articole & Ghiduri Horticole - PlanteOnline{% endif %}{% endblock %}
+{% block title %}{% if current_category %}{{ current_category }} - Articole & Ghiduri PlanteOnline{% else %}Articole & Ghiduri Horticole - Plante de Interior, Exterior & Întreținere | PlanteOnline{% endif %}{% endblock %}
+{% block meta_description %}{% if current_category %}Articole și sfaturi practice din categoria {{ current_category }}: îngrijire, udare, substraturi din turbă și fertilizare pentru plante sănătoase.{% else %}Peste {{ total_all_articles }} articole și ghiduri practice de horticultură: îngrijirea plantelor de apartament și grădină, substraturi, fertilizare și protecția plantelor.{% endif %}{% endblock %}
 
 {% block content %}
 <div class="space-y-8">

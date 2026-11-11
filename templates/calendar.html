@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}Calendarul Grădinarului - Luna {{ current_info.month_name }} - PlanteOnline{% endblock %}
+{% block title %}Calendarul Grădinarului - Luna {{ current_info.month_name }} ({{ current_info.season }}) | PlanteOnline{% endblock %}
+{% block meta_description %}Calendarul grădinarului pentru luna {{ current_info.month_name }}: lucrări în grădină, balcon și apartament. {{ (current_info.summary or '')[:140] }}{% endblock %}
 
 {% block content %}
 <div class="space-y-8">

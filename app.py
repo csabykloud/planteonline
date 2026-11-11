@@ -5,7 +5,7 @@ import datetime
 import time
 import re
 import urllib.parse
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, send_from_directory, session, abort
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, send_from_directory, session, abort, Response
 from markupsafe import escape
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -696,6 +696,8 @@ def home():
         if first_char not in plants_by_letter:
             plants_by_letter[first_char] = []
         
+        raw_desc = (p.get('description', '') or p.get('requirements', '') or 'Specie botanică decorativă cu cerințe specifice de îngrijire.').strip()
+        short_desc = (raw_desc[:162] + '...') if len(raw_desc) > 165 else raw_desc
         plants_by_letter[first_char].append({
             'id': p.get('id'),
             'name': p.get('name', ''),
@@ -704,7 +706,7 @@ def home():
             'origin': p.get('origin', 'Global'),
             'image': p.get('images', [''])[0] if p.get('images') else '',
             'fallback_image': p.get('images', ['', ''])[1] if p.get('images') and len(p.get('images')) > 1 else '',
-            'description': p.get('description', '') or p.get('requirements', '') or 'Specie botanică decorativă cu cerințe specifice de îngrijire.'
+            'description': short_desc
         })
 
     import string
@@ -791,11 +793,50 @@ def article_detail(article_id):
     if len(related) < 4:
         related = [a for a in articles if a['id'] != article_id][:4]
 
+    # Smart matching for related plants and recommended products (SEO internal linking)
+    plants = load_json('plants.json')
+    art_text = ((target.get('title') or '') + ' ' + (target.get('content') or '')[:800]).lower()
+    matched_plants = []
+    for p in plants:
+        p_name = (p.get('name') or '').strip()
+        if len(p_name) >= 4 and p_name.lower() in art_text:
+            matched_plants.append(p)
+            if len(matched_plants) >= 4:
+                break
+    if len(matched_plants) < 4:
+        cat_lower = (target.get('category') or '').lower()
+        for p in plants:
+            if p not in matched_plants:
+                if ('interior' in cat_lower and 'apartament' in (p.get('category') or '').lower()) or \
+                   ('exterior' in cat_lower and 'gradin' in (p.get('category') or '').lower()):
+                    matched_plants.append(p)
+                    if len(matched_plants) >= 4:
+                        break
+    if len(matched_plants) < 4:
+        for p in plants[:4]:
+            if p not in matched_plants:
+                matched_plants.append(p)
+
+    matched_products = []
+    for prod in products:
+        prod_words = [w for w in (prod.get('name') or '').lower().split() if len(w) >= 5 and w not in ('pentru', 'plante', 'solutie', 'substrat', 'amestec')]
+        if any(w in art_text for w in prod_words):
+            matched_products.append(prod)
+            if len(matched_products) >= 3:
+                break
+    if len(matched_products) < 3:
+        for prod in products:
+            if prod not in matched_products:
+                matched_products.append(prod)
+                if len(matched_products) >= 3:
+                    break
+
     return render_template(
         'article_detail.html',
         article=target,
         related_articles=related,
-        recommended_products=products[:4]
+        related_plants=matched_plants[:4],
+        recommended_products=matched_products[:3]
     )
 
 @app.route('/plante-az')
@@ -946,6 +987,108 @@ def about_view():
     about = load_json('about.json')
     products = load_json('products.json')
     return render_template('about.html', about=about, featured_products=products[:4])
+
+# --- SEO & GEO ENDPOINTS (robots.txt, sitemap.xml, llms.txt) ---
+
+@app.route('/robots.txt')
+def robots_txt():
+    base_url = request.url_root.rstrip('/')
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin",
+        "Disallow: /api/upload",
+        "",
+        "User-agent: GPTBot",
+        "Allow: /",
+        "",
+        "User-agent: OAI-SearchBot",
+        "Allow: /",
+        "",
+        "User-agent: Google-Extended",
+        "Allow: /",
+        "",
+        "User-agent: PerplexityBot",
+        "Allow: /",
+        "",
+        "User-agent: ClaudeBot",
+        "Allow: /",
+        "",
+        f"Sitemap: {base_url}/sitemap.xml",
+    ]
+    return Response("\n".join(lines), mimetype="text/plain; charset=utf-8")
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    base_url = request.url_root.rstrip('/')
+    plants = load_json('plants.json')
+    articles = load_json('articles.json')
+    today = datetime.date.today().isoformat()
+
+    urls = [
+        (f"{base_url}/", "daily", "1.0"),
+        (f"{base_url}/plante-az", "weekly", "0.9"),
+        (f"{base_url}/articole", "weekly", "0.9"),
+        (f"{base_url}/calendar", "monthly", "0.8"),
+        (f"{base_url}/despre-noi", "monthly", "0.7"),
+    ]
+    for m in range(1, 13):
+        urls.append((f"{base_url}/calendar?luna={m}", "monthly", "0.7"))
+    for p in plants:
+        pid = p.get('id')
+        if pid is not None:
+            urls.append((f"{base_url}/planta/{pid}", "monthly", "0.8"))
+    for a in articles:
+        aid = a.get('id')
+        if aid is not None:
+            urls.append((f"{base_url}/articol/{aid}", "monthly", "0.7"))
+
+    xml_parts = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+    ]
+    for loc, changefreq, priority in urls:
+        safe_loc = str(escape(loc))
+        xml_parts.append(
+            f"  <url><loc>{safe_loc}</loc><lastmod>{today}</lastmod>"
+            f"<changefreq>{changefreq}</changefreq><priority>{priority}</priority></url>"
+        )
+    xml_parts.append('</urlset>')
+    return Response("\n".join(xml_parts), mimetype="application/xml; charset=utf-8")
+
+@app.route('/llms.txt')
+def llms_txt():
+    base_url = request.url_root.rstrip('/')
+    plants = load_json('plants.json')
+    articles = load_json('articles.json')
+    products = load_json('products.json')
+    about = load_json('about.json')
+
+    lines = [
+        "# PlanteOnline.ro - Enciclopedie Botanică, Calendarul Grădinarului & Produse Horticultură",
+        "",
+        "> Portal educațional și ghid botanic fondat în 2001 de Societatea Mont Rose S.R.L. (România).",
+        "> Producător oficial al mărcii Florasol și distribuitor al mărcilor Humiflor, Nutrisol, Plantasol, Vitaflora și Florimo.",
+        "",
+        "## Secțiuni Principale",
+        f"- [Pagina Principală]({base_url}/): Indexul Plantelor A-Z, Calendarul Grădinarului, Articole Recomandate.",
+        f"- [Enciclopedia Plantelor A-Z ({len(plants)} specii)]({base_url}/plante-az): Fișe botanice cu denumire științifică în latină, origine, lumină, temperatură, udare, substrat și fertilizare.",
+        f"- [Calendarul Grădinarului (12 luni)]({base_url}/calendar): Lucrări lunare în grădină, balcon și apartament.",
+        f"- [Articole & Ghiduri Horticultură ({len(articles)} articole)]({base_url}/articole): Sfaturi practice pentru plante de interior, exterior și protecția plantelor.",
+        f"- [Despre Societatea Mont Rose S.R.L.]({base_url}/despre-noi): Istoric, mărci și date de contact.",
+        "",
+        f"## Gama de Produse Profesionale ({len(products)} produse - Substraturi, Pământ de Flori & Fertilizanți)",
+    ]
+    for prod in products:
+        p_name = prod.get('name', '')
+        p_brand = prod.get('brand', 'Florasol')
+        p_desc = (prod.get('description') or '').replace('\n', ' ').strip()
+        if len(p_desc) > 260:
+            p_desc = p_desc[:257] + "..."
+        p_link = prod.get('external_url') or f"{base_url}/"
+        lines.append(f"- **{p_name}** ({p_brand}): {p_desc} [Detalii produs]({p_link})")
+
+    return Response("\n".join(lines), mimetype="text/plain; charset=utf-8")
 
 # --- ADMIN PANEL & AUTHENTICATION ---
 
