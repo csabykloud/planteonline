@@ -378,17 +378,17 @@
             </span>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {% for sc_img in product_showcase_images %}
-            <div class="group relative bg-stone-50 rounded-2xl overflow-hidden border border-stone-200/90 hover:border-botanic-400 shadow-2xs hover:shadow-md transition-all cursor-pointer"
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {% set card_aspect = '4 / 3' if product.id == 7 else ('1 / 1' if product.id == 29 else '3 / 4') %}
+            {% for sc_img in product_showcase_images[:3] %}
+            <div class="group relative bg-stone-100 rounded-2xl overflow-hidden border border-stone-200/90 hover:border-botanic-400 shadow-2xs hover:shadow-md transition-all cursor-pointer"
+                 style="aspect-ratio: {{ card_aspect }};"
                  onclick="openShowcaseLightbox('{{ sc_img }}')">
-                <div class="aspect-4/3 w-full overflow-hidden bg-stone-100 flex items-center justify-center">
-                    <img src="{{ sc_img }}"
-                         alt="{{ product.name }} ({{ product.brand or 'Florasol' }}) - Ghid vizual și prezentare #{{ loop.index }}"
-                         loading="lazy" decoding="async"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                </div>
-                <div class="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3.5">
+                <img src="{{ sc_img }}"
+                     alt="{{ product.name }} ({{ product.brand or 'Florasol' }}) - Ghid vizual și prezentare #{{ loop.index }}"
+                     loading="lazy" decoding="async"
+                     class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 block">
+                <div class="absolute inset-0 bg-gradient-to-t from-stone-950/65 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-4">
                     <span class="text-white text-xs font-semibold drop-shadow-xs truncate pr-2">
                         {{ product.name }}
                     </span>

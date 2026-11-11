@@ -1375,70 +1375,114 @@ def products_view(cat_slug=None):
         all_product_categories=PRODUCT_MENU_CATEGORIES
     )
 
-# Visually verified mapping of the 49 showcase images in import_produse/termek_bemutato to product IDs
-SHOWCASE_FILE_TO_PRODUCT_IDS = {
-    'Gemini_Generated_Image_1bq1ec1bq1ec1bq1.png': [11],
-    'Gemini_Generated_Image_2k17442k17442k17.png': [7],
-    'Gemini_Generated_Image_3kbcx73kbcx73kbc.png': [7],
-    'Gemini_Generated_Image_4ljn1q4ljn1q4ljn.png': [7, 8, 9, 10],
-    'Gemini_Generated_Image_behcs5behcs5behc.png': [7],
-    'Gemini_Generated_Image_h21w1wh21w1wh21w.png': [7, 8, 10],
-    'Gemini_Generated_Image_m06t0lm06t0lm06t.png': [7, 8, 9, 10],
-    'Gemini_Generated_Image_odmek0odmek0odme.png': [7],
-    'Gemini_Generated_Image_qy17mqy17mqy17mq.png': [7],
-    'Gemini_Generated_Image_sfe8z7sfe8z7sfe8.png': [20],
-    'Gemini_Generated_Image_w5nk6yw5nk6yw5nk.png': [7],
-    'Gemini_Generated_Image_xiqwc3xiqwc3xiqw.png': [7],
-    'WhatsApp_Image_2026-10-20_at_11.16.49_1.jpeg': [16],
-    'WhatsApp_Image_2026-10-20_at_11.16.49_2.jpeg': [17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (1).png': [12, 16, 17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (2).png': [12, 16, 17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (3).png': [12, 16, 17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (4).png': [12, 16, 17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (5).png': [18, 13],
-    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (6).png': [18, 13],
-    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (7).png': [18, 13],
-    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (8).png': [18, 13],
-    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (9).png': [18, 13],
-    'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_.png': [12, 16, 17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag (1).png': [4, 5, 6, 33],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag (2).png': [4, 5, 6, 33],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag.png': [4, 5, 6, 33],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (1).png': [17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (2).png': [17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (3).png': [12, 15],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (4).png': [12, 15],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (5).png': [12, 15],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (6).png': [12, 15],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_.png': [17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (1).png': [7, 11, 8, 9, 10],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (10).png': [16, 17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (11).png': [8, 9, 10],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (12).png': [8, 9, 10],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (13).png': [8, 9, 10],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (2).png': [11, 29],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (3).png': [11, 29],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (4).png': [11, 29],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (5).png': [11, 29],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (6).png': [11, 29],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (7).png': [16, 17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (8).png': [16, 17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (9).png': [16, 17],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i.png': [7, 11, 8, 10],
-    'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_p.png': [7, 11, 8, 9, 10],
+# Visually curated mapping of up to 3 distinct, matching-proportion showcase images per product ID
+PRODUCT_SHOWCASE_CURATED_MAP = {
+    # Humiflor Amestec turbă / Pământ de flori Universal (3 distinct 1000x730 landscape scenes)
+    7: [
+        'Gemini_Generated_Image_2k17442k17442k17.png',
+        'Gemini_Generated_Image_behcs5behcs5behc.png',
+        'Gemini_Generated_Image_odmek0odmek0odme.png',
+    ],
+    # Humiflor Substrat pentru Orhidee (3 distinct scenes)
+    11: [
+        'Gemini_Generated_Image_1bq1ec1bq1ec1bq1.png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (5).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i.png',
+    ],
+    # Humiflor Soluție Nutritivă pentru Plante de Balcon (3 distinct portrait scenes)
+    8: [
+        'Gemini_Generated_Image_4ljn1q4ljn1q4ljn.png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (11).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_p.png',
+    ],
+    # Humiflor Soluție Nutritivă pentru Plante de Cameră (3 distinct portrait scenes)
+    9: [
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (13).png',
+        'Gemini_Generated_Image_m06t0lm06t0lm06t.png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (1).png',
+    ],
+    # Humiflor Soluție Nutritivă pentru Plante de Grădină (3 distinct portrait scenes)
+    10: [
+        'Gemini_Generated_Image_h21w1wh21w1wh21w.png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (12).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i.png',
+    ],
+    # Plantasol Amestec turbă / Pământ de flori Universal (1 portrait scene)
+    20: [
+        'Gemini_Generated_Image_sfe8z7sfe8z7sfe8.png',
+    ],
+    # Florasol range (2 distinct full-bleed portrait scenes: upright on veranda vs flat in garden)
+    4: [
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag (1).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag.png',
+    ],
+    5: [
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag (1).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag.png',
+    ],
+    6: [
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag (1).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag.png',
+    ],
+    33: [
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag (1).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_creaza_o_imag.png',
+    ],
+    # Nutrisol Pământ de flori pentru Mușcate și Plante de Balcon (3 distinct full-bleed portrait scenes)
+    12: [
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (5).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (3).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_.png',
+    ],
+    # Nutrisol Soluție Nutritivă pentru Mușcate și Plante de Balcon (2 distinct full-bleed portrait scenes)
+    15: [
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (5).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (3).png',
+    ],
+    # Nutrisol Pământ de flori pentru Plante de Cameră & Soluție Nutritivă Plante de Cameră (3 distinct 730x1000 scenes)
+    18: [
+        'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (6).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (7).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (9).png',
+    ],
+    13: [
+        'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (6).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (7).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (9).png',
+    ],
+    # Nutrisol Soluție de Îngrijire Ecologică a Plantelor (3 distinct full-bleed portrait scenes)
+    16: [
+        'WhatsApp_Image_2026-10-20_at_11.16.49_1.jpeg',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (8).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Genereaza_o_imagine_ (4).png',
+    ],
+    # Nutrisol Soluție de Îngrijire Organică a Plantelor (3 distinct full-bleed scenes)
+    17: [
+        'WhatsApp_Image_2026-10-20_at_11.16.49_2.jpeg',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_fa_o_imagine_ (1).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (9).png',
+    ],
+    # Vitaflora Soluție Nutritivă pentru Orhidee (3 distinct 1000x1000 square scenes)
+    29: [
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (5).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (2).png',
+        'gemini-2.5-flash-image-preview (nano-banana)_Te_rog_genereaza_o_i (6).png',
+    ],
 }
 
 def get_showcase_images_for_product(product):
-    """Return the list of /showcase_img/<filename> URLs that visually feature this product."""
+    """Return up to 3 curated /showcase_img/<filename> URLs that visually feature this product."""
     pid = product.get('id')
+    if pid in PRODUCT_SHOWCASE_CURATED_MAP:
+        return [
+            f"/showcase_img/{urllib.parse.quote(fname)}"
+            for fname in PRODUCT_SHOWCASE_CURATED_MAP[pid]
+            if os.path.exists(os.path.join(SHOWCASE_DIR, fname))
+        ][:3]
     saved_imgs = product.get('showcase_images')
     if isinstance(saved_imgs, list) and saved_imgs:
-        return saved_imgs
-    urls = []
-    for fname, pids in SHOWCASE_FILE_TO_PRODUCT_IDS.items():
-        if pid in pids and os.path.exists(os.path.join(SHOWCASE_DIR, fname)):
-            urls.append(f"/showcase_img/{urllib.parse.quote(fname)}")
-    return urls
+        return saved_imgs[:3]
+    return []
 
 @app.route('/produs/<int:product_id>')
 def product_detail(product_id):
