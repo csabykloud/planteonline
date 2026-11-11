@@ -1,229 +1,229 @@
 {
   "traffic": {
-    "total_visits": 129,
+    "total_visits": 250,
     "sources": {
       "google": 0,
       "facebook": 32,
       "instagram": 0,
       "tiktok": 0,
       "pinterest": 0,
-      "direct": 97
+      "direct": 218
     },
     "recent_visits": [
       {
-        "timestamp": "29.10.2026 09:17",
+        "timestamp": "11.11.2026 11:44",
         "source": "direct",
-        "path": "/",
-        "referrer": "127.0.0.1:5000"
-      },
-      {
-        "timestamp": "28.10.2026 09:18",
-        "source": "direct",
-        "path": "/pagina-inexistenta-test-404",
+        "path": "/produs/4",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "28.10.2026 09:18",
-        "source": "facebook",
-        "path": "/plante-az",
-        "referrer": "Direct / Marcaj"
-      },
-      {
-        "timestamp": "28.10.2026 09:18",
+        "timestamp": "11.11.2026 11:44",
         "source": "direct",
-        "path": "/",
+        "path": "/sitemap.xml",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "28.10.2026 08:36",
+        "timestamp": "11.11.2026 11:44",
         "source": "direct",
-        "path": "/articole",
-        "referrer": "127.0.0.1:5000/articole?categorie=Plante+de+interior"
-      },
-      {
-        "timestamp": "27.10.2026 15:19",
-        "source": "facebook",
-        "path": "/plante-az",
+        "path": "/llms.txt",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:19",
+        "timestamp": "11.11.2026 11:44",
         "source": "direct",
-        "path": "/",
+        "path": "/articol/207",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:19",
+        "timestamp": "11.11.2026 11:44",
         "source": "direct",
-        "path": "/",
+        "path": "/planta/85",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:19",
+        "timestamp": "11.11.2026 11:44",
         "source": "direct",
-        "path": "/articole",
+        "path": "/produs/4",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:19",
+        "timestamp": "11.11.2026 11:44",
         "source": "direct",
-        "path": "/articole",
+        "path": "/produse",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:18",
+        "timestamp": "11.11.2026 11:44",
+        "source": "direct",
+        "path": "/despre-noi",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "11.11.2026 11:44",
         "source": "direct",
         "path": "/",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:18",
+        "timestamp": "11.11.2026 11:42",
         "source": "direct",
-        "path": "/articole",
+        "path": "/produse",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:18",
+        "timestamp": "11.11.2026 11:41",
         "source": "direct",
-        "path": "/articole",
+        "path": "/sitemap.xml",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:17",
+        "timestamp": "11.11.2026 11:41",
         "source": "direct",
-        "path": "/articole",
+        "path": "/llms.txt",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:17",
+        "timestamp": "11.11.2026 11:41",
         "source": "direct",
-        "path": "/articole",
+        "path": "/articol/207",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:17",
+        "timestamp": "11.11.2026 11:41",
         "source": "direct",
-        "path": "/articole",
+        "path": "/planta/85",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:17",
+        "timestamp": "11.11.2026 11:41",
         "source": "direct",
-        "path": "/articole",
+        "path": "/produs/4",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:16",
+        "timestamp": "11.11.2026 11:41",
         "source": "direct",
-        "path": "/articole",
+        "path": "/produse",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:16",
+        "timestamp": "11.11.2026 11:41",
         "source": "direct",
-        "path": "/articole",
+        "path": "/despre-noi",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:10",
-        "source": "facebook",
-        "path": "/plante-az",
-        "referrer": "Direct / Marcaj"
-      },
-      {
-        "timestamp": "27.10.2026 15:10",
+        "timestamp": "11.11.2026 11:41",
         "source": "direct",
         "path": "/",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 15:09",
+        "timestamp": "11.11.2026 11:40",
         "source": "direct",
-        "path": "/calendar",
+        "path": "/llms.txt",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 13:52",
-        "source": "facebook",
-        "path": "/plante-az",
-        "referrer": "Direct / Marcaj"
-      },
-      {
-        "timestamp": "27.10.2026 13:52",
+        "timestamp": "11.11.2026 11:29",
         "source": "direct",
-        "path": "/",
+        "path": "/llms.txt",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 13:51",
+        "timestamp": "11.11.2026 11:20",
         "source": "direct",
-        "path": "/calendar",
+        "path": "/llms.txt",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "27.10.2026 09:02",
+        "timestamp": "11.11.2026 11:20",
         "source": "direct",
-        "path": "/",
-        "referrer": "127.0.0.1:5000/admin?tab=products"
-      },
-      {
-        "timestamp": "26.10.2026 15:57",
-        "source": "facebook",
-        "path": "/plante-az",
+        "path": "/sitemap.xml",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "26.10.2026 15:57",
+        "timestamp": "11.11.2026 11:20",
         "source": "direct",
-        "path": "/",
+        "path": "/produse",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "26.10.2026 15:57",
+        "timestamp": "11.11.2026 11:20",
         "source": "direct",
-        "path": "/",
+        "path": "/produse",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "26.10.2026 15:13",
-        "source": "facebook",
-        "path": "/plante-az",
-        "referrer": "Direct / Marcaj"
-      },
-      {
-        "timestamp": "26.10.2026 15:13",
+        "timestamp": "11.11.2026 11:20",
         "source": "direct",
-        "path": "/",
+        "path": "/produse",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "26.10.2026 15:13",
+        "timestamp": "11.11.2026 11:20",
+        "source": "direct",
+        "path": "/produse",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "11.11.2026 11:20",
+        "source": "direct",
+        "path": "/produse",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "11.11.2026 11:20",
         "source": "direct",
         "path": "/",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "26.10.2026 15:09",
-        "source": "facebook",
-        "path": "/plante-az",
+        "timestamp": "11.11.2026 10:47",
+        "source": "direct",
+        "path": "/llms.txt",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "26.10.2026 15:09",
+        "timestamp": "11.11.2026 10:47",
         "source": "direct",
-        "path": "/",
+        "path": "/sitemap.xml",
         "referrer": "Direct / Marcaj"
       },
       {
-        "timestamp": "26.10.2026 15:09",
+        "timestamp": "11.11.2026 10:47",
         "source": "direct",
-        "path": "/",
+        "path": "/produse",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "11.11.2026 10:47",
+        "source": "direct",
+        "path": "/produse",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "11.11.2026 10:47",
+        "source": "direct",
+        "path": "/produse",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "11.11.2026 10:47",
+        "source": "direct",
+        "path": "/produse",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "11.11.2026 10:47",
+        "source": "direct",
+        "path": "/produse",
         "referrer": "Direct / Marcaj"
       }
     ]
   },
   "searches": {
-    "total_searches": 38,
+    "total_searches": 40,
     "queries": {
       "anth": {
         "count": 1,
@@ -248,9 +248,27 @@
         "last_searched": "23.10.2026 12:23",
         "results_found": 2,
         "target": "plante"
+      },
+      "tuya": {
+        "count": 2,
+        "last_searched": "06.11.2026 14:24",
+        "results_found": 1,
+        "target": "plante"
       }
     },
     "recent": [
+      {
+        "query": "tuya",
+        "target": "plante",
+        "timestamp": "06.11.2026 14:24",
+        "results": 1
+      },
+      {
+        "query": "tuya",
+        "target": "plante",
+        "timestamp": "06.11.2026 14:23",
+        "results": 1
+      },
       {
         "query": "bonsai",
         "target": "plante",
@@ -448,47 +466,35 @@
         "target": "plante",
         "timestamp": "22.10.2026 14:12",
         "results": 0
-      },
-      {
-        "query": "bonsai",
-        "target": "plante",
-        "timestamp": "22.10.2026 14:05",
-        "results": 0
-      },
-      {
-        "query": "bonsai",
-        "target": "plante",
-        "timestamp": "22.10.2026 13:29",
-        "results": 0
       }
     ]
   },
   "products": {
-    "total_views": 133,
-    "total_clicks": 33,
+    "total_views": 155,
+    "total_clicks": 36,
     "items": {
       "4": {
         "name": "Florasol Amestec turba Universal",
         "brand": "Florasol",
-        "views": 65,
+        "views": 70,
         "clicks": 32,
-        "last_interacted": "28.10.2026 09:18",
+        "last_interacted": "11.11.2026 10:00",
         "image_url": "/static/uploads/prod_2026_Florasol Amestec turba Universal.png"
       },
       "6": {
         "name": "Florasol Solutie Nutritiva Universal",
         "brand": "Florasol",
-        "views": 32,
+        "views": 33,
         "clicks": 0,
-        "last_interacted": "28.10.2026 09:18",
+        "last_interacted": "11.11.2026 09:57",
         "image_url": "/static/uploads/prod_2026_Florasol Solutie Nutritiva Universal.jpeg"
       },
       "23": {
         "name": "Vitaflora Solutie Nutritiva Universal - 1L",
         "brand": "Vitaflora",
-        "views": 33,
+        "views": 34,
         "clicks": 0,
-        "last_interacted": "28.10.2026 09:18",
+        "last_interacted": "06.11.2026 13:25",
         "image_url": "/static/uploads/prod_2026_Vitaflora Solutie Nutritiva Universal 1l.png"
       },
       "31": {
@@ -510,10 +516,90 @@
       "33": {
         "name": "Solutie de ingrijire plante Florasol",
         "brand": "Florasol",
+        "views": 2,
+        "clicks": 1,
+        "last_interacted": "06.11.2026 13:23",
+        "image_url": "/static/uploads/prod_1792568963_Florasol_Solutie_Ingrijire_plante.jpeg"
+      },
+      "3": {
+        "name": "Vitaflora Batoane fertilizante pentru plante cu frunze",
+        "brand": "Vitaflora",
         "views": 1,
         "clicks": 0,
-        "last_interacted": "26.10.2026 08:34",
-        "image_url": "/static/uploads/prod_1792568963_Florasol_Solutie_Ingrijire_plante.jpeg"
+        "last_interacted": "06.11.2026 10:53",
+        "image_url": "/static/uploads/prod_2026_Baton fertilizant plante cu frunze.jpg"
+      },
+      "25": {
+        "name": "Vitaflora Solutie Nutritiva pt Capsuni si Legume - 1L",
+        "brand": "Vitaflora",
+        "views": 1,
+        "clicks": 0,
+        "last_interacted": "06.11.2026 10:53",
+        "image_url": "/static/uploads/prod_2026_Vitaflora Solutie Nutritiva pt Capsuni si Legume 1l.png"
+      },
+      "7": {
+        "name": "Humiflor Amestec turba Universal",
+        "brand": "Humiflor",
+        "views": 2,
+        "clicks": 0,
+        "last_interacted": "11.11.2026 09:56",
+        "image_url": "/static/uploads/prod_2026_Humiflor Amestec turba Universal 20L.png"
+      },
+      "10": {
+        "name": "Humiflor Solutie nutritiva plante de gradina",
+        "brand": "Humiflor",
+        "views": 2,
+        "clicks": 1,
+        "last_interacted": "06.11.2026 13:26",
+        "image_url": "/static/uploads/prod_2026_Humiflor Solutie Nutritiva Plante de gradina.jpg"
+      },
+      "14": {
+        "name": "Nutrisol Solutie Nutritiva Plante de Gradina",
+        "brand": "Nutrisol",
+        "views": 1,
+        "clicks": 0,
+        "last_interacted": "06.11.2026 10:56",
+        "image_url": "/static/uploads/prod_2026_Nutrisol Solutie Nutritiva Plante de Gradina.jpeg"
+      },
+      "8": {
+        "name": "Humiflor Solutie nutritiva plante de balcon",
+        "brand": "Humiflor",
+        "views": 2,
+        "clicks": 0,
+        "last_interacted": "11.11.2026 10:09",
+        "image_url": "/static/uploads/prod_2026_Humiflor Solutie Nutritiva Plante de balcon.jpg"
+      },
+      "22": {
+        "name": "Vitaflora Solutie Nutritiva Plante Curgatoare - 1L",
+        "brand": "Vitaflora",
+        "views": 1,
+        "clicks": 0,
+        "last_interacted": "06.11.2026 10:56",
+        "image_url": "/static/uploads/prod_2026_Vitaflora Solutie Nutritiva Plante Curgatoare 1L.png"
+      },
+      "11": {
+        "name": "Humiflor substrat orhidee",
+        "brand": "Humiflor",
+        "views": 2,
+        "clicks": 0,
+        "last_interacted": "11.11.2026 08:55",
+        "image_url": "/static/uploads/prod_2026_Humiflor Substrat Orhidee.jpeg"
+      },
+      "16": {
+        "name": "Nutrisol Soluție de îngrijire ecologică a plantelor",
+        "brand": "Nutrisol",
+        "views": 1,
+        "clicks": 1,
+        "last_interacted": "06.11.2026 13:25",
+        "image_url": "/static/uploads/prod_2026_Nutrisol Solutie de ingrijire ecologica a plantelor.jpg"
+      },
+      "12": {
+        "name": "Nutrisol Pământ de flori pentru Mușcate și Plante de Balcon",
+        "brand": "Nutrisol",
+        "views": 1,
+        "clicks": 0,
+        "last_interacted": "11.11.2026 09:56",
+        "image_url": "/static/uploads/prod_2026_Nutrislo Substrat Muscate.png"
       }
     }
   }

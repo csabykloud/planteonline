@@ -182,7 +182,9 @@ Catalog complet de produse recomandate pentru plante: Amestec turbă / Pământ 
                                 {% endif %}
                             </div>
                             <h3 class="text-lg sm:text-xl font-serif font-bold text-stone-900 leading-snug">
-                                {{ prod.name }}
+                                <a href="{{ url_for('product_detail', product_id=prod.id) }}" class="hover:text-botanic-700 hover:underline">
+                                    {{ prod.name }}
+                                </a>
                             </h3>
                         </div>
 
@@ -233,6 +235,12 @@ Catalog complet de produse recomandate pentru plante: Amestec turbă / Pământ 
                                class="w-full py-2.5 px-4 bg-gradient-to-r from-botanic-700 to-botanic-600 hover:from-botanic-800 hover:to-botanic-700 text-white font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center space-x-2 shadow-sm transition-all">
                                 <span>Accesează Produsul & Cumpără</span>
                                 <i data-lucide="external-link" class="w-4 h-4"></i>
+                            </a>
+
+                            <a href="{{ url_for('product_detail', product_id=prod.id) }}"
+                               class="w-full py-2 px-4 bg-emerald-50 hover:bg-emerald-100 text-botanic-800 border border-botanic-200 font-semibold text-xs rounded-xl flex items-center justify-center space-x-1.5 transition-colors">
+                                <i data-lucide="info" class="w-3.5 h-3.5 text-botanic-600"></i>
+                                <span>Vezi Fișa & Plante Compatibile</span>
                             </a>
 
                             {% if session.get('admin_logged_in') %}

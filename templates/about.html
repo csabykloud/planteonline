@@ -3,6 +3,33 @@
 {% block title %}Despre Noi - Societatea Mont Rose S.R.L. & PlanteOnline.ro | Producător Florasol{% endblock %}
 {% block meta_description %}Societatea Mont Rose S.R.L., înființată în 2001: producător oficial al mărcii Florasol și distribuitor al mărcilor Humiflor, Nutrisol, Plantasol, Vitaflora și Florimo pentru substraturi din turbă și fertilizanți.{% endblock %}
 
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Acasă", "item": {{ (request.url_root.rstrip('/') ~ url_for('home')) | tojson }}},
+        {"@type": "ListItem", "position": 2, "name": "Despre noi", "item": {{ request.base_url | tojson }}}
+      ]
+    },
+    {
+      "@type": "AboutPage",
+      "@id": "{{ request.base_url }}#webpage",
+      "url": {{ request.base_url | tojson }},
+      "name": "Despre Societatea Mont Rose S.R.L. și PlanteOnline.ro",
+      "isPartOf": {"@id": "{{ request.url_root.rstrip('/') }}/#website"},
+      "about": {"@id": "{{ request.url_root.rstrip('/') }}/#organization"},
+      "description": "Societatea Mont Rose S.R.L., înființată în 2001: producător oficial al mărcii Florasol și distribuitor oficial al mărcilor Humiflor, Nutrisol, Plantasol, Vitaflora și Florimo în România.",
+      "inLanguage": "ro-RO"
+    }
+  ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="space-y-8">
 

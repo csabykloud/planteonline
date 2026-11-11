@@ -23,6 +23,9 @@
       "articleSection": {{ (article.category or 'Horticultură') | tojson }},
       "description": {{ ((article.summary or article.content or article.title) | striptags | replace('\n', ' '))[:250] | tojson }},
       "inLanguage": "ro-RO",
+      "datePublished": {{ ((iso_date or '2026-10-20') ~ 'T08:00:00+02:00') | tojson }},
+      "dateModified": {{ ((iso_date or '2026-10-20') ~ 'T10:00:00+02:00') | tojson }},
+      {% if article.image %}"image": {{ article.image | tojson }},{% endif %}
       "author": {"@type": "Organization", "name": "Redacția PlanteOnline.ro"},
       "publisher": {"@id": "{{ request.url_root.rstrip('/') }}/#organization"},
       "mainEntityOfPage": {{ request.base_url | tojson }}

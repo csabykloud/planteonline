@@ -880,9 +880,18 @@ def article_detail(article_id):
                 if len(matched_products) >= 3:
                     break
 
+    # Parse publication date to ISO 8601 for Schema.org BlogPosting
+    raw_date = target.get('date', '')
+    m_date = re.match(r'(\d{1,2})\.(\d{1,2})\.(\d{4})', raw_date)
+    if m_date:
+        iso_date = f"{m_date.group(3)}-{int(m_date.group(2)):02d}-{int(m_date.group(1)):02d}"
+    else:
+        iso_date = "2026-10-20"
+
     return render_template(
         'article_detail.html',
         article=target,
+        iso_date=iso_date,
         related_articles=related,
         related_plants=matched_plants[:4],
         recommended_products=matched_products[:3]
@@ -1087,6 +1096,55 @@ def products_view():
         all_product_categories=PRODUCT_MENU_CATEGORIES
     )
 
+@app.route('/produs/<int:product_id>')
+def product_detail(product_id):
+    products = load_json('products.json')
+    plants = load_json('plants.json')
+    product = next((p for p in products if p['id'] == product_id), None)
+    if not product:
+        flash('Produsul solicitat nu a fost găsit în catalog.', 'warning')
+        return redirect(url_for('products_view'))
+
+    # Matched plants that recommend this product
+    matched_plants = []
+    p_name_lower = product.get('name', '').lower()
+    p_words = [w for w in p_name_lower.split() if len(w) >= 5 and w not in ('pentru', 'plante', 'solutie', 'substrat', 'amestec', 'universal')]
+    for plant in plants:
+        recs = plant.get('recommended_products', [])
+        is_match = False
+        for r in recs:
+            rid = r.get('id') if isinstance(r, dict) else r
+            rname = (r.get('name') or '').lower() if isinstance(r, dict) else ''
+            if rid == product_id or (rname and p_name_lower in rname):
+                is_match = True
+                break
+        if not is_match and p_words:
+            req_text = ((plant.get('description') or '') + ' ' + (plant.get('requirements') or '')).lower()
+            if any(w in req_text for w in p_words):
+                is_match = True
+        if is_match and plant not in matched_plants:
+            matched_plants.append(plant)
+
+    # Related products from same menu category or brand
+    cat_slug = product.get('menu_category', 'pamant-flori')
+    related = [p for p in products if p['id'] != product_id and (p.get('menu_category') == cat_slug or p.get('brand') == product.get('brand'))][:4]
+
+    cat_meta = next((c for c in PRODUCT_MENU_CATEGORIES if c['slug'] == cat_slug), None)
+
+    # Packaging badges
+    packaging_badges = []
+    if product.get('packaging'):
+        packaging_badges = [b.strip() for b in re.split(r'[,;]', product['packaging']) if b.strip()]
+
+    return render_template(
+        'product_detail.html',
+        product=product,
+        cat_meta=cat_meta,
+        matched_plants=matched_plants[:12],
+        related_products=related,
+        packaging_badges=packaging_badges
+    )
+
 @app.route('/despre-noi')
 def about_view():
     about = load_json('about.json')
@@ -1152,6 +1210,11 @@ def sitemap_xml():
         aid = a.get('id')
         if aid is not None:
             urls.append((f"{base_url}/articol/{aid}", "monthly", "0.7"))
+    products = load_json('products.json')
+    for pr in products:
+        pr_id = pr.get('id')
+        if pr_id is not None:
+            urls.append((f"{base_url}/produs/{pr_id}", "weekly", "0.8"))
 
     xml_parts = [
         '<?xml version="1.0" encoding="UTF-8"?>',
@@ -1196,8 +1259,10 @@ def llms_txt():
         p_desc = (prod.get('description') or '').replace('\n', ' ').strip()
         if len(p_desc) > 260:
             p_desc = p_desc[:257] + "..."
-        p_link = prod.get('external_url') or f"{base_url}/"
-        lines.append(f"- **{p_name}** ({p_brand}): {p_desc} [Detalii produs]({p_link})")
+        p_detail = f"{base_url}/produs/{prod['id']}"
+        p_ext = prod.get('external_url') or "https://www.montrose.ro"
+        p_pkg = f" [Ambalaje: {prod.get('packaging')}]" if prod.get('packaging') else ""
+        lines.append(f"- **{p_name}** ({p_brand}){p_pkg}: {p_desc} [Fișă Produs PlanteOnline]({p_detail}) | [Comandă Magazin Oficial]({p_ext})")
 
     return Response("\n".join(lines), mimetype="text/plain; charset=utf-8")
 

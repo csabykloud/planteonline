@@ -21,6 +21,10 @@ Thumbs.db
 *.log
 stderr.log
 stdout.log
+scratch/
+*.bak*
+duplicate_clusters.txt
+duplicate_evaluations.txt
 
 # IDE & Editor files
 .vscode/
