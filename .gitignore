@@ -22,6 +22,7 @@ Thumbs.db
 stderr.log
 stdout.log
 scratch/
+_gh_pages/
 *.bak*
 duplicate_clusters.txt
 duplicate_evaluations.txt

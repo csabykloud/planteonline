@@ -951,8 +951,11 @@ def article_detail(article_id):
         flash('Articolul căutat nu a fost găsit.', 'warning')
         return redirect(url_for('articles_list'))
     
-    # Save view count increment
-    save_json('articles.json', articles)
+    # Save view count increment safely
+    try:
+        save_json('articles.json', articles)
+    except OSError:
+        pass
 
     # Related articles
     related = [a for a in articles if a['id'] != article_id and a.get('category') == target.get('category')][:4]
