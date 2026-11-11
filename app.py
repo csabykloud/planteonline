@@ -10,7 +10,7 @@ from markupsafe import escape
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from recommendation_engine import recommend_products_for_plant
+from recommendation_engine import recommend_products_for_plant, recommend_for_article
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('PLANTEONLINE_SECRET_KEY', 'planteonline-secret-key-modern-2026-hardened-9f8e7d6c')
@@ -842,43 +842,9 @@ def article_detail(article_id):
     if len(related) < 4:
         related = [a for a in articles if a['id'] != article_id][:4]
 
-    # Smart matching for related plants and recommended products (SEO internal linking)
+    # Intelligent botanical matching for related plants and recommended products (SEO internal linking)
     plants = load_json('plants.json')
-    art_text = ((target.get('title') or '') + ' ' + (target.get('content') or '')[:800]).lower()
-    matched_plants = []
-    for p in plants:
-        p_name = (p.get('name') or '').strip()
-        if len(p_name) >= 4 and p_name.lower() in art_text:
-            matched_plants.append(p)
-            if len(matched_plants) >= 4:
-                break
-    if len(matched_plants) < 4:
-        cat_lower = (target.get('category') or '').lower()
-        for p in plants:
-            if p not in matched_plants:
-                if ('interior' in cat_lower and 'apartament' in (p.get('category') or '').lower()) or \
-                   ('exterior' in cat_lower and 'gradin' in (p.get('category') or '').lower()):
-                    matched_plants.append(p)
-                    if len(matched_plants) >= 4:
-                        break
-    if len(matched_plants) < 4:
-        for p in plants[:4]:
-            if p not in matched_plants:
-                matched_plants.append(p)
-
-    matched_products = []
-    for prod in products:
-        prod_words = [w for w in (prod.get('name') or '').lower().split() if len(w) >= 5 and w not in ('pentru', 'plante', 'solutie', 'substrat', 'amestec')]
-        if any(w in art_text for w in prod_words):
-            matched_products.append(prod)
-            if len(matched_products) >= 3:
-                break
-    if len(matched_products) < 3:
-        for prod in products:
-            if prod not in matched_products:
-                matched_products.append(prod)
-                if len(matched_products) >= 3:
-                    break
+    matched_plants, matched_products = recommend_for_article(target, plants, products)
 
     # Parse publication date to ISO 8601 for Schema.org BlogPosting
     raw_date = target.get('date', '')

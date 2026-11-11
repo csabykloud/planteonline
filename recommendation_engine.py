@@ -11,11 +11,18 @@ def load_products():
             return json.load(f)
     return []
 
+def load_plants():
+    path = os.path.join(DATA_DIR, 'plants.json')
+    if os.path.exists(path):
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return []
+
 def normalize_text(text):
     if not text:
         return ''
     t = text.lower()
-    for s, d in [('ț', 't'), ('ș', 's'), ('ă', 'a'), ('â', 'a'), ('î', 'i')]:
+    for s, d in [('ț', 't'), ('ș', 's'), ('ţ', 't'), ('ş', 's'), ('ă', 'a'), ('â', 'a'), ('î', 'i')]:
         t = t.replace(s, d)
     return t
 
@@ -196,3 +203,343 @@ def recommend_products_for_plant(plant, all_products=None):
             for pid in deduped_ids
         ]
     }
+
+
+# =========================================================================
+# ARTICLE RECOMMENDATIONS: Plants & Products for Articles & Guides
+# =========================================================================
+
+ARTICLE_BOTANICAL_CATEGORIES = {
+    'cactusi': {
+        'name': 'Cactuși și Plante Suculente',
+        'priority': 10,
+        'keywords': [
+            'cactus', 'cactusi', 'cactusul', 'cactusului', 'cactusilor', 'cactee', 'suculent', 'suculenta', 'suculente', 'suculentelor',
+            'aloe', 'agave', 'aeonium', 'aporocactus', 'sedum', 'crassula', 'mammillaria', 'mammilaria', 'opuntia', 'echinocactus', 
+            'echinopsis', 'echeveria', 'haworthia', 'havortia', 'kalanchoe', 'kalancoe', 'lithops', 'rebutia', 'schlumbergera', 'craciunita'
+        ],
+        'products': [24, 4, 23, 6],
+        'plant_filter': lambda p_norm, cat: any(k in p_norm for k in ['cactus', 'cactusi', 'suculent', 'mammillar', 'opunti', 'echinopsis', 'crassula', 'sedum', 'aloe', 'agave', 'haworthi', 'havorti', 'kalancho', 'kalanco', 'schlumberger', 'craciunit', 'rebuti', 'lithops'])
+    },
+    'orhidee': {
+        'name': 'Orhidee',
+        'priority': 10,
+        'keywords': [
+            'orhidee', 'orhideea', 'orhideei', 'orhideele', 'orhideelor', 'orchid', 'orchidaceae',
+            'phalaenopsis', 'cymbidium', 'dendrobium', 'vanda', 'cattleya', 'oncidium', 'paphiopedilum'
+        ],
+        'products': [11, 29, 1, 4],
+        'plant_filter': lambda p_norm, cat: any(k in p_norm for k in ['orhidee', 'orchid', 'phalaenopsis', 'cymbidium', 'dendrobium'])
+    },
+    'muscate_balcon': {
+        'name': 'Mușcate și Flori de Balcon / Terasă',
+        'priority': 9,
+        'keywords': [
+            'muscata', 'muscate', 'muscatele', 'muscatelor', 'muscatei', 'pelargonium', 'geranium',
+            'petunie', 'petunia', 'petunii', 'petuniilor', 'surfinia', 'surfinie', 'calibrachoa', 'dipladenia',
+            'jardiniera', 'jardiniere', 'jardinierelor', 'plante curgatoare', 'flori de balcon'
+        ],
+        'products': [12, 15, 5, 28, 22, 8],
+        'plant_filter': lambda p_norm, cat: any(k in p_norm for k in ['pelargonium', 'muscat', 'petuni', 'surfinia', 'verbena', 'fuchsia', 'calibrachoa']) or 'balcon' in cat
+    },
+    'conifere': {
+        'name': 'Conifere și Rășinoase',
+        'priority': 9,
+        'keywords': [
+            'conifer', 'conifere', 'coniferele', 'coniferelor', 'brad', 'bradul', 'brazi', 'molid', 'molidul', 'molizi',
+            'pin', 'pinul', 'pini', 'tuia', 'thuja', 'ienupar', 'ienuparul', 'taxus', 'tisa', 'chiparos', 'cedru'
+        ],
+        'products': [26, 4, 19, 7],
+        'plant_filter': lambda p_norm, cat: 'conifer' in cat or any(k in p_norm for k in ['conifer', 'brad', 'molid', 'pin', 'tuia', 'ienupar', 'taxus', 'chamaecyparis'])
+    },
+    'gazon': {
+        'name': 'Gazon și Peluze',
+        'priority': 9,
+        'keywords': [
+            'gazon', 'gazonul', 'gazonului', 'peluza', 'peluze', 'peluzei', 'peluzelor', 'insamantare gazon',
+            'aerare gazon', 'tunderea gazonului', 'suprainsamantare', 'regenerare gazon', 'iarba de gazon'
+        ],
+        'products': [27, 4, 19, 14],
+        'plant_filter': lambda p_norm, cat: any(k in p_norm for k in ['gazon', 'festuca', 'graminee', 'iarba albastra', 'hosta', 'lavand', 'crizantem']) or 'perene' in cat
+    },
+    'trandafiri': {
+        'name': 'Trandafiri',
+        'priority': 9,
+        'keywords': ['trandafir', 'trandafirul', 'trandafiri', 'trandafirii', 'trandafirilor', 'roze', 'rozelor', 'butasi de trandafir'],
+        'products': [30, 4, 32, 6],
+        'plant_filter': lambda p_norm, cat: 'rosa' in p_norm or 'trandafir' in p_norm
+    },
+    'citrice_mediteraneene': {
+        'name': 'Citrice și Plante Mediteraneene',
+        'priority': 9,
+        'keywords': ['citrice', 'citricele', 'citricelor', 'citric', 'lamai', 'lamaiul', 'portocal', 'portocalul', 'mandarin', 'kumquat', 'maslin', 'leandru', 'olea', 'nerium'],
+        'products': [23, 4, 18, 6],
+        'plant_filter': lambda p_norm, cat: any(k in p_norm for k in ['citrus', 'lamai', 'portocal', 'maslin', 'leandru', 'olea'])
+    },
+    'bonsai': {
+        'name': 'Bonsai',
+        'priority': 9,
+        'keywords': ['bonsai', 'bonsaiul', 'bonsaii', 'arbori miniaturizati'],
+        'products': [23, 4, 18, 6],
+        'plant_filter': lambda p_norm, cat: any(k in p_norm for k in ['ficus', 'ulmus', 'carmona', 'serissa', 'acer'])
+    },
+    'fructe_legume': {
+        'name': 'Fructe, Căpșuni și Legume',
+        'priority': 8,
+        'keywords': [
+            'capsun', 'capsuni', 'capsunii', 'capsunilor', 'capsuna', 'capsune', 'legume', 'legumelor', 'tomate', 'tomatele',
+            'rosii', 'ardei', 'vinete', 'straturi inaltate', 'livada', 'livezilor', 'pomi fructiferi', 'prun', 'pruni',
+            'mar', 'meri', 'cais', 'piersic', 'zmeur', 'zmeura', 'mur', 'mure', 'fructe de padure'
+        ],
+        'products': [25, 19, 4, 14],
+        'plant_filter': lambda p_norm, cat: any(k in p_norm for k in ['fragaria', 'capsun', 'legum', 'mentha', 'salvia', 'tomate', 'ardei', 'prun', 'mar', 'rubus', 'fruct', 'parotia'])
+    },
+    'daunatori_boli': {
+        'name': 'Protecția Plantelor, Boli și Dăunători',
+        'priority': 7,
+        'keywords': [
+            'insecticid', 'insecticide', 'afide', 'afidelor', 'acarieni', 'acarienilor', 'daunatori', 'daunatorilor',
+            'ciuperci', 'ciupercilor', 'fungicid', 'fungicide', 'boli', 'bolilor', 'fainare', 'fainarea', 'rugina',
+            'paduchi', 'omizi', 'ingalbenirea frunzelor', 'caderea frunzelor', 'igienizare', 'combaterea daunatorilor'
+        ],
+        'products': [33, 16, 17, 4],
+        'plant_filter': None
+    },
+    'turba_sol_compost': {
+        'name': 'Substraturi, Turbă și Sol',
+        'priority': 6,
+        'keywords': [
+            'turba', 'turbei', 'turba eutrofa', 'turba oligotrofa', 'substrat', 'substraturi', 'substraturile',
+            'pamant de flori', 'compost', 'composturi', 'pamant de telina', 'pamant de frunze', 'nisip', 'transplantare',
+            'replantare', 'drenaj', 'drenajul'
+        ],
+        'products': [4, 7, 20, 18, 19],
+        'plant_filter': None
+    },
+    'plante_camera_frunze': {
+        'name': 'Plante de Cameră cu Frunze Decorative',
+        'priority': 7,
+        'keywords': [
+            'plante de apartament', 'plante de interior', 'plante de camera', 'frunze decorative', 'plante verzi',
+            'ficus', 'monstera', 'palmier', 'palmieri', 'dracaena', 'dracena', 'filodendron', 'philodendron',
+            'dieffenbachia', 'sansevieria', 'calathea', 'feriga', 'ferigi', 'yucca', 'schefflera', 'zamioculcas',
+            'aglaonema', 'croton', 'pothos', 'iedera', 'umiditatea aerului', 'curatarea frunzelor'
+        ],
+        'products': [18, 31, 9, 13, 3, 4],
+        'plant_filter': lambda p_norm, cat: 'apartament' in cat and any(k in p_norm for k in ['ficus', 'monstera', 'palmier', 'dracaena', 'filodendron', 'sansevieria', 'calathea', 'feriga', 'yucca', 'schefflera', 'zamioculcas', 'croton', 'aglaonema', 'pothos'])
+    },
+    'plante_cu_flori': {
+        'name': 'Plante cu Flori și Înflorire',
+        'priority': 7,
+        'keywords': [
+            'flori', 'florile', 'florilor', 'inflorire', 'inflorirea', 'infloririi', 'inflorescenta', 'boboci', 'bobocilor',
+            'stimularea infloririi', 'azalee', 'violeta', 'saintpaulia', 'ciclamen', 'cyclamen', 'anthurium', 'begonia',
+            'hibiscus', 'zambile', 'lalele', 'narcise', 'flori de primavara', 'flori de toamna', 'crizanteme'
+        ],
+        'products': [30, 32, 2, 4, 10],
+        'plant_filter': lambda p_norm, cat: any(k in p_norm for k in ['azalee', 'violeta', 'saintpaulia', 'cyclamen', 'anthurium', 'begonia', 'hibiscus', 'zambila', 'lalea', 'narcisa', 'crizantema', 'perene'])
+    }
+}
+
+POPULAR_INDOOR_IDS = [206, 659, 135, 186, 173, 124, 89, 274, 278, 102]
+POPULAR_OUTDOOR_IDS = [265, 328, 451, 471, 301, 308, 661, 574, 552]
+
+def recommend_for_article(article, all_plants=None, all_products=None):
+    """
+    Intelligent botanical matching of related plants and recommended products
+    for encyclopedia articles & practical guides.
+    """
+    if all_plants is None:
+        all_plants = load_plants()
+    if all_products is None:
+        all_products = load_products()
+
+    prod_map = {p['id']: p for p in all_products}
+
+    # Pre-process plants
+    plant_lookup = []
+    for p in all_plants:
+        p_name = p.get('name', '')
+        p_lat = p.get('latin_name', '')
+        p_cat = p.get('category', '')
+        p_desc = p.get('description', '')
+        
+        raw_parts = p_name.split(' - ')
+        common_part = raw_parts[0]
+        subnames = [s.strip() for s in re.split(r'[,/]', common_part) if len(s.strip()) >= 4]
+        genus = p_lat.split()[0].strip() if p_lat else ''
+        p_norm_full = normalize_text(f"{p_name} {p_lat} {p_cat} {p_desc}")
+        
+        plant_lookup.append({
+            'plant': p,
+            'id': p['id'],
+            'name': p_name,
+            'category': p_cat,
+            'subnames': [normalize_text(s) for s in subnames],
+            'genus': normalize_text(genus),
+            'full_norm': p_norm_full
+        })
+
+    title_norm = normalize_text(article.get('title', ''))
+    summary_norm = normalize_text(article.get('summary', '') or '')
+    content_norm = normalize_text((article.get('content', '') or '')[:4000])
+    cat_norm = normalize_text(article.get('category', ''))
+
+    # 1. Categorize Article Topic
+    topic_scores = {}
+    for t_key, t_info in ARTICLE_BOTANICAL_CATEGORIES.items():
+        score = 0
+        prio = t_info.get('priority', 5)
+        for kw in t_info['keywords']:
+            kw_norm = normalize_text(kw)
+            if re.search(r'\b' + re.escape(kw_norm) + r'\b', title_norm, re.IGNORECASE):
+                score += (20 * prio)
+            elif re.search(r'\b' + re.escape(kw_norm) + r'\b', summary_norm, re.IGNORECASE):
+                score += (6 * prio)
+            elif re.search(r'\b' + re.escape(kw_norm) + r'\b', content_norm, re.IGNORECASE):
+                score += (1 * prio)
+        if score > 0:
+            topic_scores[t_key] = score
+
+    sorted_topics = sorted(topic_scores.items(), key=lambda x: -x[1])
+    primary_topic = sorted_topics[0][0] if sorted_topics else None
+    topic_data = ARTICLE_BOTANICAL_CATEGORIES.get(primary_topic)
+
+    # Contextual environment detection (Strict)
+    is_indoor = False
+    is_outdoor = False
+
+    if any(k in title_norm for k in ['apartament', 'camera', 'interior', 'ghivece', 'cactusi', 'orhidee']):
+        is_indoor = True
+    elif any(k in title_norm for k in ['gradina', 'balcon', 'gazon', 'curte', 'livada', 'pomi', 'arbori', 'arbusti', 'exterior', 'peluza']):
+        is_outdoor = True
+    elif 'interior' in cat_norm:
+        is_indoor = True
+    elif any(c in cat_norm for c in ['exterior', 'gradina', 'amenajari', 'fructe']):
+        is_outdoor = True
+    else:
+        indoor_cues = len(re.findall(r'\b(apartament|camera|interior|ghiveci|locuinta)\b', content_norm))
+        outdoor_cues = len(re.findall(r'\b(gradina|curte|livada|teren|peluza|rond)\b', content_norm))
+        if indoor_cues > outdoor_cues:
+            is_indoor = True
+        else:
+            is_outdoor = True
+
+    # 2. Score Plants
+    scored_plants = []
+    seen_plant_ids = set()
+
+    for pl in plant_lookup:
+        p_score = 0
+        p_cat_norm = normalize_text(pl['category'])
+        is_p_indoor = ('apartament' in p_cat_norm or 'balcon' in p_cat_norm)
+
+        # A) Explicit name in title/summary/content
+        for sname in pl['subnames']:
+            if sname and len(sname) >= 4:
+                if re.search(r'\b' + re.escape(sname) + r'\b', title_norm, re.IGNORECASE):
+                    p_score += 200
+                elif re.search(r'\b' + re.escape(sname) + r'\b', summary_norm, re.IGNORECASE):
+                    p_score += 50
+                elif re.search(r'\b' + re.escape(sname) + r'\b', content_norm, re.IGNORECASE):
+                    p_score += 15
+
+        # B) Explicit genus
+        if pl['genus'] and len(pl['genus']) >= 4:
+            if re.search(r'\b' + re.escape(pl['genus']) + r'\b', title_norm, re.IGNORECASE):
+                p_score += 150
+            elif re.search(r'\b' + re.escape(pl['genus']) + r'\b', summary_norm, re.IGNORECASE):
+                p_score += 40
+            elif re.search(r'\b' + re.escape(pl['genus']) + r'\b', content_norm, re.IGNORECASE):
+                p_score += 12
+
+        # C) Specific Topic filter match
+        if topic_data and topic_data.get('plant_filter'):
+            if topic_data['plant_filter'](pl['full_norm'], p_cat_norm):
+                p_score += 40
+                if primary_topic == 'cactusi' and any(k in pl['full_norm'] for k in ['cactus', 'mammillar', 'opunti', 'echinopsis', 'schlumberger', 'craciunit']):
+                    p_score += 45
+                elif primary_topic == 'orhidee' and 'orhid' in pl['full_norm']:
+                    p_score += 50
+                elif primary_topic == 'conifere' and ('conifer' in p_cat_norm or any(k in pl['full_norm'] for k in ['brad', 'pin', 'molid', 'tuia', 'ienupar'])):
+                    p_score += 35
+                elif primary_topic == 'muscate_balcon' and ('muscat' in pl['full_norm'] or 'pelargon' in pl['full_norm'] or 'balcon' in p_cat_norm):
+                    p_score += 40
+                elif primary_topic == 'gazon' and any(k in pl['full_norm'] for k in ['hosta', 'lavand', 'iarba', 'festuca']):
+                    p_score += 35
+                elif primary_topic == 'plante_camera_frunze' and any(k in pl['full_norm'] for k in ['ficus', 'monstera', 'palmier', 'filodendron', 'sansevieria', 'zamioculcas']):
+                    p_score += 40
+
+        # Foliage cleaning or propagation cues in indoor articles
+        if is_indoor:
+            if any(k in title_norm for k in ['frunze', 'frunzelor', 'igienizare', 'curatare']):
+                if any(k in pl['full_norm'] for k in ['ficus', 'monstera', 'filodendron', 'sansevieria', 'zamioculcas', 'dieffenbachia', 'calathea', 'palmier']):
+                    p_score += 50
+            if any(k in title_norm for k in ['butasi', 'inmultire', 'divizare']):
+                if any(k in pl['full_norm'] for k in ['crassula', 'tradescantia', 'pothos', 'ficus', 'begonia', 'saintpaulia', 'pelargonium', 'sedum']):
+                    p_score += 45
+
+        # D) General Environment Context Affinity
+        if is_indoor and is_p_indoor:
+            p_score += 15
+        elif is_outdoor and not is_p_indoor:
+            p_score += 15
+
+        if p_score > 0:
+            scored_plants.append((p_score, pl['plant']))
+
+    scored_plants.sort(key=lambda x: -x[0])
+
+    # Pick top 4 unique plants (filtering environment when possible)
+    matched_plants = []
+    for sc, p in scored_plants:
+        p_cat = normalize_text(p.get('category',''))
+        p_is_indoor = ('apartament' in p_cat or 'balcon' in p_cat)
+        if is_indoor and not p_is_indoor and sc < 100:
+            continue
+        if is_outdoor and p_is_indoor and sc < 100:
+            continue
+
+        if p['id'] not in seen_plant_ids:
+            seen_plant_ids.add(p['id'])
+            matched_plants.append(p)
+            if len(matched_plants) >= 4:
+                break
+
+    # Fallback to popular curated plants for that environment
+    fallback_pool = POPULAR_INDOOR_IDS if is_indoor else POPULAR_OUTDOOR_IDS
+    for fid in fallback_pool:
+        if len(matched_plants) >= 4:
+            break
+        if fid not in seen_plant_ids:
+            pl_match = next((pl['plant'] for pl in plant_lookup if pl['id'] == fid), None)
+            if pl_match:
+                matched_plants.append(pl_match)
+                seen_plant_ids.add(fid)
+
+    # Absolute fallback
+    if len(matched_plants) < 4:
+        for pl in plant_lookup:
+            p = pl['plant']
+            if p['id'] not in seen_plant_ids:
+                matched_plants.append(p)
+                seen_plant_ids.add(p['id'])
+            if len(matched_plants) >= 4:
+                break
+
+    # 3. Score Products
+    if topic_data:
+        prod_candidate_ids = list(topic_data['products'])
+    else:
+        prod_candidate_ids = [18, 31, 4] if is_indoor else [4, 19, 23]
+
+    matched_products = []
+    seen_prod_ids = set()
+    for pid in prod_candidate_ids:
+        if pid in prod_map and pid not in seen_prod_ids:
+            seen_prod_ids.add(pid)
+            matched_products.append(prod_map[pid])
+            if len(matched_products) >= 3:
+                break
+
+    return matched_plants[:4], matched_products[:3]

@@ -1,15 +1,33 @@
 {
   "traffic": {
-    "total_visits": 250,
+    "total_visits": 253,
     "sources": {
       "google": 0,
       "facebook": 32,
       "instagram": 0,
       "tiktok": 0,
       "pinterest": 0,
-      "direct": 218
+      "direct": 221
     },
     "recent_visits": [
+      {
+        "timestamp": "11.11.2026 12:16",
+        "source": "direct",
+        "path": "/articol/207",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "11.11.2026 12:15",
+        "source": "direct",
+        "path": "/articol/207",
+        "referrer": "Direct / Marcaj"
+      },
+      {
+        "timestamp": "11.11.2026 12:15",
+        "source": "direct",
+        "path": "/articol/207",
+        "referrer": "Direct / Marcaj"
+      },
       {
         "timestamp": "11.11.2026 11:44",
         "source": "direct",
@@ -188,24 +206,6 @@
         "timestamp": "11.11.2026 10:47",
         "source": "direct",
         "path": "/sitemap.xml",
-        "referrer": "Direct / Marcaj"
-      },
-      {
-        "timestamp": "11.11.2026 10:47",
-        "source": "direct",
-        "path": "/produse",
-        "referrer": "Direct / Marcaj"
-      },
-      {
-        "timestamp": "11.11.2026 10:47",
-        "source": "direct",
-        "path": "/produse",
-        "referrer": "Direct / Marcaj"
-      },
-      {
-        "timestamp": "11.11.2026 10:47",
-        "source": "direct",
-        "path": "/produse",
         "referrer": "Direct / Marcaj"
       },
       {
