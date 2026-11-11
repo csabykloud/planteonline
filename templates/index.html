@@ -20,7 +20,7 @@
         "brand": {"@type": "Brand", "name": {{ (prod.brand or 'Florasol') | tojson }}},
         "description": {{ (prod.description or '')[:300] | tojson }},
         "image": {{ (request.url_root.rstrip('/') ~ prod.image_url) | tojson if prod.image_url else '""' }},
-        "url": {{ (prod.external_url or request.url_root) | tojson }}
+        "url": {{ (request.url_root.rstrip('/') ~ url_for('product_detail', product_id=prod.id)) | tojson }}
       }
     }{% if not loop.last %},{% endif %}
     {% endfor %}
@@ -415,6 +415,53 @@
                 </a>
             </div>
 
+        </div>
+    </section>
+
+    <!-- 3B. BLOKK: CATEGORII PRODUSE RECOMANDATE (Navigare directă de pe prima pagină către produse și instrucțiuni - SEO #2 & #9) -->
+    <section id="categorii-produse-home-section" class="order-5 lg:order-none min-w-0 bg-white rounded-3xl p-6 sm:p-7 border border-stone-200 shadow-xs space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-stone-100 pb-4">
+            <div>
+                <span class="text-xs font-bold text-botanic-700 uppercase tracking-wider">Catalog Oficial Mont Rose</span>
+                <h2 class="text-xl sm:text-2xl font-serif font-bold text-stone-900 tracking-tight">
+                    Produse Recomandate &amp; Instrucțiuni de Utilizare
+                </h2>
+                <p class="text-xs sm:text-sm text-stone-500 mt-0.5 text-justify">
+                    Alege categoria potrivită pentru plantele tale și consultă compoziția tehnică, ambalajele disponibile și pașii de aplicare:
+                </p>
+            </div>
+            <a href="{{ url_for('products_view', categorie='toate') }}" class="text-xs font-bold text-botanic-700 hover:text-botanic-900 flex items-center space-x-1 shrink-0 group">
+                <span>Vezi toate cele 32 produse</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {% for c in product_menu_categories %}
+            <a href="{{ url_for('products_view', categorie=c.slug) }}"
+               class="bg-stone-50 hover:bg-botanic-50/60 rounded-2xl p-4 border border-stone-200 hover:border-botanic-400 transition-all flex flex-col justify-between group space-y-3">
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="w-9 h-9 rounded-xl bg-botanic-100 text-botanic-800 flex items-center justify-center font-bold group-hover:bg-botanic-600 group-hover:text-white transition-colors">
+                            <i data-lucide="{{ c.icon }}" class="w-4 h-4"></i>
+                        </span>
+                        <span class="text-[11px] font-bold text-botanic-800 bg-white border border-botanic-200 px-2.5 py-0.5 rounded-full">
+                            {{ c.count }} produse
+                        </span>
+                    </div>
+                    <h3 class="font-serif font-bold text-sm sm:text-base text-stone-900 group-hover:text-botanic-800 leading-snug">
+                        {{ c.name }}
+                    </h3>
+                    <p class="text-xs text-stone-500 line-clamp-2 leading-relaxed text-justify">
+                        {{ c.description }}
+                    </p>
+                </div>
+                <span class="text-xs font-bold text-botanic-700 group-hover:text-botanic-900 inline-flex items-center pt-2 border-t border-stone-200/70">
+                    <span>Vezi produsele și instrucțiunile</span>
+                    <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-1"></i>
+                </span>
+            </a>
+            {% endfor %}
         </div>
     </section>
 

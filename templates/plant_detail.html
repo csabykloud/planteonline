@@ -401,7 +401,7 @@
                     <div>
                         <div class="w-full h-36 bg-white rounded-xl mb-3 p-2 flex items-center justify-center overflow-hidden border border-stone-100">
                             {% if prod.image_url %}
-                            <img src="{{ prod.image_url }}" alt="{{ prod.name }} - {{ prod.brand or 'Florasol' }} recomandat pentru {{ plant.name }}" 
+                            <img src="{{ prod.image_url }}" alt="{{ prod.name }} - {{ prod.brand or 'Florasol' }}{% if prod.packaging %} ({{ prod.packaging }}){% endif %} recomandat pentru {{ plant.name }}" 
                                  loading="lazy" decoding="async"
                                  class="max-h-full object-contain group-hover:scale-105 transition-transform"
                                  onerror="this.src='https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=300&q=80'">
@@ -438,14 +438,14 @@
                             </a>
                         </h4>
                         <p class="text-[11px] text-stone-500 mt-1 line-clamp-2">
-                            {{ prod.description }}
+                            {{ (prod.description or '')[:160] }}{% if prod.description and prod.description|length > 160 %}...{% endif %}
                         </p>
                     </div>
 
                     <div class="mt-3 pt-2.5 border-t border-stone-200/60 flex items-center justify-between text-xs font-semibold text-botanic-700">
                         <span class="text-[11px] text-stone-400 font-mono">{{ prod.code or '' }}</span>
                         <a href="{{ url_for('product_detail', product_id=prod.id) }}" class="flex items-center text-[11px] hover:underline" onclick="event.stopPropagation()">
-                            Fișă dedicată <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
+                            Vezi instrucțiunile de utilizare <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
                         </a>
                     </div>
                 </div>

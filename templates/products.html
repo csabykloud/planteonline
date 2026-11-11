@@ -61,6 +61,7 @@ Catalog complet de produse recomandate pentru plante: Amestec turbă / Pământ 
                 "item": {
                   "@type": "Product",
                   "name": {{ prod.name|tojson }},
+                  "url": "{{ request.url_root.rstrip('/') }}{{ url_for('product_detail', product_id=prod.id) }}",
                   "brand": {"@type": "Brand", "name": {{ (prod.brand or 'Florasol')|tojson }}},
                   "description": {{ (prod.description or '')[:300]|tojson }},
                   "image": "{{ request.url_root.rstrip('/') }}{{ prod.image_url }}",
@@ -240,7 +241,7 @@ Catalog complet de produse recomandate pentru plante: Amestec turbă / Pământ 
                             <a href="{{ url_for('product_detail', product_id=prod.id) }}"
                                class="w-full py-2 px-4 bg-emerald-50 hover:bg-emerald-100 text-botanic-800 border border-botanic-200 font-semibold text-xs rounded-xl flex items-center justify-center space-x-1.5 transition-colors">
                                 <i data-lucide="info" class="w-3.5 h-3.5 text-botanic-600"></i>
-                                <span>Vezi Fișa & Plante Compatibile</span>
+                                <span>Vezi instrucțiunile & plante compatibile</span>
                             </a>
 
                             {% if session.get('admin_logged_in') %}
@@ -258,7 +259,7 @@ Catalog complet de produse recomandate pentru plante: Amestec turbă / Pământ 
                                 <i data-lucide="file-text" class="w-3.5 h-3.5 text-botanic-600 mr-1.5"></i>
                                 Descriere, Compoziție & Instrucțiuni de Utilizare
                             </h4>
-                            <div class="text-stone-700 text-xs sm:text-sm leading-relaxed whitespace-pre-line text-justify">{{ prod.description }}</div>
+                            <div>{{ prod.description | format_product_desc | safe }}</div>
                         </div>
 
                     </div>

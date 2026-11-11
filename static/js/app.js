@@ -320,10 +320,14 @@ async function openProductModal(prodId) {
         const pkgEl = document.getElementById('modal-product-packaging');
         const descEl = document.getElementById('modal-product-desc');
         const linkEl = document.getElementById('modal-product-link');
+        const detailLinkEl = document.getElementById('modal-product-detail-link');
 
         if (imgEl) {
             imgEl.src = prod.image_url || 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=500&q=80';
             imgEl.alt = prod.name;
+        }
+        if (detailLinkEl && prod.id) {
+            detailLinkEl.href = `/produs/${prod.id}`;
         }
         if (titleEl) titleEl.textContent = prod.name;
         if (brandEl) brandEl.textContent = prod.brand || 'Florasol';

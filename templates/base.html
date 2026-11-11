@@ -402,7 +402,7 @@
                                 <!-- Image Container -->
                                 <div class="w-full h-44 my-2 flex items-center justify-center overflow-hidden rounded-xl bg-white p-2 border border-stone-100">
                                     {% if prod.image_url %}
-                                    <img src="{{ prod.image_url }}" alt="{{ prod.name }} - {{ prod.brand or 'Florasol' }} substrat și nutriție plante" 
+                                    <img src="{{ prod.image_url }}" alt="{{ prod.name }} - {{ prod.brand or 'Florasol' }}{% if prod.packaging %} ({{ prod.packaging }}){% endif %}" 
                                          loading="lazy" decoding="async"
                                          class="max-h-full object-contain group-hover/card:scale-105 transition-transform duration-300"
                                          onerror="this.src='https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=400&q=80'">
@@ -415,11 +415,11 @@
                                 </div>
 
                                 <h4 class="font-bold text-stone-900 text-sm leading-snug line-clamp-1 mt-2 group-hover/card:text-botanic-700 transition-colors">
-                                    {{ prod.name }}
+                                    <a href="{{ url_for('product_detail', product_id=prod.id) }}" onclick="event.stopPropagation()" class="hover:underline">{{ prod.name }}</a>
                                 </h4>
                                 
                                 <p class="text-stone-500 text-xs mt-1 line-clamp-2 leading-relaxed text-justify">
-                                    {{ prod.description or 'Soluție eficientă pentru plante sănătoase și rezistente.' }}
+                                    {{ (prod.description or 'Soluție eficientă pentru plante sănătoase și rezistente.')[:155] }}{% if prod.description and prod.description|length > 155 %}...{% endif %}
                                 </p>
 
                                 <button type="button" 
@@ -427,6 +427,11 @@
                                     <span>Vezi detalii & link achiziție</span>
                                     <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                                 </button>
+                                <a href="{{ url_for('product_detail', product_id=prod.id) }}"
+                                   onclick="event.stopPropagation()"
+                                   class="mt-1.5 inline-flex items-center justify-center text-[11px] font-semibold text-botanic-700 hover:text-botanic-900 hover:underline">
+                                    <span>Vezi instrucțiunile de utilizare &rarr;</span>
+                                </a>
                             </div>
                         </div>
                         {% endfor %}
@@ -521,11 +526,15 @@
                         <p class="text-xs text-stone-400">Verificat și recomandat de specialiștii PlanteOnline</p>
 
                         <!-- External Link Button -->
-                        <div class="pt-2">
+                        <div class="pt-2 space-y-2">
                             <a id="modal-product-link" href="#" target="_blank" rel="noopener noreferrer"
                                class="w-full py-3 px-5 bg-gradient-to-r from-botanic-700 to-botanic-600 hover:from-botanic-800 hover:to-botanic-700 text-white font-semibold text-sm rounded-2xl flex items-center justify-center space-x-2 shadow-md shadow-botanic-700/20 transition-all">
                                 <span>Accesează Produsul & Cumpără</span>
                                 <i data-lucide="external-link" class="w-4 h-4"></i>
+                            </a>
+                            <a id="modal-product-detail-link" href="/produse"
+                               class="w-full py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100 text-botanic-800 border border-botanic-200 font-semibold text-xs rounded-2xl flex items-center justify-center space-x-1.5 transition-colors">
+                                <span>Vezi instrucțiunile de utilizare & plante compatibile &rarr;</span>
                             </a>
                         </div>
                     </div>
@@ -622,9 +631,13 @@
 
                 <!-- Col 3: Catalog & Resurse -->
                 <div>
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Catalog & Instrumente</h4>
+                    <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Catalog & Produse</h4>
                     <ul class="space-y-2 text-xs">
                         <li><a href="{{ url_for('plants_az') }}" class="hover:text-botanic-400 transition-colors">Indexul Plantelor A-Z ({{ total_catalog_plants }} specii)</a></li>
+                        <li><a href="{{ url_for('products_view', categorie='pamant-flori') }}" class="hover:text-botanic-400 transition-colors">Amestec turbă / Pământ de flori</a></li>
+                        <li><a href="{{ url_for('products_view', categorie='solutii-nutritive') }}" class="hover:text-botanic-400 transition-colors">Soluții Nutritive & Fertilizanți</a></li>
+                        <li><a href="{{ url_for('products_view', categorie='ingrijire-plante') }}" class="hover:text-botanic-400 transition-colors">Soluții de îngrijire plante</a></li>
+                        <li><a href="{{ url_for('products_view', categorie='batoane-fertilizante') }}" class="hover:text-botanic-400 transition-colors">Batoane fertilizante</a></li>
                         <li><a href="{{ url_for('calendar_view') }}" class="hover:text-botanic-400 transition-colors">Calendarul Anotimpurilor</a></li>
                         <li><a href="{{ url_for('about_view') }}" class="hover:text-botanic-400 transition-colors">Despre Mont Rose S.R.L.</a></li>
                     </ul>

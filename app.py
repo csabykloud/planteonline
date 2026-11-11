@@ -451,6 +451,123 @@ def format_article_filter(content):
     return '\n'.join(html_parts)
 
 
+@app.template_filter('format_product_desc')
+def format_product_desc_filter(content):
+    if not content:
+        return ""
+
+    SECTION_HEADINGS = (
+        'avantaje principale', 'beneficii principale',
+        'compoziție și caracteristici tehnice', 'compozitie si caracteristici tehnice',
+        'compoziție(npk)', 'compozitie(npk)',
+        'mod de aplicare și instrucțiuni pas cu pas',
+        'mod de aplicare și sfaturi de utilizare',
+        'mod de aplicare', 'mod de utilizare și dozare',
+        'sfaturi de utilizare', 'recomandări de utilizare',
+    )
+    INLINE_LABELS = (
+        'Utilizare:', 'Dozare:', 'Mod de administrare:',
+        'Compoziţie:', 'Compoziție:', 'Substanță activă:',
+        'Efect nutritiv:', 'Ambalare disponibilă:'
+    )
+
+    lines = str(content).strip().split('\n')
+    html_parts = []
+    in_list = False
+
+    def close_list():
+        nonlocal in_list
+        if in_list:
+            html_parts.append('</ul>')
+            in_list = False
+
+    for raw_line in lines:
+        stripped = raw_line.strip()
+        if not stripped:
+            close_list()
+            continue
+
+        safe_line = str(escape(stripped))
+        lower_no_colon = stripped.rstrip(':').strip().lower()
+
+        # 1. Standalone section headings (e.g., "Avantaje principale:", "Compoziție și caracteristici tehnice:")
+        if lower_no_colon in SECTION_HEADINGS or (stripped.endswith(':') and len(stripped) <= 52 and not stripped.startswith(('•', '-', 'Pasul'))):
+            close_list()
+            heading_text = safe_line.rstrip(':')
+            html_parts.append(
+                f'<h4 class="text-xs sm:text-sm font-bold text-botanic-950 mt-4 mb-2 pt-2.5 border-t border-stone-200/70 flex items-center">'
+                f'<span class="w-2 h-2 rounded-full bg-botanic-600 mr-2 shrink-0"></span>'
+                f'<span>{heading_text}</span>'
+                f'</h4>'
+            )
+            continue
+
+        # 2. Inline labeled section (e.g., "Utilizare: ...", "Dozare: ...", "Compoziţie: ...")
+        matched_inline = False
+        for lbl in INLINE_LABELS:
+            if stripped.startswith(lbl):
+                close_list()
+                rest = str(escape(stripped[len(lbl):].strip()))
+                safe_lbl = str(escape(lbl))
+                if lbl == 'Ambalare disponibilă:':
+                    html_parts.append(
+                        f'<div class="mt-3 pt-2.5 border-t border-stone-200/70 text-xs sm:text-sm text-stone-800">'
+                        f'<strong class="font-bold text-botanic-900">{safe_lbl}</strong> <span class="font-semibold">{rest}</span>'
+                        f'</div>'
+                    )
+                else:
+                    html_parts.append(
+                        f'<div class="my-2.5 p-3 rounded-xl bg-white border border-stone-200/80 text-xs sm:text-sm text-stone-700 leading-relaxed text-justify">'
+                        f'<strong class="font-bold text-botanic-900">{safe_lbl}</strong> {rest}'
+                        f'</div>'
+                    )
+                matched_inline = True
+                break
+        if matched_inline:
+            continue
+
+        # 3. Bullet points or step-by-step instructions
+        if stripped.startswith(('•', '- ', 'Pasul ')):
+            if not in_list:
+                html_parts.append('<ul class="space-y-2 my-2.5 pl-1 list-none">')
+                in_list = True
+            item_raw = stripped.lstrip('•-\t ').strip()
+            step_match = re.match(r'^(Pasul\s+\d+)\s*:\s*(.*)', item_raw, flags=re.IGNORECASE)
+            if step_match:
+                step_badge = str(escape(step_match.group(1)))
+                step_body = str(escape(step_match.group(2)))
+                html_parts.append(
+                    f'<li class="flex items-start space-x-2 text-xs sm:text-sm text-stone-700 leading-relaxed text-justify">'
+                    f'<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-botanic-100 text-botanic-800 text-[11px] font-bold shrink-0 mt-0.5">{step_badge}</span>'
+                    f'<span class="flex-1">{step_body}</span>'
+                    f'</li>'
+                )
+            else:
+                colon_idx = item_raw.find(':')
+                if 0 < colon_idx <= 38:
+                    prefix = str(escape(item_raw[:colon_idx + 1]))
+                    body = str(escape(item_raw[colon_idx + 1:].strip()))
+                    item_html = f'<strong class="font-semibold text-stone-900">{prefix}</strong> {body}'
+                else:
+                    item_html = str(escape(item_raw))
+                html_parts.append(
+                    f'<li class="flex items-start space-x-2 text-xs sm:text-sm text-stone-700 leading-relaxed text-justify">'
+                    f'<span class="w-1.5 h-1.5 rounded-full bg-botanic-600 mt-2 shrink-0"></span>'
+                    f'<span class="flex-1">{item_html}</span>'
+                    f'</li>'
+                )
+            continue
+
+        # 4. Standard paragraph
+        close_list()
+        html_parts.append(
+            f'<p class="text-stone-700 text-xs sm:text-sm leading-relaxed text-justify mb-2.5">{safe_line}</p>'
+        )
+
+    close_list()
+    return '\n'.join(html_parts)
+
+
 @app.template_filter('format_advice')
 def format_advice_filter(text):
     if not text:
