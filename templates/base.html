@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#15803d">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-    <meta name="description" content="{% block meta_description %}PlanteOnline.ro - Enciclopedie botanică cu peste 540 de specii de plante A-Z, calendarul grădinarului pe 12 luni, sfaturi practice de îngrijire și substraturi & fertilizanți profesionali Florasol, Humiflor, Nutrisol, Plantasol, Vitaflora și Florimo.{% endblock %}">
+    <meta name="description" content="{% block meta_description %}PlanteOnline.ro - Enciclopedie botanică cu peste {{ plants_count_badge }} de specii de plante A-Z, calendarul grădinarului pe 12 luni, sfaturi practice de îngrijire și substraturi & fertilizanți profesionali Florasol, Humiflor, Nutrisol, Plantasol, Vitaflora și Florimo.{% endblock %}">
     <link rel="canonical" href="{% block canonical_url %}{{ request.base_url }}{% endblock %}">
     <meta property="og:site_name" content="PlanteOnline.ro">
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
@@ -122,10 +122,10 @@
                         <span>Acasă</span>
                     </a>
 
-                    <!-- Plante A-Z Link (Core Feature / 530+ Specii) -->
+                    <!-- Plante A-Z Link (Core Feature / {{ plants_count_badge }} Specii) -->
                     <a href="{{ url_for('plants_az') }}" class="px-3 xl:px-3.5 py-2 rounded-lg hover:text-botanic-700 hover:bg-botanic-50 transition-colors flex items-center space-x-1.5 whitespace-nowrap shrink-0 {% if request.endpoint in ['plants_az', 'plant_detail'] %}text-botanic-700 bg-botanic-50 font-semibold{% endif %}">
                         <span class="whitespace-nowrap">Plante A-Z</span>
-                        <span class="bg-botanic-100 text-botanic-800 text-[10px] font-bold px-1.5 py-0.5 rounded-md whitespace-nowrap">530+</span>
+                        <span class="bg-botanic-100 text-botanic-800 text-[10px] font-bold px-1.5 py-0.5 rounded-md whitespace-nowrap">{{ plants_count_badge }}</span>
                     </a>
 
                     <!-- Calendar Link -->
@@ -254,7 +254,7 @@
                         <i data-lucide="leaf" class="w-4 h-4 text-botanic-600"></i>
                         <span>Plante A-Z</span>
                     </div>
-                    <span class="bg-botanic-100 text-botanic-800 text-[10px] font-bold px-2 py-0.5 rounded-md">530+ specii</span>
+                    <span class="bg-botanic-100 text-botanic-800 text-[10px] font-bold px-2 py-0.5 rounded-md">{{ plants_count_badge }} specii</span>
                 </a>
 
                 <a href="{{ url_for('calendar_view', luna=current_month_num) }}" class="flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl transition-colors {% if request.endpoint == 'calendar_view' %}text-botanic-700 bg-botanic-50 font-bold{% else %}hover:bg-stone-50{% endif %}">
@@ -624,7 +624,7 @@
                 <div>
                     <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Catalog & Instrumente</h4>
                     <ul class="space-y-2 text-xs">
-                        <li><a href="{{ url_for('plants_az') }}" class="hover:text-botanic-400 transition-colors">Indexul Plantelor A-Z (532 specii)</a></li>
+                        <li><a href="{{ url_for('plants_az') }}" class="hover:text-botanic-400 transition-colors">Indexul Plantelor A-Z ({{ total_catalog_plants }} specii)</a></li>
                         <li><a href="{{ url_for('calendar_view') }}" class="hover:text-botanic-400 transition-colors">Calendarul Anotimpurilor</a></li>
                         <li><a href="{{ url_for('about_view') }}" class="hover:text-botanic-400 transition-colors">Despre Mont Rose S.R.L.</a></li>
                     </ul>

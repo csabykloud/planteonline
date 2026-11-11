@@ -570,6 +570,9 @@ def inject_globals():
     articles = load_json('articles.json')
     products = load_json('products.json')
     about = load_json('about.json')
+    plants = load_json('plants.json')
+    total_catalog_plants = len(plants) if isinstance(plants, list) else 468
+    plants_count_badge = f"{(total_catalog_plants // 10) * 10}+"
     
     # Calculate categories with dynamic counts
     category_counts = {}
@@ -676,7 +679,9 @@ def inject_globals():
         'current_month_num': now.month,
         'current_month_name': month_names.get(now.month, 'Octombrie'),
         'about_meta': about,
-        'social_media': social
+        'social_media': social,
+        'total_catalog_plants': total_catalog_plants,
+        'plants_count_badge': plants_count_badge
     }
 
 # --- ROUTES ---
@@ -938,7 +943,9 @@ def plants_az():
         selected_subtype=subtype_filter,
         page=page,
         total_pages=total_pages,
-        total_plants=total_plants
+        total_plants=total_plants,
+        filtered_count=total_plants,
+        total_catalog_plants=len(plants)
     )
 
 @app.route('/planta/<int:plant_id>')

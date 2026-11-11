@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}Indexul Plantelor A-Z ({{ total_plants }} Specii Botanice){% if selected_letter and selected_letter != 'ALL' %} - Litera {{ selected_letter }}{% endif %}{% if selected_subtype %} - {{ selected_subtype }}{% endif %} | PlanteOnline{% endblock %}
-{% block meta_description %}Catalog botanic alfabetic A-Z cu {{ total_plants }} specii de plante{% if selected_letter and selected_letter != 'ALL' %} la litera {{ selected_letter }}{% endif %}: denumire științifică în latină, origine, lumină, udare, temperatură, substrat și fertilizare recomandată.{% endblock %}
+{% block title %}Indexul Plantelor A-Z ({{ total_catalog_plants }} Specii Botanice){% if selected_letter and selected_letter != 'ALL' %} - Litera {{ selected_letter }}{% endif %}{% if selected_subtype %} - {{ selected_subtype }}{% endif %} | PlanteOnline{% endblock %}
+{% block meta_description %}Catalog botanic alfabetic A-Z cu {{ total_catalog_plants }} specii de plante{% if selected_letter and selected_letter != 'ALL' %} (litera {{ selected_letter }}: {{ total_plants }} specii){% endif %}: denumire științifică în latină, origine, lumină, udare, temperatură, substrat și fertilizare recomandată.{% endblock %}
 
 {% block content %}
 <div class="space-y-8">
@@ -18,7 +18,7 @@
                 <h1 class="text-2xl sm:text-3xl font-serif font-bold text-stone-900 tracking-tight flex items-center gap-3">
                     <span>Plante de la A la Z</span>
                     <span class="text-xs font-sans font-bold bg-botanic-100 text-botanic-800 px-3 py-1 rounded-full">
-                        {{ total_plants }} Specii Înregistrate
+                        {{ total_catalog_plants }} Specii Înregistrate
                     </span>
                 </h1>
                 <p class="text-xs sm:text-sm text-stone-500 mt-1">
@@ -77,9 +77,10 @@
     <!-- Active Filter Info -->
     <div class="flex items-center justify-between text-xs text-stone-500 px-2">
         <span>
-            Se afișează <strong>{{ plants|length }}</strong> plante din <strong>{{ total_plants }}</strong> găsite
+            Se afișează <strong>{{ plants|length }}</strong> din <strong>{{ total_plants }}</strong> plante găsite
             {% if selected_letter and selected_letter != 'ALL' %}pentru litera <strong>"{{ selected_letter }}"</strong>{% endif %}
             {% if search_query %}după termenul <strong>"{{ search_query }}"</strong>{% endif %}
+            (din totalul de <strong>{{ total_catalog_plants }}</strong> specii din catalog)
         </span>
         {% if search_query or selected_subtype or (selected_letter and selected_letter != 'A') %}
         <a href="{{ url_for('plants_az', l='A') }}" class="text-botanic-700 hover:underline font-semibold flex items-center">
